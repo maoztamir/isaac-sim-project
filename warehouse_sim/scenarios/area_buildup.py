@@ -19,8 +19,8 @@ class AreaBuildUpScenario(Scenario):
     num_forklifts = 4
 
     def _assign_initial_waypoints(self):
-        staging = self.zone_mgr.get("StagingArea")
-        shelves = self.zone_mgr.get("ShelvesArea")
+        staging = self.area_mgr.get("StagingArea")
+        shelves = self.area_mgr.get("ShelvesArea")
         for fl in self.forklifts:
             # Heavy bias toward staging: 3 staging waypoints, 1 shelf
             route = (
@@ -31,7 +31,7 @@ class AreaBuildUpScenario(Scenario):
             fl.set_waypoints(route, start_idx=fl.id)
 
     def on_step(self, dt):
-        staging = self.zone_mgr.get("StagingArea")
+        staging = self.area_mgr.get("StagingArea")
 
         # Monitor build-up
         if staging.occupancy >= BUILDUP_THRESHOLD:

@@ -33,9 +33,9 @@ class DockQueueScenario(Scenario):
 
     def _assign_initial_waypoints(self):
         """Route: StagingArea -> LoadingZone -> ShelvesArea -> loop."""
-        staging = self.zone_mgr.get("StagingArea")
-        loading = self.zone_mgr.get("LoadingZone")
-        shelves = self.zone_mgr.get("ShelvesArea")
+        staging = self.area_mgr.get("StagingArea")
+        loading = self.area_mgr.get("LoadingZone")
+        shelves = self.area_mgr.get("ShelvesArea")
         for fl in self.forklifts:
             route = wp.gen_zone_route(
                 [staging, loading, shelves],
@@ -45,7 +45,7 @@ class DockQueueScenario(Scenario):
 
     def on_step(self, dt):
         """When a forklift enters LoadingZone and goes idle, extend its pause."""
-        loading = self.zone_mgr.get("LoadingZone")
+        loading = self.area_mgr.get("LoadingZone")
         for fl in self.forklifts:
             if fl.state == STATE_IDLE and loading.contains(fl.pos[0], fl.pos[1]):
                 fl.enter_loading()

@@ -10,7 +10,7 @@ import random as _random
 
 from . import config as C
 from .shelves import ShelfMap
-from .zones import Zone
+from .areas import Area
 
 
 def rand_floor_point(shelf_map: ShelfMap, rng: _random.Random,
@@ -30,7 +30,7 @@ def rand_floor_point(shelf_map: ShelfMap, rng: _random.Random,
     return (x, y)
 
 
-def rand_zone_point(zone: Zone, shelf_map: ShelfMap,
+def rand_zone_point(zone: Area, shelf_map: ShelfMap,
                     rng: _random.Random) -> tuple[float, float]:
     """Random navigable point inside a specific zone."""
     for _ in range(30):
@@ -47,7 +47,7 @@ def gen_patrol(shelf_map: ShelfMap, rng: _random.Random,
             for i in range(n)]
 
 
-def gen_zone_route(zones: list[Zone], shelf_map: ShelfMap,
+def gen_zone_route(zones: list[Area], shelf_map: ShelfMap,
                    rng: _random.Random,
                    points_per_zone=2) -> list[tuple[float, float]]:
     """Route that visits each zone in order with multiple waypoints per zone."""

@@ -8,7 +8,7 @@ import random
 from .. import config as C
 from .. import isaac_helpers as ih
 from ..shelves import ShelfMap
-from ..zones import ZoneManager
+from ..areas import AreaManager
 from ..forklift import Forklift
 from .. import waypoints as wp
 
@@ -24,7 +24,7 @@ class Scenario:
         self.stage = None
         self.assets_root = None
         self.shelf_map = ShelfMap()
-        self.zone_mgr = ZoneManager()
+        self.area_mgr = AreaManager()
         self.forklifts: list[Forklift] = []
         self.sim_time = 0.0
         self._telemetry_timer = 0.0
@@ -63,12 +63,14 @@ class Scenario:
         await ih.next_update()
 
         for name, (x0, x1, y0, y1) in C.ZONES.items():
-            self.zone_mgr.add(name, x0, x1, y0, y1)
+            cap = C.LOADING_AREA_CAPACITY  if name == "LoadingZone"  else \
+                  C.STAGING_AREA_CAPACITY  if name == "StagingArea"  else None
+            self.area_mgr.add(name, x0, x1, y0, y1, capacity=cap)
 
         self.setup_forklifts()
 
         print(f"[{self.name}] Scene built: {len(self.forklifts)} forklifts, "
-              f"{len(self.zone_mgr.zones)} zones.")
+              f"{len(self.area_mgr.areas)} areas.")
 
     def start(self):
         """Subscribe to physics and play."""
@@ -110,7 +112,7 @@ class Scenario:
 
         # Zone occupancy
         for fl in self.forklifts:
-            self.zone_mgr.update(fl.id, fl.pos[0], fl.pos[1], self.sim_time)
+            self.area_mgr.update(fl.id, fl.pos[0], fl.pos[1], self.sim_time)
 
         # Scenario-specific logic
         self.on_step(dt)
@@ -135,11 +137,11 @@ class Scenario:
     def _print_status(self):
         print(f"[{self.name}] t={self.sim_time:.1f}s")
         for fl in self.forklifts:
-            z = self.zone_mgr.zone_of(fl.pos[0], fl.pos[1])
-            zname = z.name if z else "open"
+            a = self.area_mgr.area_of(fl.pos[0], fl.pos[1])
+            zname = a.name if a else "open"
             print(f"  FL{fl.id}: ({fl.pos[0]:6.1f},{fl.pos[1]:6.1f}) "
                   f"spd={fl.speed:.1f} state={fl.state} zone={zname}")
-        self.zone_mgr.print_status(self.sim_time)
+        self.area_mgr.print_status(self.sim_time)
 
     # ── Scene construction helpers ───────────────────────────────────────
 

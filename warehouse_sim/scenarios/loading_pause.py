@@ -23,9 +23,9 @@ class LoadingPauseScenario(Scenario):
         self._stall_triggered = False
 
     def _assign_initial_waypoints(self):
-        loading = self.zone_mgr.get("LoadingZone")
-        shelves = self.zone_mgr.get("ShelvesArea")
-        staging = self.zone_mgr.get("StagingArea")
+        loading = self.area_mgr.get("LoadingZone")
+        shelves = self.area_mgr.get("ShelvesArea")
+        staging = self.area_mgr.get("StagingArea")
         for fl in self.forklifts:
             if fl.id == STALL_FORKLIFT:
                 # This one heads straight to the dock
@@ -40,7 +40,7 @@ class LoadingPauseScenario(Scenario):
             fl.set_waypoints(route, start_idx=0)
 
     def on_step(self, dt):
-        loading = self.zone_mgr.get("LoadingZone")
+        loading = self.area_mgr.get("LoadingZone")
         stall_fl = self.forklifts[STALL_FORKLIFT]
 
         # Once the stall forklift arrives at the loading zone, lock it there
