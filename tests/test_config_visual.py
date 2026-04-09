@@ -56,8 +56,9 @@ import asyncio
 import sys
 
 _project_root = "/home/ubuntu/isaac_sim_samples/isaac-sim-project"
-if _project_root not in sys.path:
-    sys.path.insert(0, _project_root)
+if _project_root in sys.path:
+    sys.path.remove(_project_root)
+sys.path.insert(0, _project_root)
 
 _to_remove = [k for k in sys.modules if k.startswith("warehouse_sim")]
 for k in _to_remove:

@@ -61,7 +61,12 @@ Make only the changes described in the approved plan. Do not add extras.
 
 Create or update a file in `tests/` that exercises the new code inside Isaac Sim's Script Editor. Rules:
 - Script lives in `tests/`, never in `warehouse_sim/`
-- Include the module hot-reload block at the top (same pattern as `main.py`)
+- Include the module hot-reload block at the top (same pattern as `main.py`). Always force the project root to position 0 in `sys.path` — never use `if not in` guard:
+  ```python
+  if _project_root in sys.path:
+      sys.path.remove(_project_root)
+  sys.path.insert(0, _project_root)
+  ```
 - Use `asyncio.ensure_future(_run())` as the entry point
 - Expose knobs (pause durations, gate indices, etc.) as named constants at the top of the file
 - Do **not** call `scenario.start()` in visual tests — keep the scene still unless the test specifically needs movement
