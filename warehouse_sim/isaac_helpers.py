@@ -174,6 +174,74 @@ def make_invisible(stage, prim_path):
         UsdGeom.Imageable(prim).MakeInvisible()
 
 
+def make_visible(stage, prim_path):
+    """Show a previously hidden prim via UsdGeom.Imageable."""
+    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
+    if prim.IsValid():
+        UsdGeom.Imageable(prim).MakeVisible()
+
+
+# ── Shelf detection (USD scan) ─────────────────────────────────────────────
+
+def scan_shelves_for_rects(stage, keywords, min_size=0.5, dedup_threshold=0.5,
+                            warehouse_path="/World/Warehouse"):
+    """Scan the warehouse USD for shelf-like prims and return axis-aligned rects.
+
+    Returns list of (x_min, x_max, y_min, y_max) tuples.
+    Falls back to large-structure detection if no keyword matches are found.
+    """
+    rects: list[tuple[float, float, float, float]] = []
+    wh = stage.GetPrimAtPath(Sdf.Path(warehouse_path))
+    if not wh.IsValid():
+        return rects
+
+    cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default", "render"])
+    seen: list[tuple[float, float]] = []
+
+    # Primary pass: keyword match on prim name
+    for prim in Usd.PrimRange(wh):
+        if not any(k in prim.GetName().lower() for k in keywords):
+            continue
+        if not prim.IsA(UsdGeom.Xformable):
+            continue
+        try:
+            rng = cache.ComputeWorldBound(prim).ComputeAlignedRange()
+            mn, mx = rng.GetMin(), rng.GetMax()
+            w, d, h = mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]
+            if w < min_size or d < min_size or h < min_size:
+                continue
+            cx, cy = (mn[0] + mx[0]) / 2, (mn[1] + mx[1]) / 2
+            if any(abs(cx - s[0]) < dedup_threshold and
+                   abs(cy - s[1]) < dedup_threshold for s in seen):
+                continue
+            seen.append((cx, cy))
+            rects.append((mn[0], mx[0], mn[1], mx[1]))
+        except Exception:
+            pass
+
+    # Fallback: detect large structures if no keywords matched
+    if not rects:
+        for prim in Usd.PrimRange(wh):
+            if not prim.IsA(UsdGeom.Xformable):
+                continue
+            try:
+                rng = cache.ComputeWorldBound(prim).ComputeAlignedRange()
+                mn, mx = rng.GetMin(), rng.GetMax()
+                w, d, h = mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]
+                if w > 4.0 and d > 0.8 and h > 1.5:
+                    cx = (mn[0] + mx[0]) / 2
+                    cy = (mn[1] + mx[1]) / 2
+                    if any(abs(cx - s[0]) < 1.0 and
+                           abs(cy - s[1]) < 1.0 for s in seen):
+                        continue
+                    seen.append((cx, cy))
+                    rects.append((mn[0], mx[0], mn[1], mx[1]))
+            except Exception:
+                pass
+
+    return rects
+
+
 # ── Loading dock gates ──────────────────────────────────────────────────────
 
 def spawn_gate(stage, idx, door_cx, C):
@@ -258,6 +326,70 @@ def spawn_gate(stage, idx, door_cx, C):
     lintel.AddScaleOp().Set(Gf.Vec3d((C.HOLE_W + 2 * C.WALL_T) / 2,
                                       C.WALL_T / 2, C.WALL_T / 2))
     lintel.GetDisplayColorAttr().Set(C.WALL_COLOR)
+
+
+def open_gate(stage, idx, panel_n):
+    """Visually open a dock gate: hide shutter panels + floor seal, show truck-back.
+
+    panel_n: number of shutter panels (C.PANEL_N).
+    """
+    shutter = f"/World/DockingDoors/gate_{idx}/shutter"
+    for pi in range(panel_n):
+        make_invisible(stage, f"{shutter}/panel_{pi}")
+    make_invisible(stage, f"{shutter}/floor_seal")
+    make_visible(stage, f"/World/DockingDoors/gate_{idx}/shutter_open")
+
+
+def close_gate(stage, idx, panel_n):
+    """Visually close a dock gate: show shutter panels + floor seal, hide truck-back."""
+    shutter = f"/World/DockingDoors/gate_{idx}/shutter"
+    for pi in range(panel_n):
+        make_visible(stage, f"{shutter}/panel_{pi}")
+    make_visible(stage, f"{shutter}/floor_seal")
+    make_invisible(stage, f"/World/DockingDoors/gate_{idx}/shutter_open")
+
+
+async def _sleep_app(seconds: float):
+    """Yield app updates for ~seconds so the viewport refreshes in between."""
+    import omni.kit.app
+    app = omni.kit.app.get_app()
+    # ~60 Hz driven by app updates; avoids wall-clock drift in Script Editor.
+    steps = max(1, int(seconds * 60))
+    for _ in range(steps):
+        await app.next_update_async()
+
+
+async def open_gate_animated(stage, idx, panel_n, duration=1.2):
+    """Roll-up open: reveal truck-back, then hide panels bottom → top, then floor seal.
+
+    `duration` is total animation length in seconds. State on entry doesn't
+    matter — function always ends in the fully-open state.
+    """
+    shutter = f"/World/DockingDoors/gate_{idx}/shutter"
+    # Truck-back becomes visible immediately so it's seen through panels as they clear.
+    make_visible(stage, f"/World/DockingDoors/gate_{idx}/shutter_open")
+    # Floor seal lifts first (bottom of the roll).
+    make_invisible(stage, f"{shutter}/floor_seal")
+
+    # Divide remaining duration across the N panels.
+    per_step = max(0.02, duration / max(1, panel_n))
+    for pi in range(panel_n):  # bottom → top
+        make_invisible(stage, f"{shutter}/panel_{pi}")
+        await _sleep_app(per_step)
+
+
+async def close_gate_animated(stage, idx, panel_n, duration=1.2):
+    """Roll-down close: show panels top → bottom, then floor seal, then hide truck-back."""
+    shutter = f"/World/DockingDoors/gate_{idx}/shutter"
+
+    per_step = max(0.02, duration / max(1, panel_n))
+    for pi in range(panel_n - 1, -1, -1):  # top → bottom
+        make_visible(stage, f"{shutter}/panel_{pi}")
+        await _sleep_app(per_step)
+
+    # Floor seal drops into place, then truck-back hides.
+    make_visible(stage, f"{shutter}/floor_seal")
+    make_invisible(stage, f"/World/DockingDoors/gate_{idx}/shutter_open")
 
 
 # ── Zebra tape floor markings ──────────────────────────────────────────────
