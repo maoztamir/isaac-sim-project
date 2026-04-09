@@ -99,6 +99,84 @@ FORK_RAISE_SPEED   = 0.25
 FORK_TRAVEL_HEIGHT = 0.45
 FORK_GROUND_HEIGHT = 0.0
 
+# ── Forklift FSM states ──────────────────────────────────────────────────────
+# Movement states: what the forklift is currently doing
+STATE_IDLE              = "idle"               # stationary, no task
+STATE_PICKUP_AT_SHELVES = "pickup_at_shelves"  # at shelves, picking up pallet
+STATE_MOVE_TO_STAGING   = "move_to_staging"    # driving toward staging area (loaded)
+STATE_WAIT_IN_STAGING   = "wait_in_staging"    # holding in staging, dock not ready
+STATE_MOVE_TO_LOADING   = "move_to_loading"    # driving toward loading dock (loaded)
+STATE_WAIT_AT_DOCK_QUEUE= "wait_at_dock_queue" # queued at dock, waiting for slot
+STATE_LOADING           = "loading"            # at dock, transferring pallet
+STATE_RETURNING         = "returning"          # driving back to shelves (unloaded)
+
+# ── Forklift load property ───────────────────────────────────────────────────
+# Independent of state — what the forklift is carrying.
+# Drives fork height and pallet prim visibility (wired in Task #4 models/forklift.py).
+LOAD_LOADED   = "loaded"    # pallet on forks: fork raised to FORK_TRAVEL_HEIGHT
+LOAD_UNLOADED = "unloaded"  # no pallet: fork lowered to FORK_GROUND_HEIGHT
+
+# Expected load property per state (for rule engine validation in Task #6)
+STATE_EXPECTED_LOAD = {
+    STATE_IDLE:               LOAD_UNLOADED,
+    STATE_PICKUP_AT_SHELVES:  LOAD_UNLOADED,  # picking up — becomes loaded on completion
+    STATE_MOVE_TO_STAGING:    LOAD_LOADED,
+    STATE_WAIT_IN_STAGING:    LOAD_LOADED,
+    STATE_MOVE_TO_LOADING:    LOAD_LOADED,
+    STATE_WAIT_AT_DOCK_QUEUE: LOAD_LOADED,
+    STATE_LOADING:            LOAD_LOADED,    # drops pallet — becomes unloaded on completion
+    STATE_RETURNING:          LOAD_UNLOADED,
+}
+
+# ── Area capacities ──────────────────────────────────────────────────────────
+# Maximum number of forklifts allowed in each area simultaneously.
+# ShelvesArea has no capacity limit — forklifts move freely in aisles.
+LOADING_AREA_CAPACITY  = 1   # one forklift per dock at a time
+STAGING_AREA_CAPACITY  = 6   # staging holds up to 6 waiting forklifts
+
+# ── Detection thresholds ─────────────────────────────────────────────────────
+QUEUE_SUSTAINED_SECS   = 15.0  # seconds at dock queue before "queue formed" event fires
+IDLE_WARN_SECS         = 20.0  # seconds in STATE_IDLE before "idle too long" alert fires
+NEAR_MISS_DIST         = 2.5   # metres — proximity alert trigger distance
+NEAR_MISS_SPEED_MIN    = 0.5   # m/s — min speed of one forklift to count as near-miss
+CONGESTION_SPEED_RATIO = 0.3   # speed < 30% of max while in traffic area → congestion log
+
+# ── Scenario preset levers ───────────────────────────────────────────────────
+# Each scenario reads its own sub-dict to tune its specific behaviour.
+SCENARIO_PRESETS = {
+    "dock_queue": {
+        "num_forklifts":    4,
+        "loading_duration": 20.0,   # long dock time causes queue to build up
+        "dock_capacity":    1,
+    },
+    "loading_pause": {
+        "num_forklifts":    3,
+        "loading_duration": 8.0,
+        "pause_at_sec":     30.0,   # door closes at T=30s, forklifts stop advancing
+        "pause_duration":   20.0,   # door stays closed for 20s then reopens
+    },
+    "area_buildup": {
+        "num_forklifts":    5,
+        "loading_duration": 12.0,
+        "release_interval": 8.0,    # slow outflow — staging fills up
+    },
+    "aisle_congestion": {
+        "num_forklifts":    6,
+        "loading_duration": 6.0,
+        "target_aisle_x":   None,   # None = auto-pick narrowest aisle at runtime
+    },
+    "vehicle_idle": {
+        "num_forklifts":    4,
+        "idle_forklift_ids": [1, 2],  # these forklifts receive no task
+        "loading_duration": 6.0,
+    },
+    "safety_proximity": {
+        "num_forklifts":    4,
+        "crossing_speed":   2.5,    # forklifts approach crossing point at this speed
+        "loading_duration": 6.0,
+    },
+}
+
 # ── FSM timing ──────────────────────────────────────────────────────────────
 IDLE_DURATION    = 3.5
 LOADING_DURATION = 5.0
