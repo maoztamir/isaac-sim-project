@@ -39,6 +39,51 @@ Self-contained scripts that don't use the framework. They import Isaac Sim APIs 
 - **Config-driven geometry**: All spatial constants live in `config.py` and are imported as `C`. Scenario code references `C.WAREHOUSE_CX`, `C.ZONES`, etc.
 - **Forklift waypoint loop**: Waypoints are cyclic — `_advance_waypoint()` wraps `wp_idx` modulo the list length.
 
+## Task Workflow (required for every implementation task)
+
+Every task — no matter how small — must follow this four-step sequence:
+
+### Step 1 — Plan (display before touching any code)
+
+Write and show a task plan that covers:
+- **What** files will change and why
+- **How** — the specific functions, classes, or constants being added/modified
+- **Dependencies** — what existing code this builds on or must not break
+- **Risks** — anything that could silently fail at runtime inside Isaac Sim
+
+Wait for user confirmation before proceeding.
+
+### Step 2 — Implement
+
+Make only the changes described in the approved plan. Do not add extras.
+
+### Step 3 — Visual test script
+
+Create or update a file in `tests/` that exercises the new code inside Isaac Sim's Script Editor. Rules:
+- Script lives in `tests/`, never in `warehouse_sim/`
+- Include the module hot-reload block at the top (same pattern as `main.py`)
+- Use `asyncio.ensure_future(_run())` as the entry point
+- Expose knobs (pause durations, gate indices, etc.) as named constants at the top of the file
+- Do **not** call `scenario.start()` in visual tests — keep the scene still unless the test specifically needs movement
+
+### Step 4 — Expected visual outcomes
+
+For every test step in the script, document exactly what the user should observe in the Isaac Sim viewport. Format:
+
+```
+STEP <n>: <function or action>
+  EXPECT: <what appears or changes in the viewport>
+  PASS IF: <concrete observable criterion>
+  FAIL SIGN: <what a broken result looks like>
+```
+
+Add this documentation as a comment block at the top of the test file, below the module docstring.
+
+## Test file location and naming
+
+| Core framework changes | `tests/test_<module>_visual.py` |
+| Scenario-level changes | `tests/test_scenario_<name>_visual.py` |
+
 ## Custom Agent
 
 The `/warehouse-scenario` command (`.claude/commands/warehouse-scenario.md`) dispatches to the `isaac-sim-warehouse-scenarios` subagent for design-first scenario generation. That agent searches existing samples before writing new code and follows a spec-then-implementation workflow.
