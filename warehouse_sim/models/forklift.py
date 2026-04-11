@@ -78,9 +78,10 @@ class Forklift:
                     )
                 # Spawn pallet prim under the forklift, raised to fork travel height
                 ih.spawn_asset(stage, self.pallet_prim_path,
-                               assets_root + C.PALLET_USD,
+                               C.PALLET_USD,
                                self.pos[0], self.pos[1],
-                               C.FORK_TRAVEL_HEIGHT, self.heading)
+                               C.FORK_TRAVEL_HEIGHT, self.heading,
+                               scale=C.PALLET_SCALE)
                 self._pallet_prim_spawned = True
             else:
                 ih.make_visible(stage, self.pallet_prim_path)

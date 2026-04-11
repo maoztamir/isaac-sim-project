@@ -1,8 +1,9 @@
 """
 Waypoint generation and path helpers.
 
-Generates random navigable points that respect shelf collision rects,
-prefer aisle lanes, and can target specific zones.
+Two layers:
+  - Explicit deterministic waypoints used by the rule engine (state-driven scenarios).
+  - Random/patrol generators kept for backward compatibility with old scenario code.
 """
 
 from __future__ import annotations
@@ -11,6 +12,67 @@ import random as _random
 from . import config as C
 from .shelves import ShelfMap
 from .areas import Area
+
+
+# ── Explicit deterministic waypoints ────────────────────────────────────────
+
+def get_dock_service_position(gate_idx: int) -> tuple[float, float]:
+    """Centre of the loading zone directly in front of gate gate_idx.
+
+    This is where a forklift parks to hand off a pallet to the truck.
+    """
+    cx = C.WAREHOUSE_CX + C.GATE_OFFSETS[gate_idx]
+    y  = C.WALL_Y_MIN + C.LOAD_D / 2.0
+    return (cx, y)
+
+
+def get_dock_queue_spots() -> list[tuple[float, float]]:
+    """One queue-hold position per gate, just north of the loading zone edge.
+
+    Forklifts wait here when the dock slot is occupied. Ordered LEFT → RIGHT.
+    """
+    queue_y = C.WALL_Y_MIN + C.LOAD_D + 2.0
+    return [(C.WAREHOUSE_CX + offset, queue_y) for offset in C.GATE_OFFSETS]
+
+
+def get_staging_hold_positions() -> list[tuple[float, float]]:
+    """One hold position per gate column inside the staging area.
+
+    Used as intermediate stops when staging is the next destination.
+    Ordered LEFT → RIGHT.
+    """
+    return [(C.WAREHOUSE_CX + offset, C.STAGING_CENTER_Y)
+            for offset in C.GATE_OFFSETS]
+
+
+def get_pickup_points(shelf_map: ShelfMap) -> list[tuple[float, float]]:
+    """One pickup point per detected aisle, at the aisle entrance (south end).
+
+    Returns an empty list if shelf_map is not yet initialised.
+    """
+    if not shelf_map.aisle_xs or shelf_map.area_y_min is None:
+        return []
+    entrance_y = shelf_map.area_y_min + 2.0
+    return [(ax, entrance_y) for ax in shelf_map.aisle_xs]
+
+
+def get_return_path(gate_idx: int, shelf_map: ShelfMap) -> list[tuple[float, float]]:
+    """Waypoints guiding an empty forklift from a dock back toward the shelves.
+
+    Route: dock queue spot → staging hold → nearest aisle entrance.
+    Falls back to open floor staging if shelf_map not ready.
+    """
+    cx = C.WAREHOUSE_CX + C.GATE_OFFSETS[gate_idx]
+    path: list[tuple[float, float]] = [
+        (cx, C.WALL_Y_MIN + C.LOAD_D + 2.0),   # clear the dock
+        (cx, C.STAGING_CENTER_Y),               # staging midpoint
+    ]
+    if shelf_map.aisle_xs and shelf_map.area_y_min is not None:
+        nearest_ax = min(shelf_map.aisle_xs, key=lambda ax: abs(ax - cx))
+        path.append((nearest_ax, shelf_map.area_y_min + 2.0))
+    else:
+        path.append((cx, C.WALL_Y_MAX - 4.0))
+    return path
 
 
 def rand_floor_point(shelf_map: ShelfMap, rng: _random.Random,

@@ -81,10 +81,36 @@ SEED                 = 42
 # ─────────────────────────────────────────────────────────────────────────────
 
 import asyncio
+import os
 import random
 import sys
 
 _project_root = "/home/ubuntu/isaac_sim_samples/isaac-sim-project"
+
+# Evict any sys.path entry that exposes a conflicting `warehouse_sim`
+# sibling. Two shadow cases exist on this machine:
+#   (a) /home/ubuntu/isaac_sim_samples/warehouse_sim/ — a namespace package
+#       directory with no __init__.py (shadows ours as a partial package).
+#   (b) /home/ubuntu/isaac_sim_samples/warehouse_sim/src/warehouse_sim.py — a
+#       single-file MODULE. If .../src/ is on sys.path, `import warehouse_sim`
+#       loads this file, which has no __path__, so `warehouse_sim.models`
+#       blows up with "No module named 'warehouse_sim.models'".
+_bad_paths = []
+for p in list(sys.path):
+    try:
+        if not p or p == _project_root:
+            continue
+        if os.path.isdir(os.path.join(p, "warehouse_sim")):
+            _bad_paths.append(p)
+        elif os.path.isfile(os.path.join(p, "warehouse_sim.py")):
+            _bad_paths.append(p)
+    except Exception:
+        pass
+for p in _bad_paths:
+    while p in sys.path:
+        sys.path.remove(p)
+    print(f"[test] evicted conflicting sys.path entry: {p}")
+
 if _project_root in sys.path:
     sys.path.remove(_project_root)
 sys.path.insert(0, _project_root)
@@ -93,16 +119,103 @@ _to_remove = [k for k in sys.modules if k.startswith("warehouse_sim")]
 for k in _to_remove:
     del sys.modules[k]
 
+# Also drop any None-valued `warehouse_sim*` entries — the persistent Script
+# Editor interpreter caches negative import results from earlier broken runs,
+# and those entries aren't visible to the loop above in every case.
+for k in list(sys.modules):
+    if k.startswith("warehouse_sim") and sys.modules.get(k) is None:
+        sys.modules.pop(k, None)
+
+# Wipe finder / path-importer caches so Python re-scans sys.path cleanly.
+import importlib
+importlib.invalidate_caches()
+
+import warehouse_sim
+print(f"[test] warehouse_sim loaded from: {warehouse_sim.__file__}")
+print(f"[test] warehouse_sim.__path__  = {getattr(warehouse_sim, '__path__', None)}")
+_expected_pkg = os.path.join(_project_root, "warehouse_sim", "__init__.py")
+if os.path.abspath(warehouse_sim.__file__) != os.path.abspath(_expected_pkg):
+    raise RuntimeError(
+        f"[test] WRONG warehouse_sim loaded!\n"
+        f"  got:      {warehouse_sim.__file__}\n"
+        f"  expected: {_expected_pkg}\n"
+        f"  sys.path: {sys.path}"
+    )
+
 from warehouse_sim import config as C
 from warehouse_sim import isaac_helpers as ih
 from warehouse_sim.scenarios import PRESETS
-from warehouse_sim.models.loading_door import LoadingDoor
-from warehouse_sim.models.pallet import Pallet, LOC_FORKLIFT
-from warehouse_sim.models.queue_slot import QueueSlot, SLOT_DOCK
-from warehouse_sim.models.area_slot import (
-    AreaSlot, build_loading_slots, build_staging_slots
-)
-from warehouse_sim.models.forklift import Forklift as FL
+
+# ── Diagnostic block: surface everything we need to stderr before the
+# failing import, so it appears in the Isaac Sim error console.
+import importlib, importlib.util
+print(f"[test] === PRE-IMPORT DIAGNOSTICS ===", file=sys.stderr)
+print(f"[test] warehouse_sim.__file__ = {warehouse_sim.__file__}", file=sys.stderr)
+print(f"[test] warehouse_sim.__path__ = {getattr(warehouse_sim, '__path__', 'NONE')}", file=sys.stderr)
+try:
+    _pkg_dir = warehouse_sim.__path__[0]
+    print(f"[test] os.listdir({_pkg_dir}):", file=sys.stderr)
+    for _entry in sorted(os.listdir(_pkg_dir)):
+        print(f"         {_entry}", file=sys.stderr)
+    _models_dir = os.path.join(_pkg_dir, "models")
+    if os.path.isdir(_models_dir):
+        print(f"[test] os.listdir({_models_dir}):", file=sys.stderr)
+        for _entry in sorted(os.listdir(_models_dir)):
+            print(f"         {_entry}", file=sys.stderr)
+    else:
+        print(f"[test] !!! {_models_dir} does NOT exist !!!", file=sys.stderr)
+except Exception as e:
+    print(f"[test] listdir failed: {e}", file=sys.stderr)
+
+print(f"[test] sys.modules.get('warehouse_sim.models') = "
+      f"{sys.modules.get('warehouse_sim.models')!r}", file=sys.stderr)
+print(f"[test] find_spec('warehouse_sim.models') = "
+      f"{importlib.util.find_spec('warehouse_sim.models')!r}", file=sys.stderr)
+print(f"[test] sys.path (first 15 entries):", file=sys.stderr)
+for _i, _p in enumerate(sys.path[:15]):
+    print(f"         [{_i}] {_p}", file=sys.stderr)
+print(f"[test] === END DIAGNOSTICS ===", file=sys.stderr)
+
+# If find_spec sees the module but the normal import still fails, load the
+# submodule directly from file to keep the rest of the test alive.
+try:
+    from warehouse_sim.models.loading_door import LoadingDoor
+    from warehouse_sim.models.pallet import Pallet, LOC_FORKLIFT
+    from warehouse_sim.models.queue_slot import QueueSlot, SLOT_DOCK
+    from warehouse_sim.models.area_slot import (
+        AreaSlot, build_loading_slots, build_staging_slots
+    )
+    from warehouse_sim.models.forklift import Forklift as FL
+except ModuleNotFoundError as e:
+    print(f"[test] NORMAL IMPORT FAILED: {e}", file=sys.stderr)
+    print(f"[test] Falling back to explicit spec_from_file_location …", file=sys.stderr)
+    def _load_from_file(dotted_name, file_path):
+        spec = importlib.util.spec_from_file_location(dotted_name, file_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot create spec for {dotted_name} at {file_path}")
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[dotted_name] = mod
+        spec.loader.exec_module(mod)
+        return mod
+    _mdir = os.path.join(warehouse_sim.__path__[0], "models")
+    # Make sure the `warehouse_sim.models` parent exists as a package object
+    if "warehouse_sim.models" not in sys.modules:
+        _load_from_file("warehouse_sim.models", os.path.join(_mdir, "__init__.py"))
+    _ld = _load_from_file("warehouse_sim.models.loading_door", os.path.join(_mdir, "loading_door.py"))
+    _pl = _load_from_file("warehouse_sim.models.pallet",       os.path.join(_mdir, "pallet.py"))
+    _qs = _load_from_file("warehouse_sim.models.queue_slot",   os.path.join(_mdir, "queue_slot.py"))
+    _as = _load_from_file("warehouse_sim.models.area_slot",    os.path.join(_mdir, "area_slot.py"))
+    _fl = _load_from_file("warehouse_sim.models.forklift",     os.path.join(_mdir, "forklift.py"))
+    LoadingDoor  = _ld.LoadingDoor
+    Pallet       = _pl.Pallet
+    LOC_FORKLIFT = _pl.LOC_FORKLIFT
+    QueueSlot    = _qs.QueueSlot
+    SLOT_DOCK    = _qs.SLOT_DOCK
+    AreaSlot             = _as.AreaSlot
+    build_loading_slots  = _as.build_loading_slots
+    build_staging_slots  = _as.build_staging_slots
+    FL = _fl.Forklift
+    print("[test] fallback imports OK", file=sys.stderr)
 
 
 def _banner(title):

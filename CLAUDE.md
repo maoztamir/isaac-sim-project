@@ -61,11 +61,40 @@ Make only the changes described in the approved plan. Do not add extras.
 
 Create or update a file in `tests/` that exercises the new code inside Isaac Sim's Script Editor. Rules:
 - Script lives in `tests/`, never in `warehouse_sim/`
-- Include the module hot-reload block at the top (same pattern as `main.py`). Always force the project root to position 0 in `sys.path` — never use `if not in` guard:
+- Include the module hot-reload block at the top (same pattern as `main.py`). Always force the project root to position 0 in `sys.path` — never use `if not in` guard. Also evict any *other* sys.path entry that exposes a conflicting `warehouse_sim` sibling directory (Isaac Sim's session state sometimes leaves `/home/ubuntu/isaac_sim_samples/` on sys.path, and the sibling folder there shadows ours as a namespace package):
   ```python
+  import os
+  _project_root = "/home/ubuntu/isaac_sim_samples/isaac-sim-project"
+  _bad_paths = []
+  for p in list(sys.path):
+      try:
+          if p and p != _project_root and os.path.isdir(os.path.join(p, "warehouse_sim")):
+              _bad_paths.append(p)
+      except Exception:
+          pass
+  for p in _bad_paths:
+      while p in sys.path:
+          sys.path.remove(p)
   if _project_root in sys.path:
       sys.path.remove(_project_root)
   sys.path.insert(0, _project_root)
+
+  _to_remove = [k for k in sys.modules if k.startswith("warehouse_sim")]
+  for k in _to_remove:
+      del sys.modules[k]
+
+  # Also drop any None-valued warehouse_sim entries — the persistent Script
+  # Editor interpreter keeps a negative import cache from earlier broken runs.
+  for k in list(sys.modules):
+      if k.startswith("warehouse_sim") and sys.modules.get(k) is None:
+          sys.modules.pop(k, None)
+
+  # Wipe finder / path-importer caches so Python re-scans sys.path cleanly.
+  import importlib
+  importlib.invalidate_caches()
+
+  import warehouse_sim
+  print(f"[test] warehouse_sim loaded from: {warehouse_sim.__file__}")
   ```
 - Use `asyncio.ensure_future(_run())` as the entry point
 - Expose knobs (pause durations, gate indices, etc.) as named constants at the top of the file

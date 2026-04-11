@@ -52,8 +52,18 @@ class AreaSlot:
 
     def spawn_pallets(self, stage, assets_root: str, count: int,
                       rng: random.Random,
+                      box_usds: list | None = None,
                       prim_root: str = "/World/AreaSlots") -> None:
-        """Create `count` pallet prims scattered inside the slot bounds."""
+        """Create `count` pallet prims scattered inside the slot bounds.
+
+        *box_usds* is a list of USD paths (relative to assets_root) to pick
+        from when placing a cargo box on each pallet.  Defaults to
+        ``C.BOX_USDS`` (the four cardboard-box variants from the warehouse
+        props).  Pass an empty list or ``None`` to spawn bare pallets.
+        """
+        if box_usds is None:
+            box_usds = C.BOX_USDS
+
         cx, cy = self.center
         hw = self.width  / 2.0 - 0.8
         hd = self.depth  / 2.0 - 0.8
@@ -67,7 +77,9 @@ class AreaSlot:
             pid = len(self.pallets)
             prim_path = f"{base}/pallet_{pid}"
             pallet = Pallet(pallet_id=pid, prim_path=prim_path, location=location)
-            pallet.spawn(stage, assets_root, px, py, z=0.0, yaw_deg=yaw)
+            box_usd = rng.choice(box_usds) if box_usds else None
+            pallet.spawn(stage, assets_root, px, py, z=0.0, yaw_deg=yaw,
+                         box_usd=box_usd)
             self.pallets.append(pallet)
 
         # Respect the initial is_active flag

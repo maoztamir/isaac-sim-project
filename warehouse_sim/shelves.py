@@ -51,9 +51,10 @@ class ShelfMap:
               f"{len(self.aisle_xs)} aisles detected.")
 
     def _scan_shelves(self, stage):
-        wh = stage.GetPrimAtPath("/World/Warehouse")
-        if not wh.IsValid():
+        wh_img = UsdGeom.Imageable.Get(stage, "/World/Warehouse")
+        if not wh_img or not wh_img.GetPrim().IsValid():
             return
+        wh = wh_img.GetPrim()
         cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default", "render"])
         seen = []
         for prim in Usd.PrimRange(wh):

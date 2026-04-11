@@ -59,9 +59,6 @@ class Scenario:
         self._spawn_staging_markings()
         await ih.next_update()
 
-        self._spawn_staging_props()
-        await ih.next_update()
-
         for name, (x0, x1, y0, y1) in C.ZONES.items():
             cap = C.LOADING_AREA_CAPACITY  if name == "LoadingZone"  else \
                   C.STAGING_AREA_CAPACITY  if name == "StagingArea"  else None
@@ -167,33 +164,3 @@ class Scenario:
                                 C.STAGING_CENTER_Y,
                                 C.STAGING_W, C.STAGING_D, C)
 
-    def _spawn_staging_props(self):
-        """Pallets + cardboard box stacks in the staging areas."""
-        rng = random.Random(7)  # fixed seed for deterministic layout
-        for zi, offset in enumerate(C.GATE_OFFSETS):
-            zone_cx = C.WAREHOUSE_CX + offset
-            hw = C.STAGING_W / 2 - 1.2
-            hd = C.STAGING_D / 2 - 1.0
-            n_stacks = rng.randint(3, 6)
-            for pi in range(n_stacks):
-                px = zone_cx + rng.uniform(-hw, hw)
-                py = C.STAGING_CENTER_Y + rng.uniform(-hd, hd)
-                yaw = rng.choice([0.0, 90.0, 180.0, -90.0])
-                base = f"/World/StagingProps/zone_{zi}_stack_{pi}"
-
-                # Pallet on the floor
-                ih.spawn_asset(self.stage, f"{base}_pallet",
-                               self.assets_root + C.PALLET_USD,
-                               px, py, 0.0, yaw)
-                ih.apply_static_collision(self.stage, f"{base}_pallet")
-
-                # 1-3 cardboard boxes on top
-                z = C.PALLET_H
-                for bi in range(rng.randint(1, 3)):
-                    box_usd = rng.choice(C.BOX_USDS)
-                    ih.spawn_asset(self.stage, f"{base}_box_{bi}",
-                                   self.assets_root + box_usd,
-                                   px, py, z, yaw)
-                    ih.apply_static_collision(self.stage, f"{base}_box_{bi}")
-                    z += 0.55
-        print(f"[{self.name}] Staging props spawned.")

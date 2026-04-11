@@ -46,22 +46,51 @@ def clear_world(stage):
     omni.kit.commands.execute("DeletePrimsCommand", paths=["/World"])
 
 
+def delete_prim(stage, prim_path: str) -> bool:
+    """Delete a prim and all its children from the stage.
+
+    Returns True if the prim existed and was deleted, False if it was not found.
+    """
+    import omni.kit.commands
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if xf and xf.GetPrim().IsValid():
+        omni.kit.commands.execute("DeletePrimsCommand", paths=[prim_path])
+        return True
+    return False
+
+
 def create_physics_scene(stage, path="/World/PhysicsScene"):
     """Define a gravity-enabled physics scene."""
     ps = UsdPhysics.Scene.Define(stage, path)
     ps.CreateGravityDirectionAttr(Gf.Vec3f(0, 0, -1))
     ps.CreateGravityMagnitudeAttr(9.81)
+    # Update SimulationManager's cached physics scene reference so that
+    # play_timeline() does not raise "Accessed schema on invalid prim"
+    # after a world rebuild cleared the previous /World/PhysicsScene prim.
+    try:
+        from isaacsim.core.simulation_manager import SimulationManager
+        SimulationManager._physics_scene_api = ps
+    except Exception:
+        pass
     return ps
 
 
 # ── Asset spawning ──────────────────────────────────────────────────────────
 
-def spawn_asset(stage, prim_path, asset_path, x, y, z=0.0, yaw_deg=0.0):
-    """Create an Xform at (x, y, z) rotated by yaw_deg and load a USD reference."""
+def spawn_asset(stage, prim_path, asset_path, x, y, z=0.0, yaw_deg=0.0, scale=None):
+    """Create an Xform at (x, y, z) rotated by yaw_deg and load a USD reference.
+
+    scale: uniform scale factor applied after translate/rotate.  Use 0.01 for
+    assets authored in centimetres (e.g. Omniverse DigitalTwin pallets) so they
+    render at the correct size in a metres-based stage.
+    """
     xform = UsdGeom.Xform.Define(stage, prim_path)
     xform.AddTranslateOp().Set(Gf.Vec3d(x, y, z))
     xform.AddRotateZOp().Set(yaw_deg)
-    stage.GetPrimAtPath(Sdf.Path(prim_path)).GetReferences().AddReference(asset_path)
+    if scale is not None:
+        xform.AddScaleOp().Set(Gf.Vec3d(scale, scale, scale))
+    # Use the prim obtained directly from Define — avoids GetPrimAtPath entirely.
+    xform.GetPrim().GetReferences().AddReference(asset_path)
     return xform
 
 
@@ -69,10 +98,9 @@ def spawn_asset(stage, prim_path, asset_path, x, y, z=0.0, yaw_deg=0.0):
 
 def set_prim_translate_xy(stage, prim_path, x, y):
     """Set XY of an existing prim's translate op, preserving Z."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if not prim.IsValid():
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if not xf:
         return
-    xf = UsdGeom.Xformable(prim)
     for op in xf.GetOrderedXformOps():
         if "translate" in op.GetOpName():
             cur = op.Get()
@@ -82,10 +110,9 @@ def set_prim_translate_xy(stage, prim_path, x, y):
 
 def set_prim_rotate_z(stage, prim_path, yaw_deg):
     """Set the rotateZ op on an existing prim."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if not prim.IsValid():
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if not xf:
         return
-    xf = UsdGeom.Xformable(prim)
     for op in xf.GetOrderedXformOps():
         if "rotateZ" in op.GetOpName():
             op.Set(yaw_deg)
@@ -94,10 +121,9 @@ def set_prim_rotate_z(stage, prim_path, yaw_deg):
 
 def update_prim_pose(stage, prim_path, x, y, yaw_deg):
     """Set both translate XY and rotateZ in one call."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if not prim.IsValid():
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if not xf:
         return
-    xf = UsdGeom.Xformable(prim)
     for op in xf.GetOrderedXformOps():
         name = op.GetOpName()
         if "translate" in name:
@@ -111,7 +137,10 @@ def update_prim_pose(stage, prim_path, x, y, yaw_deg):
 
 def compute_world_bbox(stage, prim_path):
     """Return (min_xyz, max_xyz) as Gf.Vec3d, or None on failure."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if not xf:
+        return None
+    prim = xf.GetPrim()
     if not prim.IsValid():
         return None
     cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default", "render"])
@@ -124,9 +153,9 @@ def compute_world_bbox(stage, prim_path):
 
 def iter_prim_descendants(stage, root_path):
     """Yield every descendant prim under root_path."""
-    root = stage.GetPrimAtPath(Sdf.Path(root_path))
-    if root.IsValid():
-        yield from Usd.PrimRange(root)
+    xf = UsdGeom.Xformable.Get(stage, root_path)
+    if xf and xf.GetPrim().IsValid():
+        yield from Usd.PrimRange(xf.GetPrim())
 
 
 # ── Simulation control ──────────────────────────────────────────────────────
@@ -162,23 +191,23 @@ def spawn_box_marker(stage, prim_path, cx, cy, cz, sx, sy, sz, color):
 
 def apply_static_collision(stage, prim_path):
     """Apply UsdPhysics.CollisionAPI to make a prim a static collider."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if prim.IsValid():
-        UsdPhysics.CollisionAPI.Apply(prim)
+    xf = UsdGeom.Xformable.Get(stage, prim_path)
+    if xf and xf.GetPrim().IsValid():
+        UsdPhysics.CollisionAPI.Apply(xf.GetPrim())
 
 
 def make_invisible(stage, prim_path):
     """Hide a prim via UsdGeom.Imageable."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if prim.IsValid():
-        UsdGeom.Imageable(prim).MakeInvisible()
+    img = UsdGeom.Imageable.Get(stage, prim_path)
+    if img:
+        img.MakeInvisible()
 
 
 def make_visible(stage, prim_path):
     """Show a previously hidden prim via UsdGeom.Imageable."""
-    prim = stage.GetPrimAtPath(Sdf.Path(prim_path))
-    if prim.IsValid():
-        UsdGeom.Imageable(prim).MakeVisible()
+    img = UsdGeom.Imageable.Get(stage, prim_path)
+    if img:
+        img.MakeVisible()
 
 
 # ── Shelf detection (USD scan) ─────────────────────────────────────────────
@@ -191,9 +220,10 @@ def scan_shelves_for_rects(stage, keywords, min_size=0.5, dedup_threshold=0.5,
     Falls back to large-structure detection if no keyword matches are found.
     """
     rects: list[tuple[float, float, float, float]] = []
-    wh = stage.GetPrimAtPath(Sdf.Path(warehouse_path))
-    if not wh.IsValid():
+    wh_img = UsdGeom.Imageable.Get(stage, warehouse_path)
+    if not wh_img or not wh_img.GetPrim().IsValid():
         return rects
+    wh = wh_img.GetPrim()
 
     cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default", "render"])
     seen: list[tuple[float, float]] = []

@@ -96,8 +96,19 @@ AISLE_SNAP           = 0.8
 
 # ── Fork mast animation ─────────────────────────────────────────────────────
 FORK_RAISE_SPEED   = 0.25
-FORK_TRAVEL_HEIGHT = 0.45
+FORK_TRAVEL_HEIGHT = 0.45   # legacy height constant
 FORK_GROUND_HEIGHT = 0.0
+
+# Local-frame offset for a pallet child prim to sit on the forks.
+# Calibrated from test_pallet_position_visual.py — user moved blue origin
+# cube to the exact fork centre:
+#   forklift anchor world:  (-21.530, -18.600, 0)
+#   pallet origin world:    (-20.334, -18.528, 0.194)
+#   world offset:           (+1.196, +0.072, +0.194)
+#   forklift rotateZ=90 inverse → local: (world_dy, -world_dx, world_dz)
+PALLET_FORK_LOCAL_X =  0.072   # local X (≈ centred left/right on forks)
+PALLET_FORK_LOCAL_Y = -1.196   # local Y (forward, towards fork tines)
+PALLET_FORK_LOCAL_Z =  0.194   # height — fork tine travel height
 
 # ── Forklift FSM states ──────────────────────────────────────────────────────
 # Movement states: what the forklift is currently doing
@@ -190,10 +201,13 @@ SHELF_KEYWORDS = frozenset({
 # ── Staging props ───────────────────────────────────────────────────────────
 PALLET_H = 0.15
 
-# ── Asset paths (relative to get_assets_root_path()) ────────────────────────
+# ── Asset paths ──────────────────────────────────────────────────────────────
+# WAREHOUSE_USD and FORKLIFT_USD are relative paths appended to assets_root.
+# PALLET_USD is an absolute URL and must be used directly (no assets_root prefix).
 WAREHOUSE_USD = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
 FORKLIFT_USD  = "/Isaac/Props/Forklift/forklift.usd"
-PALLET_USD    = "/Isaac/Props/Pallet/pallet.usd"
+PALLET_USD    = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Cardboard_Boxes_on_Pallet/Pallet_Asm_A/Pallet_Asm_A06_112x112x109cm_PR_V_NVD_01.usd"
+PALLET_SCALE  = 0.01   # asset is authored in cm; stage is in metres
 BOX_USDS      = [
     "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxA_01.usd",
     "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxB_01.usd",

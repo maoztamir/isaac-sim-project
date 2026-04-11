@@ -32,12 +32,25 @@ class Pallet:
     # ── Spawn / lifecycle ────────────────────────────────────────────────────
 
     def spawn(self, stage, assets_root: str,
-              x: float, y: float, z: float = 0.0, yaw_deg: float = 0.0) -> None:
-        """Create the pallet USD prim at the given position."""
+              x: float, y: float, z: float = 0.0, yaw_deg: float = 0.0,
+              box_usd: str | None = None) -> None:
+        """Create the pallet USD prim at the given position.
+
+        If *box_usd* is provided (a path relative to assets_root), a cargo box
+        prim is also spawned as a child of the pallet prim, sitting on top of
+        the pallet at z + PALLET_H.  USD visibility inheritance ensures the box
+        hides / shows automatically whenever the parent pallet prim is toggled.
+        """
         ih.spawn_asset(stage, self.prim_path,
-                       assets_root + C.PALLET_USD,
-                       x, y, z, yaw_deg)
+                       C.PALLET_USD,
+                       x, y, z, yaw_deg,
+                       scale=C.PALLET_SCALE)
         self.xy = (x, y)
+
+        if box_usd is not None:
+            ih.spawn_asset(stage, self.prim_path + "/box",
+                           assets_root + box_usd,
+                           x, y, z + C.PALLET_H, yaw_deg)
 
     # ── Visibility ───────────────────────────────────────────────────────────
 
