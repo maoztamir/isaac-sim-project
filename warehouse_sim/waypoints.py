@@ -94,12 +94,64 @@ def rand_floor_point(shelf_map: ShelfMap, rng: _random.Random,
 
 def rand_zone_point(zone: Area, shelf_map: ShelfMap,
                     rng: _random.Random) -> tuple[float, float]:
-    """Random navigable point inside a specific zone."""
+    """Random navigable point inside a specific zone.
+
+    When the zone falls in the shelf Y range the X coordinate is snapped to
+    the nearest detected aisle so the returned point is always in a corridor,
+    never inside a rack.
+    """
     for _ in range(30):
         x, y = zone.random_point(rng)
+        if shelf_map.in_shelf_area(y) and shelf_map.aisle_xs:
+            x = shelf_map.nearest_aisle(x)
         if not shelf_map.inside_shelf(x, y, margin=1.5):
             return (x, y)
+    # Fallback: aisle centre if in shelf area, else zone centre
+    if shelf_map.in_shelf_area(zone.center[1]) and shelf_map.aisle_xs:
+        return (shelf_map.nearest_aisle(zone.center[0]), zone.center[1])
     return zone.center
+
+
+def aisle_route(origin: tuple[float, float], dest: tuple[float, float],
+                shelf_map: ShelfMap) -> list[tuple[float, float]]:
+    """Return waypoints that cross the shelf area via the correct aisle.
+
+    Entering shelves: pre-aligns to the destination aisle 1.5 m south of the
+    shelf boundary before proceeding north — ensures the forklift is in the
+    right corridor before shelf rects appear.
+
+    Exiting shelves: exits south via the origin aisle before heading to the
+    open-floor destination.
+
+    If shelf_map is not ready or the route stays outside the shelf area the
+    function returns [dest] unchanged.
+    """
+    if not shelf_map.aisle_xs or shelf_map.area_y_min is None:
+        return [dest]
+
+    ox, oy = origin
+    dx, dy = dest
+
+    orig_in = shelf_map.in_shelf_area(oy)
+    dest_in = shelf_map.in_shelf_area(dy)
+    approach_y = shelf_map.area_y_min - 1.5   # open floor just south of shelves
+
+    if dest_in and not orig_in:
+        # Entering shelves: align to dest aisle south of boundary, then proceed
+        ax = shelf_map.nearest_aisle(dx)
+        return [(ax, approach_y), (ax, dy)]
+
+    if orig_in and not dest_in:
+        # Exiting shelves: drive to aisle exit first, then open floor
+        ax = shelf_map.nearest_aisle(ox)
+        return [(ax, approach_y), dest]
+
+    if dest_in and orig_in:
+        # Both ends inside shelves — route via aisle columns only
+        ax = shelf_map.nearest_aisle(dx)
+        return [(ax, dy)]
+
+    return [dest]
 
 
 def gen_patrol(shelf_map: ShelfMap, rng: _random.Random,

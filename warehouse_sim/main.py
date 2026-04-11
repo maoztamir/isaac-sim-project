@@ -23,6 +23,28 @@ import sys
 
 _project_root = "/home/ubuntu/isaac_sim_samples/isaac-sim-project"
 
+# ── Output log ───────────────────────────────────────────────────────────────
+_output_dir = os.path.join(_project_root, "tests", "output")
+os.makedirs(_output_dir, exist_ok=True)
+_log_path = os.path.join(_output_dir, "main.log")
+
+class _Tee:
+    def __init__(self, stream, path):
+        self._stream = stream
+        self._file   = open(path, "w", buffering=1)
+    def write(self, data):
+        self._stream.write(data)
+        self._file.write(data)
+    def flush(self):
+        self._stream.flush()
+        self._file.flush()
+    def __getattr__(self, name):
+        return getattr(self._stream, name)
+
+sys.stdout = _Tee(sys.stdout, _log_path)
+sys.stderr = _Tee(sys.stderr, _log_path)
+print(f"[main] logging to {_log_path}")
+
 # Evict any sys.path entry that exposes a conflicting `warehouse_sim` sibling
 # — either a directory OR a single-file `warehouse_sim.py` module that would
 # be loaded instead of our package.

@@ -96,10 +96,19 @@ class Scenario:
     # ── Physics callback ─────────────────────────────────────────────────
 
     def _on_physics_step(self, dt):
+        try:
+            self._on_physics_step_inner(dt)
+        except Exception:
+            import traceback
+            traceback.print_exc()
+
+    def _on_physics_step_inner(self, dt):
         # Lazy shelf init
         if not self.shelf_map.ready:
+            print(f"[{self.name}] First physics step — initialising ShelfMap...")
             self.shelf_map.init(self.stage)
             self._assign_initial_waypoints()
+            print(f"[{self.name}] ShelfMap ready, waypoints assigned.")
 
         self.sim_time += dt
 

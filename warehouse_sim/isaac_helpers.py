@@ -64,12 +64,18 @@ def create_physics_scene(stage, path="/World/PhysicsScene"):
     ps = UsdPhysics.Scene.Define(stage, path)
     ps.CreateGravityDirectionAttr(Gf.Vec3f(0, 0, -1))
     ps.CreateGravityMagnitudeAttr(9.81)
-    # Update SimulationManager's cached physics scene reference so that
-    # play_timeline() does not raise "Accessed schema on invalid prim"
-    # after a world rebuild cleared the previous /World/PhysicsScene prim.
+    # Re-register the new scene with SimulationManager so that play_timeline()
+    # does not raise "Accessed schema on invalid prim" after a world rebuild
+    # cleared the previous /World/PhysicsScene prim.
+    # SimulationManager._physics_scene_apis is an OrderedDict:
+    #   { prim_path: PhysxSchema.PhysxSceneAPI }
     try:
         from isaacsim.core.simulation_manager import SimulationManager
-        SimulationManager._physics_scene_api = ps
+        from pxr import PhysxSchema
+        SimulationManager._physics_scene_apis.clear()
+        SimulationManager._physics_scene_apis[path] = \
+            PhysxSchema.PhysxSceneAPI.Apply(ps.GetPrim())
+        SimulationManager._default_physics_scene_idx = 0
     except Exception:
         pass
     return ps

@@ -93,6 +93,7 @@ FORKLIFT_HEADING_OFFSET = 90.0
 FORKLIFT_BODY_HALF   = 0.9
 FORKLIFT_ARRIVE_RADIUS = 2.0
 AISLE_SNAP           = 0.8
+AISLE_HALF_WIDTH     = 0.1   # max X drift from aisle centreline inside shelf area
 
 # ── Fork mast animation ─────────────────────────────────────────────────────
 FORK_RAISE_SPEED   = 0.25
@@ -190,7 +191,8 @@ SCENARIO_PRESETS = {
 
 # ── FSM timing ──────────────────────────────────────────────────────────────
 IDLE_DURATION    = 3.5
-LOADING_DURATION = 5.0
+PICKUP_DURATION  = 4.0   # seconds spent picking up a pallet at the shelves
+LOADING_DURATION = 5.0   # seconds spent transferring pallet at the dock
 
 # ── Shelf detection keywords ────────────────────────────────────────────────
 SHELF_KEYWORDS = frozenset({

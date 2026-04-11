@@ -213,6 +213,18 @@ Each scenario is thin: sets object states + timing, no custom movement logic.
 | `warehouse_sim/scenarios/safety_proximity.py` | New |
 | `warehouse_sim/scenarios/__init__.py` | Update |
 
+### Step 11: Aisle navigation — fix forklift entry into shelf corridors
+
+The waypoint-skip loop in `_tick_drive` uses `margin=1.5` which bleeds into narrow
+aisle corridors (< 3 m wide) and causes aisle waypoints to be skipped, so forklifts
+never enter the shelves.
+
+- Reduce waypoint-skip margin from `1.5` to `C.FORKLIFT_BODY_HALF` in both
+  `warehouse_sim/forklift.py` and `warehouse_sim/models/forklift.py`
+- Verify `AISLE_HALF_WIDTH = 0.1` hard-clamp keeps forklifts on centreline
+- Run `main.py` (dock_queue) and confirm forklifts visibly enter and exit aisles
+- Update `tests/test_shelf_detection_visual.py` expected outcomes if needed
+
 ## Verification
 
 1. Run each scenario in Script Editor — change `SCENARIO` in `main.py`

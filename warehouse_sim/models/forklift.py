@@ -134,7 +134,7 @@ class Forklift:
         tx, ty = self.waypoints[self.wp_idx]
 
         for _ in range(len(self.waypoints)):
-            if not shelf_map.inside_shelf(tx, ty, margin=1.5):
+            if not shelf_map.inside_shelf(tx, ty, margin=0.0):
                 break
             self._advance_waypoint()
             tx, ty = self.waypoints[self.wp_idx]
@@ -154,8 +154,10 @@ class Forklift:
             self.speed = 0.0
             return
 
+        # Snap to the aisle that serves the TARGET (tx), not the nearest aisle
+        # to the forklift's current X — prevents wrong-aisle commitment.
         if shelf_map.in_shelf_area(fy) and shelf_map.aisle_xs:
-            ax = shelf_map.nearest_aisle(fx)
+            ax = shelf_map.nearest_aisle(tx)
             if abs(fx - ax) > C.AISLE_SNAP:
                 dx, dy = ax - fx, 0.0
             else:
@@ -192,7 +194,7 @@ class Forklift:
         nx = fx + self.speed * dt * math.cos(move_rad)
         ny = fy + self.speed * dt * math.sin(move_rad)
 
-        if shelf_map.inside_shelf(nx, ny, margin=C.FORKLIFT_BODY_HALF):
+        if shelf_map.inside_shelf(nx, ny, margin=0.0):
             self._advance_waypoint()
             return
 
@@ -228,6 +230,11 @@ class Forklift:
                 nx = max(C.NAV_X_MIN, min(C.NAV_X_MAX, nx))
                 ny = max(C.NAV_Y_MIN, min(C.NAV_Y_MAX, ny))
                 self.speed *= 0.5
+
+        # Hard-clamp to aisle corridor — prevents crossing into shelf blocks
+        if shelf_map.in_shelf_area(ny) and shelf_map.aisle_xs:
+            ax = shelf_map.nearest_aisle(nx)
+            nx = ax + max(-C.AISLE_HALF_WIDTH, min(C.AISLE_HALF_WIDTH, nx - ax))
 
         self.pos = [nx, ny]
         ih.update_prim_pose(stage, self.prim_path, nx, ny, self.heading)
