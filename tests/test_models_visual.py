@@ -127,6 +127,17 @@ for k in list(sys.modules):
         sys.modules.pop(k, None)
 
 # Wipe finder / path-importer caches so Python re-scans sys.path cleanly.
+# Delete stale .pyc files so Isaac Sim's persistent interpreter picks up
+# source changes rather than cached bytecode from a previous run.
+import glob as _glob
+for _pyc in _glob.glob(
+        os.path.join(_project_root, "warehouse_sim", "**", "*.pyc"),
+        recursive=True):
+    try:
+        os.remove(_pyc)
+    except OSError:
+        pass
+
 import importlib
 importlib.invalidate_caches()
 

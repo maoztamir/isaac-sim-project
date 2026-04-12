@@ -1,0 +1,132 @@
+[test] logging to /home/ubuntu/isaac_sim_samples/isaac-sim-project/tests/output/test_logic.log
+[test] warehouse_sim loaded from: /home/ubuntu/isaac_sim_samples/isaac-sim-project/warehouse_sim/__init__.py
+
+════════════════════════════════════════════════════════════
+  STEP 0: Build scene + slot markers
+════════════════════════════════════════════════════════════
+[dock_queue] Getting stage...
+[dock_queue] Resolving assets root...
+[dock_queue] Clearing /World...
+[dock_queue] Loading warehouse USD...
+[dock_queue] 3 loading dock gates spawned.
+[dock_queue] Scene built: 4 forklifts, 3 areas.
+[ShelfMap] trying decal-based scan first
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X11'               cx=-20.36 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m62'          cx=-20.94 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m63'          cx=-20.94 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m64'          cx=-20.94 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m65'          cx=-20.94 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m66_1161'     cx=-19.80 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m67_1162'     cx=-19.80 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m68_1163'     cx=-19.80 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m69_1164'     cx=-19.80 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X12_1166'          cx=-20.36 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X17'               cx=-10.45 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-10.45 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m82'          cx=-11.03 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m83'          cx=-11.03 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m84'          cx=-11.03 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m85'          cx=-11.03 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m86'          cx=-9.89 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m87'          cx=-9.89 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m88'          cx=-9.89 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m89'          cx=-9.89 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X18'               cx=-10.45 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-10.45 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X19'               cx=-5.49 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-5.49 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m90'          cx=-6.07 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m91'          cx=-6.07 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m92'          cx=-6.07 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m93'          cx=-6.07 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m94'          cx=-4.93 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m95'          cx=-4.93 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m96'          cx=-4.93 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m97'          cx=-4.93 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X20'               cx=-5.49 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-5.49 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X21'               cx=-0.54 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-0.54 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m98'          cx=-1.12 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m99'          cx=-1.12 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m100'         cx=-1.12 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m101'         cx=-1.12 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m102'         cx=0.02 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m103'         cx=0.02 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m104'         cx=0.02 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m105'         cx=0.02 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X22'               cx=-0.54 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-0.54 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X13'               cx=-15.41 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-15.41 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m70'          cx=-15.99 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m71_10'       cx=-15.99 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m72_11'       cx=-15.99 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m73_12'       cx=-15.99 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m106'         cx=-14.85 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m107'         cx=-14.85 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m108'         cx=-14.85 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m109'         cx=-14.85 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X14_13'            cx=-15.41 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-15.41 cy=25.19
+[ShelfMap] decal scan: aisle Xs = [-20.36, -15.41, -10.45, -5.49, -0.54]
+[ShelfMap] decal scan: shelf Y 8.11 → 25.73
+[ShelfMap] decal scan: boundary Xs = [-20.94, -19.8, -15.99, -14.85, -11.03, -9.89, -6.07, -4.93, -1.12, 0.02]
+[ShelfMap]   shelf block: x=(-24.53,-20.94) y=(8.11,25.73) w=3.59m
+[ShelfMap]   shelf block: x=(-19.80,-15.99) y=(8.11,25.73) w=3.81m
+[ShelfMap]   shelf block: x=(-14.85,-11.03) y=(8.11,25.73) w=3.82m
+[ShelfMap]   shelf block: x=(-9.89,-6.07) y=(8.11,25.73) w=3.82m
+[ShelfMap]   shelf block: x=(-4.93,-1.12) y=(8.11,25.73) w=3.81m
+[ShelfMap]   shelf block: x=(0.02,3.66) y=(8.11,25.73) w=3.64m
+[ShelfMap] decal scan complete: 6 rects, 5 aisles
+[ShelfMap] Shelf Y: 8.1 -> 25.7
+[ShelfMap] Aisles X: [-20.4, -15.4, -10.5, -5.5, -0.5]
+[ShelfMap] 6 shelf rects, 5 aisles detected.
+  [PASS] scene built, logic stack ready
+  Starting simulation...
+
+════════════════════════════════════════════════════════════
+  STEP 1: Simulation running
+════════════════════════════════════════════════════════════

@@ -1,0 +1,77 @@
+[
+  {
+    "type": "door_open",
+    "sim_time": 2.0,
+    "payload": {
+      "gate_idx": 0
+    }
+  },
+  {
+    "type": "door_close",
+    "sim_time": 3.0,
+    "payload": {
+      "gate_idx": 0
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.0,
+    "payload": {
+      "zone": "loading",
+      "depth": 3,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.0,
+    "payload": {
+      "zone": "staging",
+      "occupancy": 6,
+      "capacity": 6
+    }
+  },
+  {
+    "type": "state_hold",
+    "sim_time": 6.0,
+    "payload": {
+      "fl_id": 1,
+      "state": "STATE_WAIT_IN_STAGING",
+      "held_secs": 25.0,
+      "threshold": 20.0
+    }
+  },
+  {
+    "type": "pallet_transfer",
+    "sim_time": 7.0,
+    "payload": {
+      "fl_id": 2,
+      "action": "pickup",
+      "pallet_id": 7,
+      "location": [
+        -9.0,
+        15.0
+      ]
+    }
+  },
+  {
+    "type": "proximity_alert",
+    "sim_time": 8.0,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.8,
+      "speed_a": 0.5,
+      "speed_b": 1.2
+    }
+  },
+  {
+    "type": "idle_alert",
+    "sim_time": 9.0,
+    "payload": {
+      "fl_id": 3,
+      "idle_secs": 22.0,
+      "zone": "shelves"
+    }
+  }
+]

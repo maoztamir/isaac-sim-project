@@ -1,0 +1,4593 @@
+[
+  {
+    "type": "proximity_alert",
+    "sim_time": 0.1,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.0,
+      "speed_a": 1.5,
+      "speed_b": 0.8
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 0.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 0.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 1.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 1.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 2.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 2.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 3.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 3.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 4.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 4.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "proximity_alert",
+    "sim_time": 5.2,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.0,
+      "speed_a": 1.5,
+      "speed_b": 0.8
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 5.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 5.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 6.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 6.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 7.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 7.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 8.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 8.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 9.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 9.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "proximity_alert",
+    "sim_time": 10.3,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.0,
+      "speed_a": 1.5,
+      "speed_b": 0.8
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 10.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 10.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 11.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 11.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 12.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 12.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 13.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 13.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 14.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 14.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "proximity_alert",
+    "sim_time": 15.4,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.0,
+      "speed_a": 1.5,
+      "speed_b": 0.8
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 15.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 15.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 16.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 16.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 17.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 17.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 18.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 18.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 19.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 19.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "idle_alert",
+    "sim_time": 20.0,
+    "payload": {
+      "fl_id": 0,
+      "idle_secs": 20.000000000000014,
+      "zone": "LoadingZone"
+    }
+  },
+  {
+    "type": "idle_alert",
+    "sim_time": 20.0,
+    "payload": {
+      "fl_id": 1,
+      "idle_secs": 20.000000000000014,
+      "zone": "LoadingZone"
+    }
+  },
+  {
+    "type": "idle_alert",
+    "sim_time": 20.0,
+    "payload": {
+      "fl_id": 2,
+      "idle_secs": 20.000000000000014,
+      "zone": "StagingArea"
+    }
+  },
+  {
+    "type": "idle_alert",
+    "sim_time": 20.0,
+    "payload": {
+      "fl_id": 3,
+      "idle_secs": 20.000000000000014,
+      "zone": "StagingArea"
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "proximity_alert",
+    "sim_time": 20.4,
+    "payload": {
+      "fl_id_a": 0,
+      "fl_id_b": 1,
+      "distance": 1.0,
+      "speed_a": 1.5,
+      "speed_b": 0.8
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 20.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 20.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 21.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 21.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 22.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 22.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 23.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 23.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.1,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.1,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.2,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.2,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.3,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.3,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.4,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.4,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.5,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.5,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.6,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.6,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.7,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.7,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.8,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.8,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 24.9,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 24.9,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  },
+  {
+    "type": "buildup_threshold",
+    "sim_time": 25.0,
+    "payload": {
+      "zone": "LoadingZone",
+      "occupancy": 2,
+      "capacity": 1
+    }
+  },
+  {
+    "type": "queue_formed",
+    "sim_time": 25.0,
+    "payload": {
+      "zone": "StagingArea",
+      "depth": 2,
+      "threshold": 2
+    }
+  }
+]

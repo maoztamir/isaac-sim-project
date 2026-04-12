@@ -89,6 +89,17 @@ for k in list(sys.modules):
     if k.startswith("warehouse_sim") and sys.modules.get(k) is None:
         sys.modules.pop(k, None)
 
+# Delete stale .pyc files so Isaac Sim's persistent interpreter picks up
+# source changes rather than cached bytecode from a previous run.
+import glob as _glob
+for _pyc in _glob.glob(
+        os.path.join(_project_root, "warehouse_sim", "**", "*.pyc"),
+        recursive=True):
+    try:
+        os.remove(_pyc)
+    except OSError:
+        pass
+
 import importlib
 importlib.invalidate_caches()
 
