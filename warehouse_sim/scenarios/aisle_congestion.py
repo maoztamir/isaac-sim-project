@@ -17,6 +17,7 @@ from __future__ import annotations
 from .base import Scenario
 from .. import config as C
 from .. import isaac_helpers as ih
+from ..models.forklift import Forklift
 
 
 class AisleCongestionScenario(Scenario):
@@ -40,8 +41,6 @@ class AisleCongestionScenario(Scenario):
             ih.spawn_asset(self.stage, path,
                            self.assets_root + C.FORKLIFT_USD,
                            sx, spawn_y, 0.0, 90.0)
-            fl_cls = self.forklifts.__class__  # list
-            from ..models.forklift import Forklift
             self.forklifts.append(Forklift(i, path, sx, spawn_y))
 
     def _assign_initial_waypoints(self):

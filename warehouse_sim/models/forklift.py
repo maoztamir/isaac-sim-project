@@ -1,14 +1,10 @@
 """
 Forklift: 8-state FSM + kinematic bicycle model + load property.
 
-Migrated from warehouse_sim/forklift.py with the following extensions:
-  - 4-state FSM replaced with 8-state ladder from config.py
+  - 8-state FSM ladder driven by rule_engine (see logic/forklift_fsm.py)
   - `load` property (LOAD_LOADED / LOAD_UNLOADED) independent of state
   - Fork prim + pallet prim visual wiring driven by load property
-  - `assigned_task`, `current_area_slot` for rule engine (Task #6)
-
-The old warehouse_sim/forklift.py is NOT deleted yet — Task #9 cleanup
-will remove it once scenarios/base.py switches to this model.
+  - `assigned_task`, `current_area_slot` for rule engine
 """
 
 from __future__ import annotations
