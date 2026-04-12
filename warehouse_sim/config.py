@@ -189,6 +189,37 @@ SCENARIO_PRESETS = {
     },
 }
 
+# ── Config-driven scenarios ──────────────────────────────────────────────────
+# Entries here create scenarios without a Python subclass.  Set SCENARIO to the
+# dict key in main.py and ConfigScenario does the rest.  Python-class entries in
+# scenarios/PRESETS always take priority when the same name appears in both.
+#
+# Supported keys per entry:
+#   num_forklifts    (int)        how many forklifts to spawn
+#   loading_duration (float)      seconds at dock per cycle
+#   pickup_duration  (float)      seconds at shelf pickup per cycle
+#   spawn_strategy   (str)        "grid" | "near_aisle"
+#   near_aisle_x     (float|None) X for near_aisle; None = auto from ShelfMap
+#   doors            (dict)       open_all_at_start (bool) + events list
+#   idle_forklift_ids(list[int])  forklift IDs that never receive tasks
+#   thresholds       (dict)       per-scenario overrides for IDLE_WARN_SECS,
+#                                 NEAR_MISS_DIST
+CONFIG_SCENARIOS = {
+    "vehicle_idle": {
+        "num_forklifts":     4,
+        "loading_duration":  6.0,
+        "spawn_strategy":    "grid",
+        "doors": {
+            "open_all_at_start": True,
+            "events": [],
+        },
+        "idle_forklift_ids": [1, 2],   # FL1 and FL2 stay parked
+        "thresholds": {
+            "IDLE_WARN_SECS": 60.0,    # suppress idle alert for active forklifts
+        },
+    },
+}
+
 # ── FSM timing ──────────────────────────────────────────────────────────────
 IDLE_DURATION    = 3.5
 PICKUP_DURATION  = 4.0   # seconds spent picking up a pallet at the shelves

@@ -202,9 +202,43 @@ SCENARIO = "my_scenario"
 
 ---
 
-### Option B — Dict entry only (coming in Task 11)
+### Option B — Dict entry only (no subclass needed)
 
-A `ConfigScenario` mechanism is planned that lets you define a scenario entirely as a Python dict in `warehouse_sim/config.py` — no subclass needed. Supported levers will include forklift count, loading/pickup timing, door open/close schedules, idle forklift IDs, and threshold overrides. Until that is implemented, use Option A.
+Add an entry to `CONFIG_SCENARIOS` in `warehouse_sim/config.py`, then set `SCENARIO` to its key in `main.py`. No Python file needed.
+
+```python
+# warehouse_sim/config.py
+CONFIG_SCENARIOS = {
+    "my_scenario": {
+        "num_forklifts":     4,
+        "loading_duration":  8.0,
+        "pickup_duration":   4.0,
+        "spawn_strategy":    "grid",       # "grid" | "near_aisle"
+        "near_aisle_x":      None,         # float | None (auto from ShelfMap)
+        "doors": {
+            "open_all_at_start": True,
+            "events": [
+                {"at_sim_time": 30.0, "action": "close_all"},
+                {"at_sim_time": 50.0, "action": "open_all"},
+                # actions: "open_all", "close_all", "open_gate_0", "close_gate_1"
+            ],
+        },
+        "idle_forklift_ids": [1],          # these forklifts never receive tasks
+        "thresholds": {
+            "IDLE_WARN_SECS": 30.0,        # per-scenario overrides
+            "NEAR_MISS_DIST": 3.0,
+        },
+    },
+}
+```
+
+Then in `main.py`:
+
+```python
+SCENARIO = "my_scenario"
+```
+
+Python-class entries in `PRESETS` always take priority over dict entries if the same name appears in both.
 
 ---
 

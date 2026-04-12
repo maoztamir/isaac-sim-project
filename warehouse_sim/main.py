@@ -88,18 +88,21 @@ print(f"[main] Loading scenario: {SCENARIO}")
 import warehouse_sim
 print(f"[main] warehouse_sim loaded from: {warehouse_sim.__file__}")
 
-from warehouse_sim.scenarios import PRESETS
+from warehouse_sim.scenarios import PRESETS, get_scenario_class
 from warehouse_sim import config as C
-print(f"[main] Available scenarios: {list(PRESETS.keys())}")
+_preset_names = list(PRESETS.keys())
+_config_names = list(C.CONFIG_SCENARIOS.keys())
+print(f"[main] Preset scenarios:  {_preset_names}")
+print(f"[main] Config scenarios:  {_config_names}")
 print(f"[main] STAGING_CENTER_Y = {C.STAGING_CENTER_Y:.2f} (expect ~ -7.65)")
 
 
 async def _run():
-    if SCENARIO not in PRESETS:
-        print(f"[main] Unknown scenario '{SCENARIO}'. "
-              f"Available: {list(PRESETS.keys())}")
+    try:
+        cls = get_scenario_class(SCENARIO)
+    except KeyError as e:
+        print(f"[main] {e}")
         return
-    cls = PRESETS[SCENARIO]
     print(f"[main] Instantiating {cls.__name__} ...")
     scenario = cls(seed=SEED)
     await scenario.build()
