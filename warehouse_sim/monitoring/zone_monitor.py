@@ -40,6 +40,8 @@ class ZoneMonitor:
 
     def __init__(self, zone_manager):
         self._zm = zone_manager
+        # Support both ZoneManager (.zones) and AreaManager (.areas)
+        self._areas_attr = "zones" if hasattr(zone_manager, "zones") else "areas"
         # Per-zone snapshots — built from zone names on first tick
         self._snapshots: dict[str, ZoneSnapshot] = {}
         # Previous occupancy sets to detect enter/exit events
@@ -65,7 +67,7 @@ class ZoneMonitor:
         for fl in forklifts:
             speed_by_id[fl.id] = getattr(fl, "speed", 0.0)
 
-        for name, zone in self._zm.zones.items():
+        for name, zone in getattr(self._zm, self._areas_attr).items():
             snap = self._snapshots.setdefault(name, ZoneSnapshot(name=name))
             prev = self._prev_occupants.setdefault(name, set())
 
@@ -117,6 +119,10 @@ class ZoneMonitor:
             snap.occupancy_seconds = 0.0
             snap.max_dwell = 0.0
         self._prev_occupants.clear()
+
+    def areas(self) -> dict:
+        """Return the underlying area/zone dict (supports both manager types)."""
+        return getattr(self._zm, self._areas_attr)
 
     def print_summary(self) -> None:
         """Print a one-line summary per zone to stdout."""
