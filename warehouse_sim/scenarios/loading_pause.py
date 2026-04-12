@@ -1,54 +1,58 @@
 """
-Loading Pause scenario: one forklift stalls at the loading dock for an
-extended period, forcing others to reroute or wait.
+Loading Pause scenario.
+
+All three doors open at the start. At T=PAUSE_AT_SEC all doors close —
+the FSM condition `any(d.is_open for d in doors)` becomes False, so no
+forklift can transition from staging to loading. Queues form in staging
+until doors reopen at T=PAUSE_AT_SEC + PAUSE_DURATION.
+
+Levers (from C.SCENARIO_PRESETS["loading_pause"]):
+  num_forklifts    = 3
+  loading_duration = 8.0
+  pause_at_sec     = 30.0
+  pause_duration   = 20.0
 """
 
 from __future__ import annotations
 from .base import Scenario
 from .. import config as C
-from .. import waypoints as wp
-from ..forklift import STATE_IDLE, STATE_LOADING
 
-
-STALL_FORKLIFT = 0
-STALL_DURATION = 15.0  # seconds the stalled forklift stays at the dock
+# ── Scenario knobs ────────────────────────────────────────────────────────────
+PAUSE_AT_SEC   = 30.0   # sim-seconds before all doors close
+PAUSE_DURATION = 20.0   # how long doors stay closed
 
 
 class LoadingPauseScenario(Scenario):
     name = "loading_pause"
     num_forklifts = 3
 
-    def __init__(self, seed=42):
+    def __init__(self, seed: int = 42):
         super().__init__(seed)
-        self._stall_triggered = False
+        self.loading_duration = 8.0
+        self._pause_closed = False
+        self._pause_reopened = False
 
     def _assign_initial_waypoints(self):
-        loading = self.area_mgr.get("LoadingZone")
-        shelves = self.area_mgr.get("ShelvesArea")
-        staging = self.area_mgr.get("StagingArea")
-        for fl in self.forklifts:
-            if fl.id == STALL_FORKLIFT:
-                # This one heads straight to the dock
-                route = wp.gen_zone_route(
-                    [loading], self.shelf_map, self.rng, points_per_zone=1
-                )
-            else:
-                route = wp.gen_zone_route(
-                    [staging, shelves, loading],
-                    self.shelf_map, self.rng, points_per_zone=2
-                )
-            fl.set_waypoints(route, start_idx=0)
+        """Open all doors at start; timed close/reopen handled in on_step."""
+        self.open_all_doors()
+        print(f"[{self.name}] doors open — will pause at T={PAUSE_AT_SEC}s "
+              f"for {PAUSE_DURATION}s")
 
-    def on_step(self, dt):
-        loading = self.area_mgr.get("LoadingZone")
-        stall_fl = self.forklifts[STALL_FORKLIFT]
+    def on_step(self, dt: float):
+        # Close all doors at pause time
+        if not self._pause_closed and self.sim_time >= PAUSE_AT_SEC:
+            self.close_all_doors()
+            self._pause_closed = True
+            for i in range(len(self.doors)):
+                self.evt_log.log_door_close(self.sim_time, gate_idx=i)
+            print(f"[{self.name}] t={self.sim_time:.1f}s — all doors CLOSED "
+                  f"(pause for {PAUSE_DURATION}s)")
 
-        # Once the stall forklift arrives at the loading zone, lock it there
-        if (not self._stall_triggered and
-                stall_fl.state == STATE_IDLE and
-                loading.contains(stall_fl.pos[0], stall_fl.pos[1])):
-            stall_fl.state = STATE_LOADING
-            stall_fl.state_timer = STALL_DURATION
-            self._stall_triggered = True
-            print(f"[{self.name}] FL{STALL_FORKLIFT} stalled at dock for "
-                  f"{STALL_DURATION}s!")
+        # Reopen all doors after pause duration
+        if (self._pause_closed and not self._pause_reopened and
+                self.sim_time >= PAUSE_AT_SEC + PAUSE_DURATION):
+            self.open_all_doors()
+            self._pause_reopened = True
+            for i in range(len(self.doors)):
+                self.evt_log.log_door_open(self.sim_time, gate_idx=i)
+            print(f"[{self.name}] t={self.sim_time:.1f}s — all doors REOPENED")

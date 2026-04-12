@@ -27,14 +27,16 @@ class RuleEngine:
     """Stateless per-step rule evaluator owned by the Scenario."""
 
     def __init__(self,
-                 forklifts:   list[Forklift],
-                 doors:       list[LoadingDoor],
-                 pallets:     list[Pallet],
-                 area_mgr:    AreaManager,
-                 queue_mgr:   QueueManager,
-                 shelf_map:   ShelfMap,
+                 forklifts:        list[Forklift],
+                 doors:            list[LoadingDoor],
+                 pallets:          list[Pallet],
+                 area_mgr:         AreaManager,
+                 queue_mgr:        QueueManager,
+                 shelf_map:        ShelfMap,
                  stage,
-                 assets_root: str | None = None):
+                 assets_root:      str | None = None,
+                 loading_duration: float | None = None,
+                 pickup_duration:  float | None = None):
         self.forklifts  = forklifts
         self.doors      = doors
         self.pallets    = pallets
@@ -43,6 +45,9 @@ class RuleEngine:
         self.shelf_map  = shelf_map
         self.stage       = stage
         self.assets_root = assets_root
+        # Per-scenario timing overrides (fall back to config defaults when None)
+        self._loading_duration = loading_duration if loading_duration is not None else C.LOADING_DURATION
+        self._pickup_duration  = pickup_duration  if pickup_duration  is not None else C.PICKUP_DURATION
 
         # One pallet per forklift (index = forklift id); None when unloaded
         # Populated lazily as forklifts pick up pallets
@@ -73,9 +78,9 @@ class RuleEngine:
 
     def _timer_for(self, state: str) -> float:
         if state == C.STATE_PICKUP_AT_SHELVES:
-            return C.PICKUP_DURATION
+            return self._pickup_duration
         if state == C.STATE_LOADING:
-            return C.LOADING_DURATION
+            return self._loading_duration
         return 0.0
 
     def _set_waypoints(self, fl: Forklift, state: str) -> None:

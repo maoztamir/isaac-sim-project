@@ -62,6 +62,10 @@ class Scenario:
         self.zone_mon:       ZoneMonitor    | None = None
         self.metrics_writer: MetricsWriter  | None = None
 
+        # Per-scenario timing (subclasses set this in __init__ before build())
+        self.loading_duration: float = C.LOADING_DURATION
+        self.pickup_duration:  float = C.PICKUP_DURATION
+
         # Internal timers
         self.sim_time = 0.0
         self._telemetry_timer = 0.0
@@ -135,6 +139,8 @@ class Scenario:
             shelf_map=self.shelf_map,
             stage=self.stage,
             assets_root=self.assets_root,
+            loading_duration=self.loading_duration,
+            pickup_duration=self.pickup_duration,
         )
 
         print(f"[{self.name}] Scene built: {len(self.forklifts)} forklifts, "
@@ -217,13 +223,19 @@ class Scenario:
             self._print_status()
 
     def _assign_initial_waypoints(self):
-        """Default: random patrol. Override in subclasses for scenario routes."""
-        for fl in self.forklifts:
-            if not fl.waypoints:
-                fl.set_waypoints(
-                    wp.gen_patrol(self.shelf_map, self.rng),
-                    start_idx=fl.id * 2
-                )
+        """Default: open all doors; FSM drives forklifts from STATE_IDLE automatically.
+        Override in subclasses for scenario-specific door state or forced initial states."""
+        self.open_all_doors()
+
+    def open_all_doors(self) -> None:
+        """Open all loading dock doors."""
+        for door in self.doors:
+            door.open(self.stage)
+
+    def close_all_doors(self) -> None:
+        """Close all loading dock doors."""
+        for door in self.doors:
+            door.close(self.stage)
 
     # ── Event checks ─────────────────────────────────────────────────────────
 

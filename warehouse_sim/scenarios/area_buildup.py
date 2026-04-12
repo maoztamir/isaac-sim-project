@@ -1,55 +1,47 @@
 """
-Area Build-Up scenario: all forklifts converge on the StagingArea,
-causing crowding and dwell-time accumulation.
+Area Build-Up scenario.
+
+Five forklifts cycle through the warehouse with a 12 s loading duration.
+Because loading is slow and dock capacity = 1, forklifts accumulate in
+staging faster than they can be released — staging fills up and
+buildup threshold events fire from base._check_area_thresholds().
+
+Levers (from C.SCENARIO_PRESETS["area_buildup"]):
+  num_forklifts    = 5
+  loading_duration = 12.0   — slow release from staging
+  release_interval = 8.0    — (informational — slowness comes from loading_duration)
 """
 
 from __future__ import annotations
 from .base import Scenario
 from .. import config as C
-from .. import waypoints as wp
-from ..forklift import STATE_DRIVE
 
-
-BUILDUP_THRESHOLD = 3       # occupancy that triggers a warning
-DWELL_WARN_SECS   = 10.0    # seconds before per-forklift dwell warning
+# Dwell threshold for a per-forklift warning printed in on_step
+DWELL_WARN_SECS = 15.0
 
 
 class AreaBuildUpScenario(Scenario):
     name = "area_buildup"
-    num_forklifts = 4
+    num_forklifts = 5
+
+    def __init__(self, seed: int = 42):
+        super().__init__(seed)
+        self.loading_duration = 12.0
 
     def _assign_initial_waypoints(self):
-        staging = self.area_mgr.get("StagingArea")
-        shelves = self.area_mgr.get("ShelvesArea")
-        for fl in self.forklifts:
-            # Heavy bias toward staging: 3 staging waypoints, 1 shelf
-            route = (
-                [wp.rand_zone_point(staging, self.shelf_map, self.rng)
-                 for _ in range(3)]
-                + [wp.rand_floor_point(self.shelf_map, self.rng, prefer_aisle=True)]
-            )
-            fl.set_waypoints(route, start_idx=fl.id)
+        """Open all doors; FSM cycles forklifts; slow loading causes staging build-up."""
+        self.open_all_doors()
+        print(f"[{self.name}] {self.num_forklifts} forklifts, "
+              f"{self.loading_duration}s loading — staging build-up expected")
 
-    def on_step(self, dt):
+    def on_step(self, dt: float):
+        """Log per-forklift dwell warnings when staging gets crowded."""
         staging = self.area_mgr.get("StagingArea")
-
-        # Monitor build-up
-        if staging.occupancy >= BUILDUP_THRESHOLD:
+        if staging is None:
+            return
+        if staging.occupancy >= 3:
             for fl_id in staging.occupant_ids:
                 dwell = staging.dwell_time(fl_id, self.sim_time)
-                if dwell > DWELL_WARN_SECS:
-                    print(f"[{self.name}] WARNING: FL{fl_id} in StagingArea "
-                          f"for {dwell:.1f}s (build-up)")
-
-        # Re-route forklifts that finish their loop back to staging
-        for fl in self.forklifts:
-            if (fl.state == STATE_DRIVE and
-                    fl.wp_idx == 0 and
-                    len(fl.waypoints) > 0):
-                route = (
-                    [wp.rand_zone_point(staging, self.shelf_map, self.rng)
-                     for _ in range(3)]
-                    + [wp.rand_floor_point(self.shelf_map, self.rng,
-                                           prefer_aisle=True)]
-                )
-                fl.set_waypoints(route)
+                if dwell >= DWELL_WARN_SECS:
+                    print(f"[{self.name}] t={self.sim_time:.1f}s  "
+                          f"FL{fl_id} in StagingArea for {dwell:.1f}s — build-up")

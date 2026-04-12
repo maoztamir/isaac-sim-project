@@ -1,7 +1,7 @@
-from .base import Scenario
-from .dock_queue import DockQueueScenario
-from .loading_pause import LoadingPauseScenario
-from .area_buildup import AreaBuildUpScenario
+from .base             import Scenario
+from .dock_queue       import DockQueueScenario
+from .loading_pause    import LoadingPauseScenario
+from .area_buildup     import AreaBuildUpScenario
 from .aisle_congestion import AisleCongestionScenario
 
 PRESETS = {
