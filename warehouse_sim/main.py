@@ -80,6 +80,15 @@ for k in list(sys.modules):
     if k.startswith("warehouse_sim") and sys.modules.get(k) is None:
         sys.modules.pop(k, None)
 
+import glob as _glob
+for _pyc in _glob.glob(
+        os.path.join(_project_root, "warehouse_sim", "**", "*.pyc"),
+        recursive=True):
+    try:
+        os.remove(_pyc)
+    except OSError:
+        pass
+
 import importlib
 importlib.invalidate_caches()
 
