@@ -46,14 +46,15 @@ def get_staging_hold_positions() -> list[tuple[float, float]]:
 
 
 def get_pickup_points(shelf_map: ShelfMap) -> list[tuple[float, float]]:
-    """One pickup point per detected aisle, at the aisle entrance (south end).
+    """One pickup point per detected aisle, on the open floor just south of the
+    shelf boundary.  Forklifts stop here rather than entering the aisles.
 
     Returns an empty list if shelf_map is not yet initialised.
     """
     if not shelf_map.aisle_xs or shelf_map.area_y_min is None:
         return []
-    entrance_y = shelf_map.area_y_min + 2.0
-    return [(ax, entrance_y) for ax in shelf_map.aisle_xs]
+    approach_y = shelf_map.area_y_min - 1.5   # 1.5 m south of shelf boundary
+    return [(ax, approach_y) for ax in shelf_map.aisle_xs]
 
 
 def get_return_path(gate_idx: int, shelf_map: ShelfMap) -> list[tuple[float, float]]:
@@ -69,7 +70,8 @@ def get_return_path(gate_idx: int, shelf_map: ShelfMap) -> list[tuple[float, flo
     ]
     if shelf_map.aisle_xs and shelf_map.area_y_min is not None:
         nearest_ax = min(shelf_map.aisle_xs, key=lambda ax: abs(ax - cx))
-        path.append((nearest_ax, shelf_map.area_y_min + 2.0))
+        approach_y = shelf_map.area_y_min - 1.5   # stop in front of shelves
+        path.append((nearest_ax, approach_y))
     else:
         path.append((cx, C.WALL_Y_MAX - 4.0))
     return path

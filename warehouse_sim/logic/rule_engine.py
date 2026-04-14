@@ -101,7 +101,8 @@ class RuleEngine:
             gate = self._preferred_gate(fl)
             pts = wp.get_staging_hold_positions()
             dest = pts[gate] if gate < len(pts) else pts[0]
-            fl.set_waypoints([dest])
+            route = wp.aisle_route((fl.pos[0], fl.pos[1]), dest, sm)
+            fl.set_waypoints(route)
 
         elif state == C.STATE_WAIT_IN_STAGING:
             gate = self._preferred_gate(fl)
@@ -146,6 +147,10 @@ class RuleEngine:
             if pallet:
                 assign_pallet(fl, pallet, stage, assets_root=self.assets_root)
                 self._fl_pallet[fl.id] = pallet
+            else:
+                # No physical Pallet object in scene — set load state logically
+                # so the FSM dock gate (fl.load == LOAD_LOADED) still works.
+                fl.load = C.LOAD_LOADED
 
         # Loading complete: drop the pallet at the dock
         if (old_state == C.STATE_LOADING and
@@ -158,6 +163,9 @@ class RuleEngine:
                 release_pallet(fl, pallet, stage,
                                drop_location=LOC_DOCK, drop_xy=drop_xy)
                 self._fl_pallet[fl.id] = None
+            else:
+                # Mirror of the logical-load path above
+                fl.load = C.LOAD_UNLOADED
 
     # ── Helpers ───────────────────────────────────────────────────────────────
 

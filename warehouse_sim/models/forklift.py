@@ -42,6 +42,10 @@ class Forklift:
         self.waypoints: list[tuple[float, float]] = []
         self.wp_idx = 0
 
+        # Stuck-recovery timers
+        self._stuck_secs: float = 0.0     # accumulates while blocked by another forklift
+        self._recovery_secs: float = 0.0  # counts down during the reverse phase
+
         # Pallet prim path that rides on the fork when loaded
         self.pallet_prim_path = f"{prim_path}/carried_pallet"
         self._pallet_prim_spawned = False
@@ -95,15 +99,34 @@ class Forklift:
         This update() only executes movement / in-state behaviour.
         """
         if self.state == C.STATE_IDLE:
-            # Stationary — rule engine will bump us out
+            # Count down any initial hold-off timer (used for staggered starts)
+            if self.state_timer > 0.0:
+                self.state_timer = max(0.0, self.state_timer - dt)
+            # Pin prim so physics drift can't move it while we wait
+            ih.update_prim_pose(stage, self.prim_path,
+                                self.pos[0], self.pos[1], self.heading)
             return
         if self.state in (C.STATE_WAIT_IN_STAGING,
                           C.STATE_WAIT_AT_DOCK_QUEUE):
             self.speed = 0.0
+            ih.update_prim_pose(stage, self.prim_path,
+                                self.pos[0], self.pos[1], self.heading)
             return
-        if self.state in (C.STATE_LOADING, C.STATE_PICKUP_AT_SHELVES):
-            # Paused while pallet transfer happens; timed by rule engine
+        if self.state == C.STATE_PICKUP_AT_SHELVES:
+            if self.waypoints:
+                # Still traveling to pickup location
+                self._tick_drive(dt, stage, shelf_map, all_forklifts)
+            else:
+                # At pickup location — count down timer; pin the prim
+                self.state_timer -= dt
+                ih.update_prim_pose(stage, self.prim_path,
+                                    self.pos[0], self.pos[1], self.heading)
+            return
+        if self.state == C.STATE_LOADING:
+            # Parked at dock — count down timer; pin the prim
             self.state_timer -= dt
+            ih.update_prim_pose(stage, self.prim_path,
+                                self.pos[0], self.pos[1], self.heading)
             return
         # Moving states: MOVE_TO_STAGING, MOVE_TO_LOADING, RETURNING
         self._tick_drive(dt, stage, shelf_map, all_forklifts)
@@ -127,6 +150,25 @@ class Forklift:
         if not self.waypoints:
             return
 
+        # ── Stuck-recovery: reverse briefly to break look-ahead deadlocks ──────
+        if self._recovery_secs > 0.0:
+            self._recovery_secs -= dt
+            # Move backward: opposite of the current heading direction
+            rev_rad = math.radians(self.heading - C.FORKLIFT_HEADING_OFFSET + 180)
+            nx = self.pos[0] + C.FORKLIFT_MIN_SPEED * dt * math.cos(rev_rad)
+            ny = self.pos[1] + C.FORKLIFT_MIN_SPEED * dt * math.sin(rev_rad)
+            nx = max(C.NAV_X_MIN, min(C.NAV_X_MAX, nx))
+            ny = max(C.NAV_Y_MIN, min(C.NAV_Y_MAX, ny))
+            self.pos = [nx, ny]
+            self.speed = C.FORKLIFT_MIN_SPEED
+            ih.update_prim_pose(stage, self.prim_path, nx, ny, self.heading)
+            self._sync_carried_pallet(stage)
+            # Reset stuck counter when reversal ends so it can't immediately re-arm
+            if self._recovery_secs <= 0.0:
+                self._stuck_secs = 0.0
+            return
+        # ─────────────────────────────────────────────────────────────────────────
+
         tx, ty = self.waypoints[self.wp_idx]
 
         for _ in range(len(self.waypoints)):
@@ -140,15 +182,25 @@ class Forklift:
         dist = math.hypot(dx, dy)
 
         if dist < C.FORKLIFT_ARRIVE_RADIUS:
-            self.speed = 0.0
-            self.state = C.STATE_IDLE
-            ih.update_prim_pose(stage, self.prim_path, fx, fy, self.heading)
-            self._sync_carried_pallet(stage)
+            old_idx = self.wp_idx
+            self._advance_waypoint()
+            if self.wp_idx <= old_idx:
+                # Wrapped — all waypoints visited; stop and signal arrival
+                self.speed = 0.0
+                self.waypoints = []
+                ih.update_prim_pose(stage, self.prim_path, fx, fy, self.heading)
+                self._sync_carried_pallet(stage)
+            # else: intermediate waypoint reached — drive on next frame
             return
 
         if self._blocked_by_other(all_forklifts):
+            self._stuck_secs += dt
             self.speed = 0.0
+            if self._stuck_secs >= 2.0:   # raised from 0.8 — avoids hair-trigger on passing traffic
+                self._stuck_secs = 0.0
+                self._recovery_secs = 1.2
             return
+        self._stuck_secs = 0.0
 
         # Snap to the aisle that serves the TARGET (tx), not the nearest aisle
         # to the forklift's current X — prevents wrong-aisle commitment.
@@ -198,18 +250,14 @@ class Forklift:
         ny = max(C.NAV_Y_MIN, min(C.NAV_Y_MAX, ny))
 
         for rx0, rx1, ry0, ry1 in shelf_map.rects:
-            ex0 = rx0 - C.FORKLIFT_BODY_HALF
-            ex1 = rx1 + C.FORKLIFT_BODY_HALF
-            ey0 = ry0 - C.FORKLIFT_BODY_HALF
-            ey1 = ry1 + C.FORKLIFT_BODY_HALF
-            if ex0 < nx < ex1 and ey0 < ny < ey1:
-                dl, dr = nx - ex0, ex1 - nx
-                db, dt_ = ny - ey0, ey1 - ny
+            if rx0 < nx < rx1 and ry0 < ny < ry1:
+                dl, dr = nx - rx0, rx1 - nx
+                db, dt_ = ny - ry0, ry1 - ny
                 d_min = min(dl, dr, db, dt_)
-                if   d_min == dl: nx = ex0
-                elif d_min == dr: nx = ex1
-                elif d_min == db: ny = ey0
-                else:             ny = ey1
+                if   d_min == dl: nx = rx0
+                elif d_min == dr: nx = rx1
+                elif d_min == db: ny = ry0
+                else:             ny = ry1
                 self.speed *= 0.4
                 self._advance_waypoint()
                 break

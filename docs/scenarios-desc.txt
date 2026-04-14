@@ -1,6 +1,27 @@
 1. Dock Queue Scenario
 Multiple forklifts arrive at a dock door faster than the loading process can handle. Vehicles begin to line up, forming a queue that exceeds normal operating thresholds. The queue persists over time, with limited forward movement, indicating a mismatch between arrival rate and loading throughput. This scenario tests the system’s ability to detect sustained queuing, measure peak queue size, and identify doors becoming bottlenecks.
 
+Implementation Details:
+  - Forklifts: 4
+  - Loading duration: 20 s (long, to force queue build-up)
+  - Dock capacity: 1 slot at a time
+  - All 3 dock doors open at start
+
+FSM Cycle (per forklift):
+  IDLE → PICKUP_AT_SHELVES (shelf aisle, ~pickup_duration s)
+       → MOVE_TO_STAGING   (drive to zebra-taped staging area)
+       → WAIT_IN_STAGING   (hold when dock slot is taken)
+       → MOVE_TO_LOADING   (advance to dock when slot is free)
+       → LOADING           (stationary at dock, 20 s)
+       → RETURNING         (drive back toward shelf aisles)
+       → IDLE              (cycle repeats)
+
+Expected Observations:
+  - At steady state, 2–3 forklifts queue in the staging area while 1 loads at the dock.
+  - queue_formed event fires when 2+ forklifts occupy StagingArea simultaneously.
+  - buildup_threshold event fires when StagingArea reaches or exceeds capacity.
+  - Telemetry prints every 10 s: forklift positions, speeds, FSM states, and area names.
+
 2. Loading Pause Scenario
 A dock door is open and assigned for loading, but material handling activity suddenly stops. Forklifts are either absent or waiting without active loading taking place. The door remains open for an extended period while no loading progress occurs, suggesting operational disruption such as labor gaps, coordination issues, or delays in material availability. This scenario validates detection of idle dock time during active door states.
 

@@ -24,8 +24,12 @@ if TYPE_CHECKING:
 # ── Condition helpers ────────────────────────────────────────────────────────
 
 def _arrived(fl: "Forklift") -> bool:
-    """True when the forklift has no active waypoint movement (speed ≈ 0)."""
-    return fl.speed < 0.05 and fl.state_timer <= 0.0
+    """True when the forklift has reached its final waypoint and stopped.
+
+    Requires waypoints to be depleted so a forklift blocked mid-route
+    (speed=0 but still en-route) does not falsely trigger arrival.
+    """
+    return fl.speed < 0.05 and fl.state_timer <= 0.0 and not fl.waypoints
 
 
 def _pickup_done(fl: "Forklift") -> bool:
@@ -52,7 +56,10 @@ def evaluate_transition(
 
     # ── IDLE → PICKUP_AT_SHELVES ─────────────────────────────────────────────
     # An idle forklift with no task and no pallet should head to shelves.
+    # state_timer > 0 means a stagger hold-off is in effect — stay idle.
     if state == C.STATE_IDLE:
+        if fl.state_timer > 0.0:
+            return None
         if fl.load == C.LOAD_UNLOADED:
             return C.STATE_PICKUP_AT_SHELVES
         # Idle but loaded: edge case — go straight to staging
@@ -68,9 +75,9 @@ def evaluate_transition(
     # ── MOVE_TO_STAGING → MOVE_TO_LOADING  (if dock available) ──────────────
     if state == C.STATE_MOVE_TO_STAGING:
         if _arrived(fl):
-            # Try to claim a dock slot now — if successful, head straight to dock
+            # Forklift must be carrying a pallet before occupying a dock slot
             any_door_open = any(d.is_open for d in doors)
-            if any_door_open:
+            if any_door_open and fl.load == C.LOAD_LOADED:
                 slot = queue_mgr.request_slot(fl.id, "dock")
                 if slot:
                     return C.STATE_MOVE_TO_LOADING
@@ -78,8 +85,9 @@ def evaluate_transition(
 
     # ── WAIT_IN_STAGING → MOVE_TO_LOADING  (when dock becomes available) ─────
     if state == C.STATE_WAIT_IN_STAGING:
-        dock_available = any(d.is_open for d in doors) and \
-                         queue_mgr.free_count("dock") > 0
+        dock_available = (any(d.is_open for d in doors) and
+                          queue_mgr.free_count("dock") > 0 and
+                          fl.load == C.LOAD_LOADED)
         if dock_available:
             return C.STATE_MOVE_TO_LOADING
 
