@@ -65,14 +65,13 @@ class DockQueueScenario(Scenario):
     def _spawn_dock_pallets(self, active_gates: list[int]) -> None:
         """Spawn a box prop at the service position of each active dock gate.
 
-        Uses a local warehouse prop (BOX_USDS[0]) so no remote Nucleus fetch
-        is needed. The props represent goods already staged at the dock,
+        Uses PALLET_USD (the full pallet assembly asset) scaled by PALLET_SCALE
+        (cm → m). The props represent goods already staged at the dock,
         visually signalling that those loading zones are active.
         """
-        box_usd = self.assets_root + C.BOX_USDS[0]
         for gate in active_gates:
             cx, cy = wp.get_dock_service_position(gate)
             prim_path = f"/World/DockPallets/pallet_gate_{gate}"
-            ih.spawn_asset(self.stage, prim_path, box_usd,
-                           cx, cy, 0.0, 0.0)
+            ih.spawn_asset(self.stage, prim_path, C.PALLET_USD,
+                           cx, cy, 0.0, 0.0, scale=C.PALLET_SCALE)
         print(f"[{self.name}] dock pallets spawned at gates {active_gates}")
