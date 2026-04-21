@@ -76,11 +76,14 @@ class Forklift:
                         "set_load(LOADED) needs assets_root on first call "
                         "to spawn the carried-pallet prim."
                     )
-                # Spawn pallet prim under the forklift, raised to fork travel height
+                # Spawn as child prim using LOCAL offsets so it rides on the
+                # forks automatically as the parent forklift moves/rotates.
                 ih.spawn_asset(stage, self.pallet_prim_path,
                                C.PALLET_USD,
-                               self.pos[0], self.pos[1],
-                               C.FORK_TRAVEL_HEIGHT, self.heading,
+                               C.PALLET_FORK_LOCAL_X,
+                               C.PALLET_FORK_LOCAL_Y,
+                               C.PALLET_FORK_LOCAL_Z,
+                               0.0,
                                scale=C.PALLET_SCALE)
                 self._pallet_prim_spawned = True
             else:
@@ -287,10 +290,8 @@ class Forklift:
     # ── Carried-pallet tracking ──────────────────────────────────────────────
 
     def _sync_carried_pallet(self, stage):
-        """Keep the carried-pallet prim aligned with the forklift when loaded."""
-        if self._pallet_prim_spawned and self.load == C.LOAD_LOADED:
-            ih.update_prim_pose(stage, self.pallet_prim_path,
-                                self.pos[0], self.pos[1], self.heading)
+        """No-op: carried_pallet is a child prim and follows the forklift
+        parent's transform automatically — no separate pose update needed."""
 
     # ── Helpers ──────────────────────────────────────────────────────────────
 

@@ -98,6 +98,13 @@ class Scenario:
 
         ih.create_physics_scene(self.stage)
 
+        self._spawn_cameras()
+
+        # LoadingDoor objects must exist before _spawn_loading_doors() so that
+        # method can wire crate_prim_path onto each door.
+        self.doors = [LoadingDoor(i, is_open=False)
+                      for i in range(len(C.GATE_OFFSETS))]
+
         self._spawn_loading_doors()
         await ih.next_update()
 
@@ -111,10 +118,6 @@ class Scenario:
                   C.STAGING_AREA_CAPACITY if name == "StagingArea" else None
             self.area_mgr.add(name, x0, x1, y0, y1, capacity=cap)
 
-        # LoadingDoor objects — one per gate (closed by default)
-        self.doors = [LoadingDoor(i, is_open=False)
-                      for i in range(len(C.GATE_OFFSETS))]
-
         # Monitoring — instantiate before forklifts so subclasses can log in setup
         self.evt_log = EventLogger(print_events=False)
         self.zone_mon = ZoneMonitor(self.area_mgr)
@@ -126,6 +129,7 @@ class Scenario:
 
         # Forklifts (subclass override point)
         self.setup_forklifts()
+        await ih.next_update()   # let remote USD references (pallets, etc.) start resolving
         self._idle_secs = {fl.id: 0.0 for fl in self.forklifts}
 
         # Logic — needs forklifts + doors populated
@@ -175,11 +179,22 @@ class Scenario:
     def _on_physics_step(self, dt: float):
         try:
             self._on_physics_step_inner(dt)
-        except Exception:
+        except Exception as _exc:
             import traceback
             traceback.print_exc()
+            # If the USD stage has expired (Script Editor re-run without Stop),
+            # unsubscribe immediately so errors don't spam every physics tick.
+            if "Invalid stage" in str(_exc) or "invalid stage" in str(_exc).lower():
+                print(f"[{self.name}] Stale physics callback — unsubscribing.")
+                self._sub = None
 
     def _on_physics_step_inner(self, dt: float):
+        # Refresh stage — the stored self.stage can go stale when the Script
+        # Editor re-runs without stopping the previous simulation first.
+        fresh = ih.get_stage()
+        if fresh is not None:
+            self.stage = fresh
+
         # 1. Lazy shelf init
         if not self.shelf_map.ready:
             print(f"[{self.name}] First physics step — initialising ShelfMap...")
@@ -332,11 +347,27 @@ class Scenario:
 
     # ── Scene construction helpers ────────────────────────────────────────────
 
+    def _spawn_cameras(self):
+        """Load four surveillance cameras from the reference USD positions file."""
+        created = ih.spawn_cameras_from_usd(self.stage, C.CAMERA_POSITIONS_USD)
+        print(f"[{self.name}] {len(created)} surveillance cameras loaded from USD.")
+
     def _spawn_loading_doors(self):
-        """3 loading dock gates on the south wall."""
+        """3 loading dock gates on the south wall, each with a hidden dock crate."""
         for i, offset in enumerate(C.GATE_OFFSETS):
-            ih.spawn_gate(self.stage, i, C.WAREHOUSE_CX + offset, C)
-        print(f"[{self.name}] 3 loading dock gates spawned.")
+            door_cx = C.WAREHOUSE_CX + offset
+            ih.spawn_gate(self.stage, i, door_cx, C)
+
+            # Spawn a crate at the gate's service position, hidden by default.
+            # It becomes visible whenever door.open() is called.
+            cx, cy = wp.get_dock_service_position(i)
+            crate_path = f"/World/DockCrates/crate_gate_{i}"
+            ih.spawn_asset(self.stage, crate_path, C.CRATE_USD,
+                           cx, cy, 0.0, 0.0, scale=C.CRATE_SCALE)
+            ih.make_invisible(self.stage, crate_path)
+            self.doors[i].crate_prim_path = crate_path
+
+        print(f"[{self.name}] 3 loading dock gates + crates spawned.")
 
     def _spawn_loading_markings(self):
         """Zebra tape around each loading zone in front of the doors."""
