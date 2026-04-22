@@ -24,6 +24,9 @@ import os
 import re
 import subprocess
 import sys
+import threading
+
+from tqdm import tqdm
 
 IMAGE_EXTS = {".png", ".jpg", ".jpeg"}
 DEFAULT_FPS = 30
@@ -45,18 +48,26 @@ def find_frame_folders(root: str) -> list[tuple[str, list[str]]]:
 def make_output_path(frame_folder: str, root: str, out_dir: str | None) -> str:
     """Derive the MP4 path from the frame folder's position under root."""
     rel = os.path.relpath(frame_folder, root)
-    # e.g. "Replicator_03/rgb" → "Replicator_03_rgb"
     slug = rel.replace(os.sep, "_")
-    filename = slug + ".mp4"
     base = out_dir if out_dir else root
-    return os.path.join(base, filename)
+    return os.path.join(base, slug + ".mp4")
 
 
-def frames_to_video(frame_folder: str, frames: list[str], output: str, fps: int) -> bool:
-    """Call ffmpeg to encode a sorted frame list into an MP4. Returns True on success."""
-    # Write a temporary concat list so ffmpeg gets frames in exact sorted order
-    # regardless of filesystem ordering.
+def frames_to_video(
+    frame_folder: str,
+    frames: list[str],
+    output: str,
+    fps: int,
+    label: str,
+) -> bool:
+    """Encode a sorted frame list to MP4 with a tqdm progress bar.
+
+    Uses ffmpeg's -progress pipe:1 to stream frame counts to stdout so
+    the bar updates in real time without polling.
+    Returns True on success.
+    """
     list_path = os.path.join(frame_folder, "_ffmpeg_input.txt")
+    total = len(frames)
     try:
         with open(list_path, "w") as fh:
             for f in frames:
@@ -67,20 +78,63 @@ def frames_to_video(frame_folder: str, frames: list[str], output: str, fps: int)
 
         cmd = [
             "ffmpeg", "-y",
+            "-nostats", "-loglevel", "error",   # keep stderr quiet; errors only
             "-f", "concat", "-safe", "0",
             "-i", list_path,
-            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",  # ensure even dimensions
+            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
             "-c:v", "libx264",
             "-crf", "18",
             "-pix_fmt", "yuv420p",
             "-movflags", "+faststart",
+            "-progress", "pipe:1",              # stream key=value progress to stdout
             output,
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"  [ERROR] ffmpeg failed:\n{result.stderr[-800:]}", file=sys.stderr)
+
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1,
+        )
+
+        # Drain stderr on a background thread to prevent pipe buffer deadlock.
+        stderr_lines: list[str] = []
+        def _drain(pipe: object, buf: list[str]) -> None:
+            for line in pipe:
+                buf.append(line)
+        t = threading.Thread(target=_drain, args=(proc.stderr, stderr_lines), daemon=True)
+        t.start()
+
+        with tqdm(
+            total=total,
+            desc=f"  {label}",
+            unit="fr",
+            ncols=80,
+            colour="green",
+            leave=True,
+        ) as bar:
+            last = 0
+            for line in proc.stdout:
+                if line.startswith("frame="):
+                    try:
+                        n = int(line.split("=", 1)[1].strip())
+                        bar.update(n - last)
+                        last = n
+                    except ValueError:
+                        pass
+            # Ensure bar reaches 100 % even if ffmpeg omits the final progress line
+            bar.update(total - last)
+
+        proc.wait()
+        t.join()
+
+        if proc.returncode != 0:
+            err = "".join(stderr_lines)
+            print(f"  [ERROR] ffmpeg failed:\n{err[-800:]}", file=sys.stderr)
             return False
         return True
+
     finally:
         if os.path.exists(list_path):
             os.remove(list_path)
@@ -89,9 +143,12 @@ def frames_to_video(frame_folder: str, frames: list[str], output: str, fps: int)
 def main():
     parser = argparse.ArgumentParser(description="Convert Replicator frame folders to MP4.")
     parser.add_argument("root", help="Root folder containing Replicator output folders.")
-    parser.add_argument("--fps", type=int, default=DEFAULT_FPS, help=f"Frames per second (default {DEFAULT_FPS}).")
-    parser.add_argument("--out", default=None, help="Output directory for MP4 files (default: alongside each frame folder's parent).")
-    parser.add_argument("--dry-run", action="store_true", help="Print what would be done without running ffmpeg.")
+    parser.add_argument("--fps", type=int, default=DEFAULT_FPS,
+                        help=f"Frames per second (default {DEFAULT_FPS}).")
+    parser.add_argument("--out", default=None,
+                        help="Output directory for MP4 files (default: root folder).")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Print what would be done without running ffmpeg.")
     args = parser.parse_args()
 
     root = os.path.abspath(args.root)
@@ -102,27 +159,28 @@ def main():
     if not folders:
         sys.exit("No image files found under the given root.")
 
-    print(f"Found {len(folders)} frame folder(s) under {root}\n")
+    total_vids = len(folders)
+    print(f"Found {total_vids} frame folder(s) under {root}\n")
 
     ok = 0
-    for folder, frames in folders:
+    for idx, (folder, frames) in enumerate(folders, 1):
         output = make_output_path(folder, root, args.out)
         rel = os.path.relpath(folder, root)
-        print(f"  {rel}  ({len(frames)} frames)  →  {os.path.basename(output)}")
+        print(f"[{idx}/{total_vids}]  {rel}  ({len(frames)} frames)  →  {os.path.basename(output)}")
 
         if args.dry_run:
             continue
 
-        success = frames_to_video(folder, frames, output, args.fps)
+        success = frames_to_video(folder, frames, output, args.fps, label=rel)
         if success:
             size_mb = os.path.getsize(output) / 1e6
-            print(f"    ✓  {output}  ({size_mb:.1f} MB)")
+            print(f"  ✓  {output}  ({size_mb:.1f} MB)\n")
             ok += 1
         else:
-            print(f"    ✗  failed — see errors above")
+            print(f"  ✗  failed — see errors above\n")
 
     if not args.dry_run:
-        print(f"\n{ok}/{len(folders)} videos created.")
+        print(f"{ok}/{total_vids} videos created.")
 
 
 if __name__ == "__main__":
