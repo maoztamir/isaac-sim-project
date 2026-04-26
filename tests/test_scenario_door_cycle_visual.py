@@ -39,6 +39,14 @@ STEP 6: Door re-opens, forklift proceeds
           to move_to_loading and approaches the dock.
   PASS IF: Status log shows FL state change from wait_in_staging to
            move_to_loading shortly after a CLOSED → OPEN toggle.
+
+STEP 7: Empty-open gate (40% chance each open transition)
+  EXPECT: Log prints "CLOSED → OPEN (EMPTY — dock slot blocked ...)".
+          The gate shutter rises but NO forklift approaches that dock.
+          Status log shows door_N=OPEN(E) while all FLs avoid that gate.
+  PASS IF: Over several door cycles, at least one "EMPTY" open is logged
+           and no forklift enters the corresponding loading zone.
+  FAIL SIGN: A forklift docks at a gate whose slot is blocked (EMPTY).
 """
 
 import os
