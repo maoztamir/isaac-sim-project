@@ -6,12 +6,14 @@ Physics-step order (per frame):
   2. sim_time += dt
   3. rule_engine.tick(dt)   — FSM transitions before movement
   4. Forklift movement
-  5. Area occupancy update
-  6. ZoneMonitor tick
-  7. MetricsWriter tick
-  8. Event checks (proximity, idle, staging buildup, dock queue depth)
-  9. Scenario on_step(dt) hook
- 10. Telemetry every 10 s
+  5. Pedestrian movement
+  6. Area occupancy update
+  7. ZoneMonitor tick
+  8. MetricsWriter tick
+  9. Event checks (proximity, idle, staging buildup, dock queue depth,
+                    pedestrian near-miss)
+ 10. Scenario on_step(dt) hook
+ 11. Telemetry every 10 s
 """
 
 from __future__ import annotations
@@ -25,12 +27,14 @@ from ..areas import AreaManager
 from ..models.forklift import Forklift
 from ..models.loading_door import LoadingDoor
 from ..models.pallet import Pallet
+from ..models.pedestrian import Pedestrian
 from ..logic.rule_engine import RuleEngine
 from ..logic.queue_manager import QueueManager
 from ..monitoring import ZoneMonitor, EventLogger, MetricsWriter
 from ..monitoring.event_logger import (
     EVENT_PROXIMITY_ALERT, EVENT_IDLE_ALERT,
     EVENT_QUEUE_FORMED, EVENT_BUILDUP_THRESHOLD,
+    EVENT_PEDESTRIAN_NEAR_MISS,
 )
 from .. import waypoints as wp
 
@@ -47,7 +51,8 @@ class Scenario:
         self.assets_root = None
         self.shelf_map = ShelfMap()
         self.area_mgr = AreaManager()
-        self.forklifts: list[Forklift] = []
+        self.forklifts:   list[Forklift]   = []
+        self.pedestrians: list[Pedestrian] = []
 
         # Object-state models (populated in build())
         self.doors:   list[LoadingDoor] = []
@@ -74,6 +79,8 @@ class Scenario:
         self._idle_secs: dict[int, float] = {}
         # Proximity alert cool-down: (min_id, max_id) → sim_time of last alert
         self._prox_cooldown: dict[tuple[int, int], float] = {}
+        # Pedestrian near-miss cool-down: (fl_id, ped_id) → sim_time of last alert
+        self._ped_prox_cooldown: dict[tuple[int, int], float] = {}
 
     # ── Lifecycle ────────────────────────────────────────────────────────────
 
@@ -132,6 +139,11 @@ class Scenario:
         await ih.next_update()   # let remote USD references (pallets, etc.) start resolving
         self._idle_secs = {fl.id: 0.0 for fl in self.forklifts}
 
+        # Pedestrians (subclass override point — waypoints assigned here, not lazily)
+        self.setup_pedestrians()
+        if self.pedestrians:
+            await ih.next_update()
+
         # Logic — needs forklifts + doors populated
         self.queue_mgr = QueueManager(self.shelf_map)
         self.rule_engine = RuleEngine(
@@ -148,6 +160,7 @@ class Scenario:
         )
 
         print(f"[{self.name}] Scene built: {len(self.forklifts)} forklifts, "
+              f"{len(self.pedestrians)} pedestrians, "
               f"{len(self.area_mgr.areas)} areas, {len(self.doors)} doors.")
 
     def start(self):
@@ -169,6 +182,17 @@ class Scenario:
                            sx, sy, 0.0, 90.0)
             fl = Forklift(i, path, sx, sy)
             self.forklifts.append(fl)
+
+    def setup_pedestrians(self):
+        """Spawn pedestrians and set their waypoints.  Override in presets.
+
+        Unlike forklifts, pedestrian waypoints are assigned here (not lazily
+        on the first physics step) because they do not depend on ShelfMap.
+
+        Call self.spawn_pedestrian() for each pedestrian needed.
+        Default: no pedestrians.
+        """
+        pass
 
     def on_step(self, dt: float):
         """Per-frame scenario logic hook. Override for custom behaviour."""
@@ -213,19 +237,23 @@ class Scenario:
         for fl in self.forklifts:
             fl.update(dt, self.stage, self.shelf_map, self.forklifts)
 
-        # 5. Area occupancy
+        # 5. Pedestrian movement
+        for ped in self.pedestrians:
+            ped.update(dt, self.stage)
+
+        # 6. Area occupancy
         for fl in self.forklifts:
             self.area_mgr.update(fl.id, fl.pos[0], fl.pos[1], self.sim_time)
 
-        # 6. Zone monitor
+        # 7. Zone monitor
         if self.zone_mon is not None:
             self.zone_mon.tick(self.forklifts, self.sim_time, dt)
 
-        # 7. Metrics writer
+        # 8. Metrics writer
         if self.metrics_writer is not None:
             self.metrics_writer.tick(self.sim_time, dt)
 
-        # 8. Event checks
+        # 9. Event checks
         self._check_events(dt)
 
         # 9. Scenario hook
@@ -262,6 +290,8 @@ class Scenario:
         self._check_proximity()
         self._check_idle(dt)
         self._check_area_thresholds()
+        if self.pedestrians:
+            self._check_pedestrian_proximity()
 
     def _check_proximity(self) -> None:
         """Log a proximity alert when two forklifts are within NEAR_MISS_DIST."""
@@ -336,6 +366,8 @@ class Scenario:
         self.area_mgr.print_status(self.sim_time)
         if self.zone_mon is not None:
             self.zone_mon.print_summary()
+        for ped in self.pedestrians:
+            print(f"  {ped}")
         if self.evt_log is not None:
             n = self.evt_log.count()
             if n:
@@ -343,7 +375,75 @@ class Scenario:
                       f"proximity={self.evt_log.count(EVENT_PROXIMITY_ALERT)}  "
                       f"idle={self.evt_log.count(EVENT_IDLE_ALERT)}  "
                       f"queue={self.evt_log.count(EVENT_QUEUE_FORMED)}  "
-                      f"buildup={self.evt_log.count(EVENT_BUILDUP_THRESHOLD)}")
+                      f"buildup={self.evt_log.count(EVENT_BUILDUP_THRESHOLD)}  "
+                      f"ped_near_miss={self.evt_log.count(EVENT_PEDESTRIAN_NEAR_MISS)}")
+
+    # ── Pedestrian helpers ────────────────────────────────────────────────────
+
+    def spawn_pedestrian(self, x: float, y: float,
+                         waypoints: list[tuple[float, float]],
+                         speed: float = C.PEDESTRIAN_SPEED,
+                         loop: bool = True,
+                         heading: float = 0.0) -> Pedestrian:
+        """Spawn one pedestrian prim and register it.
+
+        Tries C.PEDESTRIAN_USD first; falls back to C.PEDESTRIAN_USD_FALLBACK
+        if the People extension is not installed.
+        """
+        ped_id   = len(self.pedestrians)
+        prim_path = f"/World/Pedestrians/pedestrian_{ped_id}"
+
+        usd_path = C.PEDESTRIAN_USD
+        try:
+            ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
+        except Exception:
+            usd_path = C.PEDESTRIAN_USD_FALLBACK
+            ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
+
+        ped = Pedestrian(ped_id, prim_path, x, y, heading)
+        ped.speed = speed
+        ped.set_waypoints(waypoints, loop=loop)
+        self.pedestrians.append(ped)
+        print(f"[{self.name}] Pedestrian {ped_id} spawned at ({x:.1f},{y:.1f}) "
+              f"with {len(waypoints)} waypoints, loop={loop}")
+        return ped
+
+    def _check_pedestrian_proximity(self) -> None:
+        """Fire near-miss events and emergency-stop actors when a forklift
+        is within PEDESTRIAN_STOP_DIST of any pedestrian."""
+        cooldown = 5.0
+        for fl in self.forklifts:
+            for ped in self.pedestrians:
+                dist = ped.distance_to(fl.pos[0], fl.pos[1])
+
+                # Nothing to do if both are already stopped
+                if (fl.speed < C.NEAR_MISS_SPEED_MIN and
+                        ped.state == "stopped"):
+                    continue
+
+                key  = (fl.id, ped.id)
+                last = self._ped_prox_cooldown.get(key, -999.0)
+
+                if dist <= C.PEDESTRIAN_STOP_DIST:
+                    # Emergency stop — both actors
+                    ped.stop_for(3.0)
+                    fl.state       = C.STATE_IDLE
+                    fl.speed       = 0.0
+                    fl.state_timer = 3.0   # hold idle for 3 s then FSM resumes
+                    if self.sim_time - last >= cooldown:
+                        self._ped_prox_cooldown[key] = self.sim_time
+                        self.evt_log.log_pedestrian_near_miss(
+                            self.sim_time, fl.id, ped.id,
+                            dist, fl.speed, stopped=True,
+                        )
+
+                elif dist <= C.PEDESTRIAN_WARN_DIST:
+                    if self.sim_time - last >= cooldown:
+                        self._ped_prox_cooldown[key] = self.sim_time
+                        self.evt_log.log_pedestrian_near_miss(
+                            self.sim_time, fl.id, ped.id,
+                            dist, fl.speed, stopped=False,
+                        )
 
     # ── Scene construction helpers ────────────────────────────────────────────
 

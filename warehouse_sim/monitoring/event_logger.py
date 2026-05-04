@@ -27,8 +27,9 @@ EVENT_QUEUE_FORMED       = "queue_formed"
 EVENT_BUILDUP_THRESHOLD  = "buildup_threshold"
 EVENT_STATE_HOLD         = "state_hold"
 EVENT_PALLET_TRANSFER    = "pallet_transfer"
-EVENT_PROXIMITY_ALERT    = "proximity_alert"
-EVENT_IDLE_ALERT         = "idle_alert"
+EVENT_PROXIMITY_ALERT        = "proximity_alert"
+EVENT_IDLE_ALERT             = "idle_alert"
+EVENT_PEDESTRIAN_NEAR_MISS   = "pedestrian_near_miss"
 
 
 @dataclass
@@ -126,6 +127,18 @@ class EventLogger:
             "fl_id": fl_id,
             "idle_secs": idle_secs,
             "zone": zone_name,
+        }))
+
+    def log_pedestrian_near_miss(self, sim_time: float,
+                                 fl_id: int, ped_id: int,
+                                 distance: float, fl_speed: float,
+                                 stopped: bool) -> None:
+        self._append(Event(EVENT_PEDESTRIAN_NEAR_MISS, sim_time, {
+            "fl_id":    fl_id,
+            "ped_id":   ped_id,
+            "distance": distance,
+            "fl_speed": fl_speed,
+            "stopped":  stopped,
         }))
 
     # ── Query API ─────────────────────────────────────────────────────────────

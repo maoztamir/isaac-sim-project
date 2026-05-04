@@ -167,6 +167,11 @@ NEAR_MISS_DIST         = 2.5   # metres — proximity alert trigger distance
 NEAR_MISS_SPEED_MIN    = 0.5   # m/s — min speed of one forklift to count as near-miss
 CONGESTION_SPEED_RATIO = 0.3   # speed < 30% of max while in traffic area → congestion log
 
+# ── Pedestrian kinematics & safety thresholds ─────────────────────────────────
+PEDESTRIAN_SPEED     = 1.4   # m/s nominal walking speed
+PEDESTRIAN_WARN_DIST = 2.0   # m  — log warning when forklift this close
+PEDESTRIAN_STOP_DIST = 1.0   # m  — emergency-stop both actors at this distance
+
 # ── Scenario preset levers ───────────────────────────────────────────────────
 # Each scenario reads its own sub-dict to tune its specific behaviour.
 SCENARIO_PRESETS = {
@@ -251,8 +256,12 @@ PALLET_H = 0.15
 # ── Asset paths ──────────────────────────────────────────────────────────────
 # WAREHOUSE_USD and FORKLIFT_USD are relative paths appended to assets_root.
 # PALLET_USD is an absolute URL and must be used directly (no assets_root prefix).
-WAREHOUSE_USD = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
-FORKLIFT_USD  = "/Isaac/Props/Forklift/forklift.usd"
+WAREHOUSE_USD    = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
+FORKLIFT_USD     = "/Isaac/Props/Forklift/forklift.usd"
+# Pedestrian character — requires the Isaac People extension to be enabled.
+# Falls back to a simple box prop if the path is not found on the nucleus.
+PEDESTRIAN_USD          = "/Isaac/People/Characters/F_BusinessCasual_A/F_BusinessCasual_A.usd"
+PEDESTRIAN_USD_FALLBACK = "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxA_01.usd"
 PALLET_USD    = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Cardboard_Boxes_on_Pallet/Pallet_Asm_A/Pallet_Asm_A06_112x112x109cm_PR_V_NVD_01.usd"
 PALLET_SCALE  = 0.01   # asset is authored in cm; stage is in metres
 CRATE_USD     = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Wood_Crate_on_Pallet/Plywood_A/PlywoodCrateAssembly_A05_PR_NVD_01.usd"
