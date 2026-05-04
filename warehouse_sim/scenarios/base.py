@@ -387,15 +387,18 @@ class Scenario:
                          heading: float = 0.0) -> Pedestrian:
         """Spawn one pedestrian prim and register it.
 
-        Uses C.PEDESTRIAN_USD prepended with assets_root.
-        Default is a warehouse box prop — guaranteed visible.
-        Change PEDESTRIAN_USD in config.py to a character path if the
-        Isaac People extension is installed.
+        Tries C.PEDESTRIAN_USD first; falls back to C.PEDESTRIAN_USD_FALLBACK
+        if the People extension is not installed.
         """
-        ped_id    = len(self.pedestrians)
+        ped_id   = len(self.pedestrians)
         prim_path = f"/World/Pedestrians/pedestrian_{ped_id}"
-        usd_path  = self.assets_root + C.PEDESTRIAN_USD
-        ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
+
+        usd_path = C.PEDESTRIAN_USD
+        try:
+            ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
+        except Exception:
+            usd_path = C.PEDESTRIAN_USD_FALLBACK
+            ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
 
         ped = Pedestrian(ped_id, prim_path, x, y, heading)
         ped.speed = speed
