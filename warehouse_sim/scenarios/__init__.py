@@ -1,18 +1,20 @@
-from .base             import Scenario
-from .dock_queue       import DockQueueScenario
-from .loading_pause    import LoadingPauseScenario
-from .area_buildup     import AreaBuildUpScenario
-from .aisle_congestion import AisleCongestionScenario
-from .showcase         import ShowcaseScenario
-from .door_cycle       import DoorCycleScenario
+from .base                     import Scenario
+from .dock_queue               import DockQueueScenario
+from .dock_queue_pedestrian    import DockQueuePedestrianScenario
+from .loading_pause            import LoadingPauseScenario
+from .area_buildup             import AreaBuildUpScenario
+from .aisle_congestion         import AisleCongestionScenario
+from .showcase                 import ShowcaseScenario
+from .door_cycle               import DoorCycleScenario
 
 PRESETS = {
-    "dock_queue":       DockQueueScenario,
-    "loading_pause":    LoadingPauseScenario,
-    "area_buildup":     AreaBuildUpScenario,
-    "aisle_congestion": AisleCongestionScenario,
-    "showcase":         ShowcaseScenario,
-    "door_cycle":       DoorCycleScenario,
+    "dock_queue":              DockQueueScenario,
+    "dock_queue_pedestrian":   DockQueuePedestrianScenario,
+    "loading_pause":           LoadingPauseScenario,
+    "area_buildup":            AreaBuildUpScenario,
+    "aisle_congestion":        AisleCongestionScenario,
+    "showcase":                ShowcaseScenario,
+    "door_cycle":              DoorCycleScenario,
 }
 
 

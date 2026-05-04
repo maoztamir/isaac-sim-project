@@ -13,7 +13,7 @@ Change SCENARIO below to switch presets:
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
-SCENARIO = "door_cycle"
+SCENARIO = "dock_queue_pedestrian"
 SEED = 42
 # ─────────────────────────────────────────────────────────────────────────────
 
