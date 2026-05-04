@@ -258,8 +258,10 @@ PALLET_H = 0.15
 # PALLET_USD is an absolute URL and must be used directly (no assets_root prefix).
 WAREHOUSE_USD    = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
 FORKLIFT_USD     = "/Isaac/Props/Forklift/forklift.usd"
-# DH (Digital Human) character — ships with Isaac Sim, no extension required.
-PEDESTRIAN_USD = "/Isaac/People/DH_Characters/f50e69fb-067b-11ef-871f-b04f13dd02fd/f50e69fb-067b-11ef-871f-b04f13dd02fd.usd"
+# Pedestrian visual — a capsule primitive created directly in the stage (no USD load).
+PEDESTRIAN_HEIGHT = 1.6    # metres, body cylinder portion
+PEDESTRIAN_RADIUS = 0.25   # metres
+PEDESTRIAN_COLOR  = (1.0, 0.55, 0.0)   # bright orange — clearly visible against grey floor
 PALLET_USD    = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Cardboard_Boxes_on_Pallet/Pallet_Asm_A/Pallet_Asm_A06_112x112x109cm_PR_V_NVD_01.usd"
 PALLET_SCALE  = 0.01   # asset is authored in cm; stage is in metres
 CRATE_USD     = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Wood_Crate_on_Pallet/Plywood_A/PlywoodCrateAssembly_A05_PR_NVD_01.usd"

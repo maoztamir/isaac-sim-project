@@ -388,8 +388,11 @@ class Scenario:
         """Spawn one pedestrian prim and register it."""
         ped_id    = len(self.pedestrians)
         prim_path = f"/World/Pedestrians/pedestrian_{ped_id}"
-        usd_path  = self.assets_root + C.PEDESTRIAN_USD
-        ih.spawn_asset(self.stage, prim_path, usd_path, x, y, 0.0, heading)
+        ih.spawn_capsule_marker(self.stage, prim_path,
+                                x, y,
+                                C.PEDESTRIAN_HEIGHT,
+                                C.PEDESTRIAN_RADIUS,
+                                C.PEDESTRIAN_COLOR)
 
         ped = Pedestrian(ped_id, prim_path, x, y, heading)
         ped.speed = speed

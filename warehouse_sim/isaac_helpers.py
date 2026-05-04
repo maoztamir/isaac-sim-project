@@ -196,6 +196,17 @@ def spawn_box_marker(stage, prim_path, cx, cy, cz, sx, sy, sz, color):
     return cube
 
 
+def spawn_capsule_marker(stage, prim_path, x, y, height, radius, color):
+    """Create a colored upright capsule marker (no physics, no external USD)."""
+    cap = UsdGeom.Capsule.Define(stage, prim_path)
+    cap.GetHeightAttr().Set(height)
+    cap.GetRadiusAttr().Set(radius)
+    cap.GetAxisAttr().Set("Z")
+    cap.AddTranslateOp().Set(Gf.Vec3d(x, y, height / 2.0 + radius))
+    cap.GetDisplayColorAttr().Set([Gf.Vec3f(*color)])
+    return cap
+
+
 def apply_static_collision(stage, prim_path):
     """Apply UsdPhysics.CollisionAPI to make a prim a static collider."""
     xf = UsdGeom.Xformable.Get(stage, prim_path)
