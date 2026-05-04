@@ -3,3 +3,12 @@ __pycache__/
 *.pyo
 .DS_Store
 .claude/settings.local.json
+
+# Generated test outputs
+tests/output/events_*.json
+tests/output/metrics_*.csv
+tests/output/*.log
+
+# Generated visualisation outputs
+output/area_verification/
+output/bev_map.png

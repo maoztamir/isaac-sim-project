@@ -13,7 +13,7 @@ Change SCENARIO below to switch presets:
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
-SCENARIO = "dock_queue"
+SCENARIO = "door_cycle"
 SEED = 42
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -106,6 +106,26 @@ print(f"[main] Config scenarios:  {_config_names}")
 print(f"[main] STAGING_CENTER_Y = {C.STAGING_CENTER_Y:.2f} (expect ~ -7.65)")
 
 
+# ── Persistent state across Script Editor re-runs ───────────────────────────
+# sys.modules is never cleared by the hot-reload block, so this survives
+# Ctrl+Enter re-runs and lets us release the old physics subscription before
+# building the new scene — preventing "Invalid stage" spam from stale callbacks.
+_STATE_KEY = "_warehouse_sim_main_state"
+if _STATE_KEY not in sys.modules:
+    import types
+    sys.modules[_STATE_KEY] = types.SimpleNamespace(scenario=None)
+_state = sys.modules[_STATE_KEY]
+
+if _state.scenario is not None:
+    try:
+        ih_stop = _state.scenario
+        ih_stop._sub = None   # drop handle → physx auto-unsubscribes
+        print("[main] Released previous scenario's physics subscription.")
+    except Exception:
+        pass
+    _state.scenario = None
+
+
 async def _run():
     try:
         cls = get_scenario_class(SCENARIO)
@@ -116,5 +136,8 @@ async def _run():
     scenario = cls(seed=SEED)
     await scenario.build()
     scenario.start()
+    _state.scenario = scenario   # persist for next re-run
+
 
 asyncio.ensure_future(_run())
+

@@ -29,8 +29,10 @@ class AreaBuildUpScenario(Scenario):
         self.loading_duration = 12.0
 
     def _assign_initial_waypoints(self):
-        """Open all doors; FSM cycles forklifts; slow loading causes staging build-up."""
-        self.open_all_doors()
+        """Open gates 0 and 2, keep middle gate closed; slow loading causes staging build-up."""
+        self.doors[0].open(self.stage)
+        self.doors[-1].open(self.stage)
+        self.doors[1].close(self.stage)
         print(f"[{self.name}] {self.num_forklifts} forklifts, "
               f"{self.loading_duration}s loading — staging build-up expected")
 

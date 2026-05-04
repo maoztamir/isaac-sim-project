@@ -15,7 +15,6 @@ from __future__ import annotations
 from .base import Scenario
 from .. import config as C
 from .. import isaac_helpers as ih
-from .. import waypoints as wp
 from ..models.forklift import Forklift
 
 # Seconds between each forklift's first departure — prevents all forklifts
@@ -50,29 +49,13 @@ class DockQueueScenario(Scenario):
             self.forklifts.append(fl)
 
     def _assign_initial_waypoints(self):
-        """Open doors 0 and 2; close door 1 (middle). Pre-stage pallets at
-        the two active dock positions so the loading zones look occupied."""
+        """Open doors 0 and 2; close door 1 (middle).
+        open() automatically shows the dock crate; close() hides it."""
         for i, door in enumerate(self.doors):
             if i == _CLOSED_GATE:
                 door.close(self.stage)
             else:
                 door.open(self.stage)
-        self._spawn_dock_pallets(active_gates=[0, 2])
         print(f"[{self.name}] doors 0+2 open, door {_CLOSED_GATE} closed — "
               f"{self.num_forklifts} forklifts staggered by {_STAGGER_SECS}s, "
               f"loading duration {self.loading_duration}s")
-
-    def _spawn_dock_pallets(self, active_gates: list[int]) -> None:
-        """Spawn a box prop at the service position of each active dock gate.
-
-        Uses a local warehouse prop (BOX_USDS[0]) so no remote Nucleus fetch
-        is needed. The props represent goods already staged at the dock,
-        visually signalling that those loading zones are active.
-        """
-        box_usd = self.assets_root + C.BOX_USDS[0]
-        for gate in active_gates:
-            cx, cy = wp.get_dock_service_position(gate)
-            prim_path = f"/World/DockPallets/pallet_gate_{gate}"
-            ih.spawn_asset(self.stage, prim_path, box_usd,
-                           cx, cy, 0.0, 0.0)
-        print(f"[{self.name}] dock pallets spawned at gates {active_gates}")

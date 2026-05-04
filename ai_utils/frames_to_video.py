@@ -15,6 +15,7 @@ Usage:
     python frames_to_video.py /media/storage/replicator/_out_sdrec
     python frames_to_video.py /media/storage/replicator/_out_sdrec --fps 24 --out /tmp/videos
     python frames_to_video.py /media/storage/replicator/_out_sdrec --dry-run
+    conda run -n isaac_scenario python frames_to_video.py /media/storage/replicator/_out_sdrec_2 --fps 24 --out /media/storage/replicator/_out_sdrec_2
 """
 
 from __future__ import annotations

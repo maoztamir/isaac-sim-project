@@ -33,26 +33,28 @@ class LoadingPauseScenario(Scenario):
         self._pause_reopened = False
 
     def _assign_initial_waypoints(self):
-        """Open all doors at start; timed close/reopen handled in on_step."""
-        self.open_all_doors()
-        print(f"[{self.name}] doors open — will pause at T={PAUSE_AT_SEC}s "
-              f"for {PAUSE_DURATION}s")
+        """Open first and last gates only; timed close/reopen handled in on_step."""
+        self.doors[0].open(self.stage)
+        self.doors[-1].open(self.stage)
+        self.doors[1].close(self.stage)
+        print(f"[{self.name}] gates 0+2 open, gate 1 closed — "
+              f"will pause at T={PAUSE_AT_SEC}s for {PAUSE_DURATION}s")
 
     def on_step(self, dt: float):
-        # Close all doors at pause time
+        # Close active gates (0 and 2) at pause time
         if not self._pause_closed and self.sim_time >= PAUSE_AT_SEC:
-            self.close_all_doors()
-            self._pause_closed = True
-            for i in range(len(self.doors)):
+            for i in (0, 2):
+                self.doors[i].close(self.stage)
                 self.evt_log.log_door_close(self.sim_time, gate_idx=i)
-            print(f"[{self.name}] t={self.sim_time:.1f}s — all doors CLOSED "
+            self._pause_closed = True
+            print(f"[{self.name}] t={self.sim_time:.1f}s — gates 0+2 CLOSED "
                   f"(pause for {PAUSE_DURATION}s)")
 
-        # Reopen all doors after pause duration
+        # Reopen active gates after pause duration
         if (self._pause_closed and not self._pause_reopened and
                 self.sim_time >= PAUSE_AT_SEC + PAUSE_DURATION):
-            self.open_all_doors()
-            self._pause_reopened = True
-            for i in range(len(self.doors)):
+            for i in (0, 2):
+                self.doors[i].open(self.stage)
                 self.evt_log.log_door_open(self.sim_time, gate_idx=i)
-            print(f"[{self.name}] t={self.sim_time:.1f}s — all doors REOPENED")
+            self._pause_reopened = True
+            print(f"[{self.name}] t={self.sim_time:.1f}s — gates 0+2 REOPENED")

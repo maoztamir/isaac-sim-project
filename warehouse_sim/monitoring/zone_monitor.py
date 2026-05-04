@@ -30,18 +30,17 @@ class ZoneSnapshot:
 
 class ZoneMonitor:
     """
-    Wraps a ZoneManager and accumulates per-zone metrics each physics step.
+    Wraps an AreaManager and accumulates per-area metrics each physics step.
 
     Parameters
     ----------
-    zone_manager : ZoneManager
-        The ZoneManager instance (from warehouse_sim/zones.py).
+    zone_manager : AreaManager
+        The AreaManager instance (from warehouse_sim/areas.py).
     """
 
     def __init__(self, zone_manager):
         self._zm = zone_manager
-        # Support both ZoneManager (.zones) and AreaManager (.areas)
-        self._areas_attr = "zones" if hasattr(zone_manager, "zones") else "areas"
+        self._areas_attr = "areas"
         # Per-zone snapshots — built from zone names on first tick
         self._snapshots: dict[str, ZoneSnapshot] = {}
         # Previous occupancy sets to detect enter/exit events
@@ -121,8 +120,8 @@ class ZoneMonitor:
         self._prev_occupants.clear()
 
     def areas(self) -> dict:
-        """Return the underlying area/zone dict (supports both manager types)."""
-        return getattr(self._zm, self._areas_attr)
+        """Return the underlying areas dict from the AreaManager."""
+        return self._zm.areas
 
     def print_summary(self) -> None:
         """Print a one-line summary per zone to stdout."""

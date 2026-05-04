@@ -6,6 +6,7 @@ stays testable and version-change impact is contained.
 """
 
 from __future__ import annotations
+import math
 from pxr import Gf, Sdf, Usd, UsdGeom, UsdPhysics
 
 
@@ -466,3 +467,135 @@ def spawn_zebra_rect(stage, prim_base, rect_cx, rect_cy, rect_w, rect_d, C):
         ("east",  False, rect_cx + hw, rect_cy,      rect_d),
     ]:
         spawn_zebra_edge(stage, f"{prim_base}/{label}", is_h, ex, ey, elen, C)
+
+
+# ── Surveillance cameras ──────────────────────────────────────────────────────
+
+def spawn_cameras_from_usd(stage, source_usd_path, parent_path="/World/Cameras"):
+    """Read UsdGeom.Camera prims from *source_usd_path* and recreate them in *stage*.
+
+    The source USD is opened as a temporary read-only stage.  Every Camera prim
+    found anywhere in that stage is copied to ``parent_path/<cam_name>`` in the
+    target stage, preserving the full transform op and all camera attributes
+    (focalLength, horizontalAperture, verticalAperture, clippingRange).
+
+    Returns a list of the destination prim paths created.
+    """
+    src = Usd.Stage.Open(source_usd_path)
+    if not src:
+        raise RuntimeError(
+            f"spawn_cameras_from_usd: could not open '{source_usd_path}'"
+        )
+
+    # Ensure the /World/Cameras xform exists
+    UsdGeom.Xform.Define(stage, parent_path)
+
+    created = []
+    for prim in Usd.PrimRange(src.GetPseudoRoot()):
+        if not prim.IsA(UsdGeom.Camera):
+            continue
+
+        cam_name = prim.GetName()
+        src_cam  = UsdGeom.Camera(prim)
+        src_xf   = UsdGeom.Xformable(prim)
+        dst_path = f"{parent_path}/{cam_name}"
+
+        dst_cam = UsdGeom.Camera.Define(stage, dst_path)
+
+        # Copy the first transform op (xformOp:transform or xformOp:translate)
+        for op in src_xf.GetOrderedXformOps():
+            op_name = op.GetOpName()
+            val     = op.Get()
+            if val is None:
+                continue
+            if "transform" in op_name:
+                dst_cam.AddTransformOp().Set(val)
+                break
+            if "translate" in op_name:
+                dst_cam.AddTranslateOp().Set(val)
+                break
+
+        # Copy camera attributes
+        fl = src_cam.GetFocalLengthAttr().Get()
+        ha = src_cam.GetHorizontalApertureAttr().Get()
+        va = src_cam.GetVerticalApertureAttr().Get()
+        cr = src_cam.GetClippingRangeAttr().Get()
+        if fl is not None:
+            dst_cam.CreateFocalLengthAttr(fl)
+        if ha is not None:
+            dst_cam.CreateHorizontalApertureAttr(ha)
+        if va is not None:
+            dst_cam.CreateVerticalApertureAttr(va)
+        if cr is not None:
+            dst_cam.CreateClippingRangeAttr(cr)
+
+        created.append(dst_path)
+        print(f"[spawn_cameras_from_usd] {cam_name} → {dst_path}")
+
+    return created
+
+
+def spawn_camera(stage, path, eye, target, fov_deg=70.0):
+    """Create a USD perspective camera at *eye* aimed at *target*.
+
+    eye, target: 3-tuples or Gf.Vec3d (world-space, metres, Z-up).
+    fov_deg: horizontal field of view in degrees.
+
+    The camera looks along its local -Z axis (USD/OpenGL convention).
+    A look-at matrix is built from the eye→target direction using Z-up as
+    the world up vector, with a Y-up fallback when the look direction is
+    nearly parallel to Z.
+    """
+    eye    = Gf.Vec3d(*eye)
+    target = Gf.Vec3d(*target)
+
+    fwd = target - eye
+    fwd_len = fwd.GetLength()
+    if fwd_len < 1e-10:
+        raise ValueError(f"spawn_camera: eye and target are the same point ({path})")
+    fwd = fwd / fwd_len
+
+    # Camera local axes (right=X, up=Y, look=-Z)
+    world_up = Gf.Vec3d(0, 0, 1)
+    right = Gf.Vec3d(
+        fwd[1]*world_up[2] - fwd[2]*world_up[1],
+        fwd[2]*world_up[0] - fwd[0]*world_up[2],
+        fwd[0]*world_up[1] - fwd[1]*world_up[0],
+    )
+    right_len = right.GetLength()
+    if right_len < 1e-6:
+        # Camera is pointing nearly straight up or down — use Y as fallback up
+        world_up = Gf.Vec3d(0, 1, 0)
+        right = Gf.Vec3d(
+            fwd[1]*world_up[2] - fwd[2]*world_up[1],
+            fwd[2]*world_up[0] - fwd[0]*world_up[2],
+            fwd[0]*world_up[1] - fwd[1]*world_up[0],
+        )
+        right_len = right.GetLength()
+    right = right / right_len
+
+    up = Gf.Vec3d(
+        right[1]*fwd[2] - right[2]*fwd[1],
+        right[2]*fwd[0] - right[0]*fwd[2],
+        right[0]*fwd[1] - right[1]*fwd[0],
+    )
+
+    # Row-major 4×4 transform: rows = [right, up, -fwd, eye]
+    mat = Gf.Matrix4d(
+        (right[0],  right[1],  right[2],  0.0),
+        (up[0],     up[1],     up[2],     0.0),
+        (-fwd[0],  -fwd[1],   -fwd[2],    0.0),
+        (eye[0],    eye[1],    eye[2],    1.0),
+    )
+
+    cam = UsdGeom.Camera.Define(stage, path)
+    cam.AddTransformOp().Set(mat)
+
+    # Focal length from horizontal FOV and standard 20.955 mm aperture
+    aperture = 20.955
+    focal_length = aperture / (2.0 * math.tan(math.radians(fov_deg / 2.0)))
+    cam.CreateHorizontalApertureAttr(aperture)
+    cam.CreateFocalLengthAttr(focal_length)
+    cam.CreateClippingRangeAttr(Gf.Vec2f(0.1, 100000.0))
+
+    return cam

@@ -2,6 +2,7 @@
 Warehouse constants and tuning parameters.
 All spatial values in metres; angles in degrees.
 """
+import os as _os
 
 # ── Warehouse bounds (from full_warehouse.usd) ──────────────────────────────
 WALL_X_MIN, WALL_X_MAX = -26.33,  5.46
@@ -13,8 +14,21 @@ NAV_X_MAX = WALL_X_MAX - WALL_MARGIN
 NAV_Y_MIN = WALL_Y_MIN + WALL_MARGIN
 NAV_Y_MAX = WALL_Y_MAX - WALL_MARGIN
 
-# Centre X of the warehouse (used to position gates and staging)
+# Centre of the warehouse floor
 WAREHOUSE_CX = (WALL_X_MIN + WALL_X_MAX) / 2.0   # ~ -10.435
+WAREHOUSE_CY = (WALL_Y_MIN + WALL_Y_MAX) / 2.0   # ~   3.60
+
+# ── Surveillance cameras ─────────────────────────────────────────────────────
+CAMERA_HEIGHT  = 15.0   # metres above the floor
+CAMERA_FOV_DEG = 70.0   # horizontal field of view
+
+# Reference USD that stores the four manually-positioned camera prims.
+# Path is resolved relative to this config file so it works regardless of
+# the current working directory.
+CAMERA_POSITIONS_USD = _os.path.normpath(
+    _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                  "..", "tests", "camera_position.usd")
+)
 
 # ── Loading dock gate geometry ──────────────────────────────────────────────
 GATE_OFFSETS = [-7.0, 0.0, 7.0]         # X offsets from WAREHOUSE_CX
@@ -241,6 +255,8 @@ WAREHOUSE_USD = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
 FORKLIFT_USD  = "/Isaac/Props/Forklift/forklift.usd"
 PALLET_USD    = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Cardboard_Boxes_on_Pallet/Pallet_Asm_A/Pallet_Asm_A06_112x112x109cm_PR_V_NVD_01.usd"
 PALLET_SCALE  = 0.01   # asset is authored in cm; stage is in metres
+CRATE_USD     = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Wood_Crate_on_Pallet/Plywood_A/PlywoodCrateAssembly_A05_PR_NVD_01.usd"
+CRATE_SCALE   = 0.01   # asset is authored in cm; stage is in metres
 BOX_USDS      = [
     "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxA_01.usd",
     "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxB_01.usd",
