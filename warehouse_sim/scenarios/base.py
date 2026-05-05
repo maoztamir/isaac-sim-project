@@ -45,6 +45,12 @@ class Scenario:
     name = "base"
     num_forklifts = 3
 
+    # Set True in subclasses that have IRA pedestrians.  When True, build()
+    # uses SimulationManager to open the warehouse as the ROOT stage (required
+    # for navmesh baking to see the floor mesh), then continues building the
+    # remaining scene elements on the live stage.
+    _use_ira_loader: bool = False
+
     def __init__(self, seed: int = 42):
         self.rng = random.Random(seed)
         self.stage = None
@@ -94,14 +100,23 @@ class Scenario:
         self.assets_root = ih.get_assets_root()
         await ih.next_update()
 
-        print(f"[{self.name}] Clearing /World...")
-        ih.clear_world(self.stage)
-        await ih.next_update()
+        if self._use_ira_loader:
+            # IRA path: register pedestrians first so _open_ira_scene() knows
+            # how many characters to spawn, then open via SimulationManager.
+            self.setup_pedestrians()
+            await self._open_ira_scene()
+            self.stage = ih.get_stage()   # SimulationManager replaced the stage
+        else:
+            # Reference path: clear world and load warehouse as a reference prim.
+            print(f"[{self.name}] Clearing /World...")
+            ih.clear_world(self.stage)
+            await ih.next_update()
 
-        print(f"[{self.name}] Loading warehouse USD...")
-        ih.spawn_asset(self.stage, "/World/Warehouse",
-                       self.assets_root + C.WAREHOUSE_USD, 0, 0, 0)
-        await ih.next_update()
+            print(f"[{self.name}] Loading warehouse USD...")
+            _assets_waiter = ih.wait_for_assets_loaded()
+            ih.spawn_asset(self.stage, "/World/Warehouse",
+                           self.assets_root + C.WAREHOUSE_USD, 0, 0, 0)
+            await _assets_waiter
 
         ih.create_physics_scene(self.stage)
 
@@ -136,13 +151,14 @@ class Scenario:
 
         # Forklifts (subclass override point)
         self.setup_forklifts()
-        await ih.next_update()   # let remote USD references (pallets, etc.) start resolving
+        await ih.next_update()
         self._idle_secs = {fl.id: 0.0 for fl in self.forklifts}
 
-        # Pedestrians (subclass override point — waypoints assigned here, not lazily)
-        self.setup_pedestrians()
-        if self.pedestrians:
-            await ih.next_update()
+        # Pedestrians — IRA path already spawned them; reference path spawns here.
+        if not self._use_ira_loader:
+            self.setup_pedestrians()
+            if self.pedestrians:
+                await self._setup_ira_pedestrians()
 
         # Logic — needs forklifts + doors populated
         self.queue_mgr = QueueManager(self.shelf_map)
@@ -380,64 +396,113 @@ class Scenario:
 
     # ── Pedestrian helpers ────────────────────────────────────────────────────
 
-    def spawn_pedestrian(self, x: float, y: float,
-                         waypoints: list[tuple[float, float]],
-                         speed: float = C.PEDESTRIAN_SPEED,
-                         loop: bool = True,
-                         heading: float = 0.0) -> Pedestrian:
-        """Spawn one pedestrian prim and register it."""
-        ped_id    = len(self.pedestrians)
-        prim_path = f"/World/Pedestrians/pedestrian_{ped_id}"
-        ih.spawn_capsule_marker(self.stage, prim_path,
-                                x, y,
-                                C.PEDESTRIAN_HEIGHT,
-                                C.PEDESTRIAN_RADIUS,
-                                C.PEDESTRIAN_COLOR)
+    def spawn_pedestrian(self, waypoints: list[tuple[float, float]],
+                         loop: bool = True) -> Pedestrian:
+        """Register one IRA-animated pedestrian with a waypoint patrol route.
 
-        ped = Pedestrian(ped_id, prim_path, x, y, heading)
-        ped.speed = speed
-        ped.set_waypoints(waypoints, loop=loop)
+        Characters are not spawned here — actual USD loading and navmesh
+        setup happens in _setup_ira_pedestrians(), called from build().
+        """
+        ped_id = len(self.pedestrians)
+        if ped_id == 0:
+            char_name = "Character"
+        elif ped_id < 10:
+            char_name = f"Character_0{ped_id}"
+        else:
+            char_name = f"Character_{ped_id}"
+        prim_path = f"/World/Characters/{char_name}"
+
+        ped = Pedestrian(ped_id, prim_path, char_name)
+        ped.waypoints = list(waypoints)
+        ped.loop = loop
         self.pedestrians.append(ped)
-        print(f"[{self.name}] Pedestrian {ped_id} spawned at ({x:.1f},{y:.1f}) "
-              f"with {len(waypoints)} waypoints, loop={loop}")
+        print(f"[{self.name}] Pedestrian {ped_id} registered: {char_name}, "
+              f"{len(waypoints)} waypoints, loop={loop}")
         return ped
 
+    async def _open_ira_scene(self) -> None:
+        """Open the warehouse via SimulationManager and spawn IRA pedestrians.
+
+        SimulationManager opens the warehouse USD as the ROOT stage, which
+        gives the navmesh baker direct access to the floor mesh.  Called only
+        when _use_ira_loader=True; setup_pedestrians() must run first so that
+        self.pedestrians is populated with waypoints.
+        """
+        import asyncio
+        import carb.settings
+        from isaacsim.replicator.agent.core.simulation import SimulationManager
+
+        config_path = "/tmp/warehouse_sim_ira_config.yaml"
+        cmd_path    = "/tmp/warehouse_sim_ira_commands.txt"
+
+        ih.generate_ira_command_file(self.pedestrians, cmd_path)
+
+        yaml_text = (
+            "isaacsim.replicator.agent:\n"
+            "  version: 0.7.0\n"
+            "  global:\n"
+            "    seed: 42\n"
+            "    simulation_length: 9000\n"
+            "  scene:\n"
+            f"    asset_path: {C.IRA_WAREHOUSE_USD}\n"
+            "  character:\n"
+            f"    asset_path: {C.IRA_CHARACTERS_DIR}\n"
+            f"    command_file: {cmd_path}\n"
+            "    filters: []\n"
+            f"    num: {len(self.pedestrians)}\n"
+            "    spawn_area: []\n"
+            "    navigation_area: []\n"
+        )
+        with open(config_path, "w") as fh:
+            fh.write(yaml_text)
+
+        s = carb.settings.get_settings()
+        s.set("/exts/isaacsim.replicator.agent/asset_settings/default_biped_assets_path",
+              C.IRA_BIPED_USD)
+        s.set("/exts/omni.anim.people/command_settings/number_of_loop", "inf")
+        s.set("/exts/omni.anim.people/navigation_settings/navmesh_enabled", True)
+
+        sim = SimulationManager()
+        setup_done = asyncio.Event()
+
+        def _on_done(event):
+            setup_done.set()
+
+        _handle = sim.register_set_up_simulation_done_callback(_on_done)
+
+        ok = sim.load_config_file(config_path)
+        if not ok:
+            print(f"[{self.name}] ERROR: IRA config file failed to load — "
+                  "check IRA_WAREHOUSE_USD in config.py")
+            _handle = None
+            return
+
+        sim.set_up_simulation_from_config_file()
+        print(f"[{self.name}] Waiting for IRA setup "
+              f"(navmesh bake + {len(self.pedestrians)} pedestrian(s)) …")
+
+        try:
+            await asyncio.wait_for(setup_done.wait(), timeout=180.0)
+        except asyncio.TimeoutError:
+            print(f"[{self.name}] ERROR: IRA setup timed out — "
+                  "check Isaac Sim console for navmesh or asset errors")
+        finally:
+            _handle = None
+
+        print(f"[{self.name}] IRA scene open — "
+              f"{len(self.pedestrians)} pedestrian(s) spawned and wired")
+
+    async def _setup_ira_pedestrians(self) -> None:
+        """Generate the IRA command file and spawn all registered pedestrians."""
+        cmd_path = "/tmp/warehouse_sim_pedestrians.txt"
+        ih.generate_ira_command_file(self.pedestrians, cmd_path)
+        await ih.setup_ira_pedestrians(
+            C.IRA_BIPED_USD, C.IRA_CHARACTER_USD, cmd_path, len(self.pedestrians)
+        )
+
     def _check_pedestrian_proximity(self) -> None:
-        """Fire near-miss events and emergency-stop actors when a forklift
-        is within PEDESTRIAN_STOP_DIST of any pedestrian."""
-        cooldown = 5.0
-        for fl in self.forklifts:
-            for ped in self.pedestrians:
-                dist = ped.distance_to(fl.pos[0], fl.pos[1])
-
-                # Nothing to do if both are already stopped
-                if (fl.speed < C.NEAR_MISS_SPEED_MIN and
-                        ped.state == "stopped"):
-                    continue
-
-                key  = (fl.id, ped.id)
-                last = self._ped_prox_cooldown.get(key, -999.0)
-
-                if dist <= C.PEDESTRIAN_STOP_DIST:
-                    # Emergency stop — both actors
-                    ped.stop_for(3.0)
-                    fl.state       = C.STATE_IDLE
-                    fl.speed       = 0.0
-                    fl.state_timer = 3.0   # hold idle for 3 s then FSM resumes
-                    if self.sim_time - last >= cooldown:
-                        self._ped_prox_cooldown[key] = self.sim_time
-                        self.evt_log.log_pedestrian_near_miss(
-                            self.sim_time, fl.id, ped.id,
-                            dist, fl.speed, stopped=True,
-                        )
-
-                elif dist <= C.PEDESTRIAN_WARN_DIST:
-                    if self.sim_time - last >= cooldown:
-                        self._ped_prox_cooldown[key] = self.sim_time
-                        self.evt_log.log_pedestrian_near_miss(
-                            self.sim_time, fl.id, ped.id,
-                            dist, fl.speed, stopped=False,
-                        )
+        # USD position query for IRA characters — deferred pending future work.
+        pass
 
     # ── Scene construction helpers ────────────────────────────────────────────
 

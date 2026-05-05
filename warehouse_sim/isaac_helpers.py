@@ -185,6 +185,118 @@ def stop_timeline():
     omni.timeline.get_timeline_interface().stop()
 
 
+async def wait_for_assets_loaded(timeout: float = 90.0) -> None:
+    """Block until the next ASSETS_LOADED stage event fires.
+
+    Subscribe BEFORE spawning the asset so there is no race condition.
+    The event fires once the USD stage finishes resolving the reference.
+    """
+    import asyncio
+    import omni.usd
+    done = asyncio.Event()
+
+    def _on_event(event):
+        if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):
+            done.set()
+
+    handle = omni.usd.get_context().get_stage_event_stream() \
+        .create_subscription_to_pop(_on_event, name="ih_wait_assets_loaded")
+    try:
+        await asyncio.wait_for(done.wait(), timeout=timeout)
+    except asyncio.TimeoutError:
+        print(f"[ih] WARNING: wait_for_assets_loaded timed out after {timeout}s")
+    finally:
+        handle = None   # release subscription
+
+
+# ── IRA pedestrian helpers ──────────────────────────────────────────────────
+
+def generate_ira_command_file(pedestrians, output_path: str) -> None:
+    """Write an omni.anim.people command file from pedestrian waypoint lists.
+
+    Each pedestrian's waypoints become sequential GoTo + Idle commands.
+    Character naming follows IRA convention: index 0 → "Character",
+    index 1 → "Character_01", etc.
+    """
+    lines = []
+    for ped in pedestrians:
+        prefix = ped.character_name
+        for (wx, wy) in ped.waypoints:
+            lines.append(f"{prefix} GoTo {wx:.2f} {wy:.2f} 0.0 _")
+            lines.append(f"{prefix} Idle 1.5")
+    with open(output_path, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"[ih] Command file written: {output_path} ({len(lines)} lines, "
+          f"{len(pedestrians)} pedestrian(s))")
+
+
+async def setup_ira_pedestrians(biped_usd: str, character_usd: str,
+                                command_file_path: str, count: int) -> None:
+    """Spawn and wire IRA-animated characters on the already-loaded stage.
+
+    Bakes the navmesh, spawns `count` character USDs at staggered positions
+    on the open warehouse floor, then attaches the animation graph and
+    CharacterBehavior script so omni.anim.people can drive movement.
+
+    Must be called after the warehouse scene is fully loaded.
+    """
+    import asyncio
+    import carb.settings
+    import omni.anim.navigation.core as nav
+    from isaacsim.replicator.agent.core.stage_util import CharacterUtil
+    from isaacsim.replicator.agent.core.settings import BehaviorScriptPaths
+    from omni.anim.people.scripts.custom_command.populate_anim_graph import (
+        populate_anim_graph,
+    )
+
+    s = carb.settings.get_settings()
+    s.set("/exts/isaacsim.replicator.agent/asset_settings/default_biped_assets_path",
+          biped_usd)
+    s.set("/exts/omni.anim.people/command_settings/command_file_path",
+          command_file_path)
+    s.set("/exts/omni.anim.people/command_settings/number_of_loop", "inf")
+    s.set("/exts/omni.anim.people/navigation_settings/navmesh_enabled", True)
+
+    # Load the invisible biped skeleton then re-run populate_anim_graph so the
+    # AnimationGraph is guaranteed present before characters are wired.
+    CharacterUtil.load_default_biped_to_stage()
+    await next_update()
+    populate_anim_graph()
+
+    # Navmesh bake — the warehouse floor must be loaded before this runs.
+    # Caller is responsible for waiting for ASSETS_LOADED (via
+    # ih.wait_for_assets_loaded()) before calling this function.
+    _inav = nav.acquire_interface()
+    _inav.start_navmesh_baking_and_wait()
+    if _inav.get_navmesh() is None:
+        print("[ih] WARNING: NavMesh baking failed — GoTo commands will be rejected.")
+
+    # Spawn each character, then wait for their USD references to resolve so
+    # SkelRoot prims exist when get_characters_in_stage() is called.
+    _spawn_xs = [-5.0, -12.0, -19.0, -3.0]
+    for i in range(count):
+        char_name = CharacterUtil.get_character_name_by_index(i)
+        sx = _spawn_xs[i % len(_spawn_xs)]
+        CharacterUtil.load_character_usd_to_stage(
+            character_usd, [sx, -10.0, 0.0], 0, char_name
+        )
+
+    await asyncio.sleep(2.0)  # let character USD references resolve
+
+    # Wire animation graph + CharacterBehavior script to every character.
+    biped_prim  = CharacterUtil.get_default_biped_character()
+    char_list   = CharacterUtil.get_characters_in_stage()
+    anim_graph  = CharacterUtil.get_anim_graph_from_character(biped_prim)
+    if anim_graph is None:
+        print("[ih] WARNING: AnimationGraph not found — characters will not animate.")
+    CharacterUtil.setup_animation_graph_to_character(char_list, anim_graph)
+    CharacterUtil.setup_python_scripts_to_character(
+        char_list, BehaviorScriptPaths.behavior_script_path()
+    )
+    print(f"[ih] IRA pedestrians ready: {count} character(s), "
+          f"{len(char_list)} SkelRoot(s) wired.")
+
+
 # ── Visual markers ──────────────────────────────────────────────────────────
 
 def spawn_box_marker(stage, prim_path, cx, cy, cz, sx, sy, sz, color):

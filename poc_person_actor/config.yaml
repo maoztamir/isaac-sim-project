@@ -1,0 +1,14 @@
+isaacsim.replicator.agent:
+  version: 0.7.0
+  global:
+    seed: 42
+    simulation_length: 9000   # 300 s at 30 fps — irrelevant for live playback
+  scene:
+    asset_path: /home/ubuntu/isaacsim_assets/Assets/Isaac/5.1/Isaac/Environments/Simple_Warehouse/full_warehouse.usd
+  character:
+    asset_path: /home/ubuntu/isaacsim_assets/Assets/Isaac/5.1/Isaac/People/Characters
+    command_file: commands.txt   # resolved relative to this config file
+    filters: []
+    num: 1
+    spawn_area: []               # empty = full navmesh walkable area
+    navigation_area: []          # empty = unrestricted

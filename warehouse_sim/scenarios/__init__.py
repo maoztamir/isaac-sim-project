@@ -6,6 +6,7 @@ from .area_buildup             import AreaBuildUpScenario
 from .aisle_congestion         import AisleCongestionScenario
 from .showcase                 import ShowcaseScenario
 from .door_cycle               import DoorCycleScenario
+from .mixed_floor              import MixedFloorScenario
 
 PRESETS = {
     "dock_queue":              DockQueueScenario,
@@ -15,6 +16,7 @@ PRESETS = {
     "aisle_congestion":        AisleCongestionScenario,
     "showcase":                ShowcaseScenario,
     "door_cycle":              DoorCycleScenario,
+    "mixed_floor":             MixedFloorScenario,
 }
 
 

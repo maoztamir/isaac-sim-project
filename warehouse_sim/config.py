@@ -258,10 +258,18 @@ PALLET_H = 0.15
 # PALLET_USD is an absolute URL and must be used directly (no assets_root prefix).
 WAREHOUSE_USD    = "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
 FORKLIFT_USD     = "/Isaac/Props/Forklift/forklift.usd"
-# Pedestrian visual — a capsule primitive created directly in the stage (no USD load).
-PEDESTRIAN_HEIGHT = 1.6    # metres, body cylinder portion
-PEDESTRIAN_RADIUS = 0.25   # metres
-PEDESTRIAN_COLOR  = (1.0, 0.55, 0.0)   # bright orange — clearly visible against grey floor
+
+# ── IRA (isaacsim.replicator.agent) pedestrian assets ────────────────────────
+# Absolute local paths — no assets_root prefix needed.
+IRA_CHARACTERS_DIR = "/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1/Isaac/People/Characters"
+IRA_BIPED_USD      = IRA_CHARACTERS_DIR + "/Biped_Setup.usd"
+IRA_CHARACTER_USD  = (IRA_CHARACTERS_DIR
+                      + "/male_adult_construction_01_new"
+                      + "/male_adult_construction_01_new.usd")
+# Absolute local path to the warehouse USD used by SimulationManager.
+# SimulationManager requires a local file path (not a Nucleus URL).
+IRA_WAREHOUSE_USD  = ("/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1/Isaac"
+                      "/Environments/Simple_Warehouse/full_warehouse.usd")
 PALLET_USD    = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Cardboard_Boxes_on_Pallet/Pallet_Asm_A/Pallet_Asm_A06_112x112x109cm_PR_V_NVD_01.usd"
 PALLET_SCALE  = 0.01   # asset is authored in cm; stage is in metres
 CRATE_USD     = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/DigitalTwin/Assets/Warehouse/Shipping/Wood_Crate_on_Pallet/Plywood_A/PlywoodCrateAssembly_A05_PR_NVD_01.usd"
