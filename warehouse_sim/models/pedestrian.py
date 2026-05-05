@@ -79,46 +79,19 @@ class Pedestrian:
     # ── Per-frame update ─────────────────────────────────────────────────────
 
     def update(self, dt: float, stage) -> None:
-        """Advance position and sync the USD prim.  Call once per physics step."""
-        # Timed-stop countdown
+        """Sync self.pos from the character prim (moved by omni.anim.people).
+
+        Does NOT move the prim — omni.anim.people drives it.  We just read
+        the world position so proximity checks stay accurate.
+        """
         if self.state == STATE_STOPPED and self._resume_timer > 0.0:
             self._resume_timer -= dt
             if self._resume_timer <= 0.0:
                 self.state = STATE_WALKING
 
-        if self.state != STATE_WALKING or not self.waypoints:
-            return
-
-        tx, ty = self.waypoints[self.wp_idx]
-        dx     = tx - self.pos[0]
-        dy     = ty - self.pos[1]
-        dist   = math.hypot(dx, dy)
-
-        if dist < _WAYPOINT_REACH_DIST:
-            self._advance_waypoint()
-            return
-
-        # Snap heading to direction of travel
-        self.heading = math.degrees(math.atan2(dy, dx))
-
-        # Move
-        step = min(self.speed * dt, dist)
-        self.pos[0] += dx / dist * step
-        self.pos[1] += dy / dist * step
-
-        ih.set_prim_translate_xy(stage, self.prim_path, self.pos[0], self.pos[1])
-        ih.set_prim_rotate_z(stage, self.prim_path, self.heading)
-
-    def _advance_waypoint(self) -> None:
-        if not self.waypoints:
-            return
-        if self.loop:
-            self.wp_idx = (self.wp_idx + 1) % len(self.waypoints)
-        else:
-            if self.wp_idx < len(self.waypoints) - 1:
-                self.wp_idx += 1
-            else:
-                self.state = STATE_IDLE   # reached end of non-looping path
+        xy = ih.get_prim_world_xy(stage, self.prim_path)
+        if xy is not None:
+            self.pos = list(xy)
 
     def __repr__(self) -> str:
         return (f"Pedestrian(id={self.id}, state={self.state}, "

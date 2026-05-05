@@ -142,7 +142,7 @@ class Scenario:
         # Pedestrians (subclass override point — waypoints assigned here, not lazily)
         self.setup_pedestrians()
         if self.pedestrians:
-            await ih.next_update()
+            await self._finalize_pedestrians()
 
         # Logic — needs forklifts + doors populated
         self.queue_mgr = QueueManager(self.shelf_map)
@@ -385,22 +385,63 @@ class Scenario:
                          speed: float = C.PEDESTRIAN_SPEED,
                          loop: bool = True,
                          heading: float = 0.0) -> Pedestrian:
-        """Spawn one pedestrian prim and register it."""
+        """Register one SDG pedestrian.
+
+        Does NOT spawn any prim here — _finalize_pedestrians() handles all
+        async USD work after setup_pedestrians() completes.
+        """
         ped_id    = len(self.pedestrians)
-        prim_path = f"/World/Pedestrians/pedestrian_{ped_id}"
-        ih.spawn_capsule_marker(self.stage, prim_path,
-                                x, y,
-                                C.PEDESTRIAN_HEIGHT,
-                                C.PEDESTRIAN_RADIUS,
-                                C.PEDESTRIAN_COLOR)
+        char_name = f"Worker_{ped_id}"
+        prim_path = f"/World/Characters/{char_name}"
 
         ped = Pedestrian(ped_id, prim_path, x, y, heading)
         ped.speed = speed
         ped.set_waypoints(waypoints, loop=loop)
         self.pedestrians.append(ped)
-        print(f"[{self.name}] Pedestrian {ped_id} spawned at ({x:.1f},{y:.1f}) "
+        print(f"[{self.name}] Pedestrian {ped_id} registered at ({x:.1f},{y:.1f}) "
               f"with {len(waypoints)} waypoints, loop={loop}")
         return ped
+
+    async def _finalize_pedestrians(self) -> None:
+        """Enable omni.anim.people, spawn character prims, write command file, attach scripts."""
+        import os
+        ih.enable_anim_people()
+        await ih.next_update()
+
+        for ped in self.pedestrians:
+            char_name = ped.prim_path.split("/")[-1]
+            ih.spawn_anim_character(self.assets_root, char_name, ped.pos[0], ped.pos[1])
+            print(f"[{self.name}] SDG character '{char_name}' spawned at ({ped.pos[0]:.1f},{ped.pos[1]:.1f})")
+
+        # Write shared command file (all pedestrians, looped by the inf setting)
+        cmd_dir  = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "tests", "output")
+        os.makedirs(cmd_dir, exist_ok=True)
+        cmd_path = os.path.normpath(os.path.join(cmd_dir, "pedestrian_commands.txt"))
+        with open(cmd_path, "w") as f:
+            for ped in self.pedestrians:
+                char_name = ped.prim_path.split("/")[-1]
+                for wp in ped.waypoints:
+                    f.write(f"{char_name} GoTo {wp[0]:.3f} {wp[1]:.3f} 0.0 _\n")
+        print(f"[{self.name}] Command file written: {cmd_path}")
+
+        # Wait for character USD references to resolve
+        for _ in range(8):
+            await ih.next_update()
+
+        # Populate animation graph on the biped template
+        try:
+            from omni.anim.people.scripts.custom_command.populate_anim_graph import populate_anim_graph
+            populate_anim_graph()
+        except Exception as e:
+            print(f"[{self.name}] populate_anim_graph: {e}")
+
+        # Attach CharacterBehavior script to each character's SkelRoot
+        for ped in self.pedestrians:
+            ok = ih.attach_character_behavior(ped.prim_path, cmd_path)
+            if not ok:
+                print(f"[{self.name}] Warning: SkelRoot not found for {ped.prim_path} — "
+                      f"character will not animate")
 
     def _check_pedestrian_proximity(self) -> None:
         """Fire near-miss events and emergency-stop actors when a forklift

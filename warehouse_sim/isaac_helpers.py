@@ -207,6 +207,102 @@ def spawn_capsule_marker(stage, prim_path, x, y, height, radius, color):
     return cap
 
 
+def enable_anim_people():
+    """Enable omni.anim.people, set direct-path (no navmesh) and infinite command loop."""
+    from isaacsim.core.utils.extensions import enable_extension
+    import carb
+    enable_extension("omni.anim.graph.core")
+    enable_extension("omni.anim.people")
+    s = carb.settings.get_settings()
+    s.set("/exts/omni.anim.people/navigation_settings/navmesh_enabled", False)
+    s.set("/exts/omni.anim.people/command_settings/number_of_loop", "inf")
+
+
+def spawn_anim_character(assets_root, char_name, x, y):
+    """Create Biped_Setup + character prims under /World/Characters/.
+
+    Returns the character root prim path.
+    Call attach_character_behavior() after waiting several frames for USD load.
+    """
+    from isaacsim.core.utils import prims as iprims
+    import omni.usd
+    from pxr import Gf
+
+    stage = omni.usd.get_context().get_stage()
+    parent_path = "/World/Characters"
+    if not stage.GetPrimAtPath(parent_path).IsValid():
+        UsdGeom.Xform.Define(stage, parent_path)
+
+    biped_path = f"{parent_path}/Biped_Setup"
+    if not stage.GetPrimAtPath(biped_path).IsValid():
+        iprims.create_prim(biped_path, "Xform",
+                           usd_path=assets_root + C.PEDESTRIAN_BIPED_USD)
+
+    char_path = f"{parent_path}/{char_name}"
+    prim = iprims.create_prim(char_path, "Xform",
+                               usd_path=assets_root + C.PEDESTRIAN_USD)
+    try:
+        prim.GetAttribute("xformOp:translate").Set(Gf.Vec3d(x, y, 0.0))
+    except Exception:
+        pass
+    return char_path
+
+
+def attach_character_behavior(char_path, cmd_file_path):
+    """Attach CharacterBehavior script to the SkelRoot under char_path.
+
+    Must be called after the character USD has had time to resolve (several frames).
+    Returns True on success, False if SkelRoot not yet available.
+    """
+    import omni.usd
+    import omni.kit.commands
+    import omni.kit.app
+    import carb
+    from pxr import Sdf, Usd
+
+    stage = omni.usd.get_context().get_stage()
+    carb.settings.get_settings().set(
+        "/exts/omni.anim.people/command_settings/command_file_path",
+        cmd_file_path,
+    )
+
+    char_prim = stage.GetPrimAtPath(char_path)
+    if not char_prim or not char_prim.IsValid():
+        print(f"[ih] attach_character_behavior: prim not found at {char_path}")
+        return False
+
+    skelroot = None
+    for prim in Usd.PrimRange(char_prim):
+        if prim.GetTypeName() == "SkelRoot":
+            skelroot = prim
+            break
+
+    if skelroot is None:
+        print(f"[ih] attach_character_behavior: SkelRoot not yet loaded under {char_path}")
+        return False
+
+    ext_mgr = omni.kit.app.get_app().get_extension_manager()
+    ext_path = ext_mgr.get_extension_path_by_module("omni.anim.people")
+    script_path = ext_path + "/omni/anim/people/scripts/character_behavior.py"
+
+    skel_sdf = Sdf.Path(str(skelroot.GetPrimPath()))
+    omni.kit.commands.execute("ApplyScriptingAPICommand", paths=[skel_sdf])
+    skelroot.GetAttribute("omni:scripting:scripts").Set([r"{}".format(script_path)])
+    print(f"[ih] CharacterBehavior attached to {skelroot.GetPrimPath()}")
+    return True
+
+
+def get_prim_world_xy(stage, prim_path):
+    """Return (x, y) world position of prim, or None if not found."""
+    import omni.usd
+    prim = stage.GetPrimAtPath(prim_path)
+    if not prim or not prim.IsValid():
+        return None
+    matrix = omni.usd.get_world_transform_matrix(prim)
+    t = matrix.ExtractTranslation()
+    return (t[0], t[1])
+
+
 def apply_static_collision(stage, prim_path):
     """Apply UsdPhysics.CollisionAPI to make a prim a static collider."""
     xf = UsdGeom.Xformable.Get(stage, prim_path)
