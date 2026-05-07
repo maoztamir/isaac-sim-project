@@ -269,7 +269,14 @@ async def setup_ira_pedestrians(biped_usd: str, character_usd: str,
     _inav = nav.acquire_interface()
     _inav.start_navmesh_baking_and_wait()
     if _inav.get_navmesh() is None:
-        print("[ih] WARNING: NavMesh baking failed — GoTo commands will be rejected.")
+        # NavMesh baking fails when the warehouse is loaded as a USD reference
+        # sub-prim (no NavMeshVolume present).  Fall back to straight-line GoTo
+        # so characters still walk their patrol routes without obstacle avoidance.
+        print("[ih] NavMesh baking failed — falling back to direct-path navigation "
+              "(navmesh_enabled=False). Characters will walk straight-line routes.")
+        s.set("/exts/omni.anim.people/navigation_settings/navmesh_enabled", False)
+    else:
+        print("[ih] NavMesh baked successfully.")
 
     # Spawn each character, then wait for their USD references to resolve so
     # SkelRoot prims exist when get_characters_in_stage() is called.
@@ -486,6 +493,52 @@ def spawn_gate(stage, idx, door_cx, C):
     lintel.AddScaleOp().Set(Gf.Vec3d((C.HOLE_W + 2 * C.WALL_T) / 2,
                                       C.WALL_T / 2, C.WALL_T / 2))
     lintel.GetDisplayColorAttr().Set(C.WALL_COLOR)
+
+
+def spawn_door_label(stage, idx, door_cx, C):
+    """Spawn a yellow 7-segment digit (1, 2, or 3) above loading dock gate idx.
+
+    Segments are cube prims under /World/DockLabels/label_{idx}, centred on
+    door_cx at Z = GATE_TOTAL_H + 0.6 m (just above the drum housing).
+    """
+    digit    = idx + 1                      # gates 0-indexed → labels 1, 2, 3
+    gate_y   = C.WALL_Y_MIN + C.GATE_D / 2
+    label_z  = C.GATE_TOTAL_H + 0.6        # centre Z of the glyph
+    h_half   = 0.50                         # half glyph height  (total = 1.0 m)
+    w_half   = 0.30                         # half glyph width   (total = 0.6 m)
+    q_half   = 0.25                         # quarter height for vert segments
+    seg_t    = 0.10                         # bar thickness
+    depth    = 0.08                         # Y extent of each bar
+
+    # (cx_off, cz_off, half_sx, half_sz)
+    segs = {
+        "top": ( 0,       +h_half, w_half,           seg_t / 2),
+        "mid": ( 0,        0,      w_half,           seg_t / 2),
+        "bot": ( 0,       -h_half, w_half,           seg_t / 2),
+        "tl":  (-w_half,  +q_half, seg_t / 2, q_half - seg_t / 2),
+        "tr":  (+w_half,  +q_half, seg_t / 2, q_half - seg_t / 2),
+        "bl":  (-w_half,  -q_half, seg_t / 2, q_half - seg_t / 2),
+        "br":  (+w_half,  -q_half, seg_t / 2, q_half - seg_t / 2),
+    }
+    patterns = {
+        1: {"tr", "br"},
+        2: {"top", "tr", "mid", "bl", "bot"},
+        3: {"top", "tr", "mid", "br", "bot"},
+    }
+
+    color = [(1.0, 0.85, 0.0)]  # yellow
+    root  = f"/World/DockLabels/label_{idx}"
+    UsdGeom.Xform.Define(stage, root)
+
+    for seg_name, (cx_off, cz_off, hsx, hsz) in segs.items():
+        if seg_name not in patterns[digit]:
+            continue
+        p = UsdGeom.Cube.Define(stage, f"{root}/{seg_name}")
+        # Negate cx_off so digits read correctly from the north camera
+        # (looking south: camera-right = west = -X).
+        p.AddTranslateOp().Set(Gf.Vec3d(door_cx - cx_off, gate_y, label_z + cz_off))
+        p.AddScaleOp().Set(Gf.Vec3d(hsx, depth / 2, hsz))
+        p.GetDisplayColorAttr().Set(color)
 
 
 def open_gate(stage, idx, panel_n):

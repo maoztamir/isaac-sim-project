@@ -525,6 +525,7 @@ class Scenario:
                            cx, cy, 0.0, 0.0, scale=C.CRATE_SCALE)
             ih.make_invisible(self.stage, crate_path)
             self.doors[i].crate_prim_path = crate_path
+            ih.spawn_door_label(self.stage, i, door_cx, C)
 
         print(f"[{self.name}] 3 loading dock gates + crates spawned.")
 
