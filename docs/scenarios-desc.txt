@@ -1,38 +1,11 @@
-1. Dock Queue Scenario
-Multiple forklifts arrive at a dock door faster than the loading process can handle. Vehicles begin to line up, forming a queue that exceeds normal operating thresholds. The queue persists over time, with limited forward movement, indicating a mismatch between arrival rate and loading throughput. This scenario tests the system’s ability to detect sustained queuing, measure peak queue size, and identify doors becoming bottlenecks.
+SCENARIO INDEX
+==============
+Full specs in docs/scenarios/
 
-Implementation Details:
-  - Forklifts: 4
-  - Loading duration: 20 s (long, to force queue build-up)
-  - Dock capacity: 1 slot at a time
-  - All 3 dock doors open at start
-
-FSM Cycle (per forklift):
-  IDLE → PICKUP_AT_SHELVES (shelf aisle, ~pickup_duration s)
-       → MOVE_TO_STAGING   (drive to zebra-taped staging area)
-       → WAIT_IN_STAGING   (hold when dock slot is taken)
-       → MOVE_TO_LOADING   (advance to dock when slot is free)
-       → LOADING           (stationary at dock, 20 s)
-       → RETURNING         (drive back toward shelf aisles)
-       → IDLE              (cycle repeats)
-
-Expected Observations:
-  - At steady state, 2–3 forklifts queue in the staging area while 1 loads at the dock.
-  - queue_formed event fires when 2+ forklifts occupy StagingArea simultaneously.
-  - buildup_threshold event fires when StagingArea reaches or exceeds capacity.
-  - Telemetry prints every 10 s: forklift positions, speeds, FSM states, and area names.
-
-2. Loading Pause Scenario
-A dock door is open and assigned for loading, but material handling activity suddenly stops. Forklifts are either absent or waiting without active loading taking place. The door remains open for an extended period while no loading progress occurs, suggesting operational disruption such as labor gaps, coordination issues, or delays in material availability. This scenario validates detection of idle dock time during active door states.
-
-3. Aisle Congestion Scenario
-Several forklifts operate within the same aisle, causing increased vehicle density and reduced movement speed. Traffic flow becomes restricted as vehicles slow down or stop intermittently due to limited space and interactions with each other. The congestion persists long enough to indicate a developing bottleneck rather than a temporary slowdown. This scenario evaluates detection of high-density zones and reduced mobility patterns.
-
-4. Area Build-Up Scenario
-Forklifts begin accumulating in a specific operational zone such as staging, packing, or transfer areas. Vehicles enter the area faster than they can exit, leading to crowding and increased dwell time. Movement becomes inefficient, and flow slows across the area, indicating a systemic bottleneck rather than isolated congestion. This scenario tests the system’s ability to identify build-ups and prolonged flow imbalance.
-
-5. Vehicle Idle Scenario
-A forklift remains stationary in a non-designated idle zone for an extended duration without performing any task. The vehicle is not actively loading, unloading, or moving, suggesting potential inefficiencies such as operator inactivity, task delays, or system misallocation. This scenario is used to validate detection of abnormal idle behavior and prolonged inactivity at the vehicle level.
-
-6. Safety Proximity (Near-Miss) Scenario
-Two or more forklifts come into dangerously close proximity while moving within the warehouse, such as at intersections, aisles, or near dock doors. Their paths intersect or overlap in a way that creates a high-risk situation, requiring sudden braking or evasive action. No collision occurs, but the interaction represents a near-miss event. This scenario evaluates the system’s ability to detect unsafe distances and high-risk interactions in real time.
+001  Dock Queue Forming          001_dock_queue_forming.txt
+003  Door Idle While Open        003_door_idle.txt
+004  Loading Pause               004_loading_pause.txt
+005  Aisle Congestion            005_aisle_congestion.txt
+006  Staging Area Build-Up       006_area_buildup.txt
+007  Forklift Idle – Subtle      007_forklift_idle.txt
+008  Near Miss – FL / Pedestrian 008_near_miss.txt

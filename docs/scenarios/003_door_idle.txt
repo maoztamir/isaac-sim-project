@@ -1,0 +1,74 @@
+SCENE ID: WAREHOUSE_DOOR_IDLE_003
+TITLE: Door Idle While Open
+
+INT. WAREHOUSE – LOADING DOCK 2 – DAY
+
+PURPOSE
+Show an anomalous idle state: dock door is open, trailer is attached, pallets are
+present — but no loading activity is occurring. The scene should feel like
+something should be happening, but isn't.
+
+CAMERA
+Shot type: Static, dock-facing
+Frame: Door 2 full width; pallets near entrance foreground; staging visible behind
+Focus: Empty threshold — door open, no forklift engaging
+Lens / height: 24–35mm equivalent, eye level or slightly elevated  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Door 2 loading zone (active door, trailer attached)
+Z2: Entrance apron (where pallets sit)
+Z3: Staging area beyond (background reference)
+
+ACTORS
+P0, P1, P2: pallets near door entrance, unattended
+FL0: forklift (optional) — background pass, does not engage
+
+INITIAL STATE
+t=0.0
+- Door 2: open
+- Trailer: attached at dock
+- P0, P1, P2: placed near door entrance
+- No forklift inside loading zone or approaching
+
+TIMELINE / ACTION BEATS
+00.0–03.0
+- Nothing happens.
+- Door open. Pallets present. Trailer waiting. No movement.
+
+03.0–06.0
+- FL0 (optional) passes through background without entering loading zone.
+- No engagement with door or pallets.
+
+06.0–08.0
+- Still no loading activity.
+- Door remains open. Pallets untouched. Trailer idle.
+
+08.0+
+- Scene holds. door_idle_duration continues accumulating.
+
+COORDINATION RULES
+- FL0 must NOT enter the loading zone at any point.
+- No forklift may approach or stop at Door 2 during the scene.
+- Pallets remain stationary throughout.
+
+SUCCESS CRITERIA
+- 8 s elapse with door open and no loading activity.
+- door_idle_duration alert fires at or before configured threshold.
+- Trailer and pallets visually present throughout.
+- Optional FL0 pass reads as background activity, not engagement.
+
+FAILURE CONDITIONS
+- Any forklift enters or approaches the loading zone.
+- Pallets move or disappear.
+- Door closes during scene.
+- FL0 pass is ambiguous — looks like it could be starting to load.
+
+OBSERVABILITY
+Log:
+- door_idle_duration (seconds since door opened with no forklift inside)
+- dock_occupied (should remain False throughout)
+- forklift_proximity_to_door (nearest FL distance to door threshold)
+- idle_alert_fired timestamp
+
+Mobile alert context:
+  "Door 7 idle — 8 min | no loading"

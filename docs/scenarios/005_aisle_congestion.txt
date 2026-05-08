@@ -1,0 +1,74 @@
+SCENE ID: WAREHOUSE_AISLE_CONGESTION_005
+TITLE: Aisle Congestion
+
+INT. WAREHOUSE – NARROW SHELF AISLE – DAY
+
+PURPOSE
+Show density-driven speed reduction and hesitation in a narrow shelf aisle when
+too many forklifts funnel into the same lane. Movement exists but is slowed,
+inefficient, and visually tense — one forklift pauses, another hesitates at the
+entry, none can commit to full forward speed.
+
+CAMERA
+Shot type: Bird's-eye or elevated end-of-aisle static
+Frame: Full aisle length; rack walls on both sides visible
+Focus: Forklift density, speed reduction, hesitation and near-blocking moments
+Lens / height: Overhead wide or elevated end-of-aisle  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Target shelf aisle (congestion zone)
+Z2: Aisle entry points (where forklifts queue)
+Z3: Adjacent aisles (visible but not targeted)
+
+ACTORS
+FL0–FL5: 6 forklifts, all targeting the same narrow aisle
+          Loading duration: 6 s (short, so forklifts cycle back quickly)
+
+INITIAL STATE
+t=0.0
+- FL0–FL5: near south wall or aisle entries, all assigned to same aisle
+- Aisle clear at start
+- Short loading duration ensures rapid re-entry
+
+TIMELINE / ACTION BEATS
+00.0–15.0
+- Forklifts begin funneling into the target aisle in staggered order.
+- First 1–2 enter; remaining approach and queue at entry.
+
+15.0–30.0
+- Aisle fills. Speeds drop as density rises.
+- One forklift pauses mid-aisle; another reroutes or holds at entry.
+- Visible hesitation — forklifts cannot commit to full forward movement.
+
+30.0+
+- Congestion sustained. All vehicles at or approaching aisle at <30% max speed.
+- congestion_alert fires per forklift inside the congested zone.
+- Movement exists but reads as slowed and inefficient.
+
+COORDINATION RULES
+- All forklifts target the same aisle — no FSM rerouting to other aisles.
+- Minimum in-aisle separation: 1.0 m.
+- At most 2 forklifts may be fully inside the aisle simultaneously; others queue at entry.
+- Speed reduction is automatic from forklift density logic — do not hardcode.
+
+SUCCESS CRITERIA
+- All 6 forklifts reach or queue for the target aisle by 30 s.
+- Speed of forklifts inside aisle falls below 30% max by 30 s.
+- congestion_alert fires for each forklift in the congested zone.
+- Hesitation / near-blocking moment visible in viewport.
+
+FAILURE CONDITIONS
+- Forklifts self-reroute to adjacent aisles, dispersing the congestion.
+- Forklifts move at full speed through the aisle — no visible slowdown.
+- congestion_alert never fires.
+- Forklifts clip racks or each other.
+
+OBSERVABILITY
+Log:
+- aisle_occupancy (forklifts inside target aisle) per frame
+- forklift_speed_in_aisle per FL (m/s)
+- congestion_alert per FL (timestamp + FL id)
+- min_FL_separation_in_aisle
+
+Mobile alert context:
+  "Staging congestion — 7 min | 12–15 pallets"

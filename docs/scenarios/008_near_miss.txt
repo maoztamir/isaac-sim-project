@@ -1,0 +1,82 @@
+SCENE ID: WAREHOUSE_NEAR_MISS_008
+TITLE: Near Miss – Forklift Reversing / Pedestrian
+
+INT. WAREHOUSE – NARROW AISLE – DAY
+
+PURPOSE
+Show a quiet near-miss event: a forklift reversing with a loaded pallet (driver
+attention directed backward/upward, away from travel path) and a pedestrian
+walking in the same direction, unaware. Distance closes to under 1 m with no
+collision and no dramatic stop — just closing proximity that should have been
+caught by the system.
+
+CAMERA
+Shot type: Static, aisle-facing or slightly elevated overhead
+Frame: Full aisle width; both actors visible simultaneously at all times
+Focus: Closing gap between forklift rear and pedestrian
+Lens / height: Elevated 3–4 m or end-of-aisle  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Target aisle (near-miss corridor)
+Z2: Aisle entry (pedestrian approach)
+Z3: Crossing point (where proximity peaks — <1 m)
+
+ACTORS
+FL0: forklift, reversing with loaded forks — driver looking back, away from pedestrian
+P0: pedestrian, walking away from FL0 in same aisle — unaware, not looking back
+
+INITIAL STATE
+t=0.0
+- FL0: at one end of aisle, loaded, about to begin reversing
+- P0: already in aisle walking away from FL0, or entering from far end
+- Both on same aisle axis; paths converge as FL0 reverses
+
+TIMELINE / ACTION BEATS
+00.0–03.0
+- FL0 begins reversing — loaded forks raised, driver attention directed backward.
+- P0 walks away down the aisle. Neither aware of the other.
+
+03.0–06.0
+- P0 continues walking, unaware of approaching forklift.
+- FL0 continues reversing — no awareness of pedestrian in path.
+- Gap closes progressively and visibly.
+
+06.0–08.0
+- Distance between FL0 rear and P0 drops below 1 m.
+- proximity_alert fires.
+- No collision. No sudden stop. No drama.
+- Just closing distance — the problem is quiet.
+
+08.0+
+- Scene holds or actors pass without contact.
+
+COORDINATION RULES
+- FL0 must be reversing — not driving forward.
+- FL0 forks must be loaded (obstructing driver's forward sightline).
+- P0 must be walking away from FL0 (unaware) — not toward it.
+- No physical contact at any point; proximity_alert fires before contact.
+- Forklift-forklift fallback: if pedestrian actor unavailable, two forklifts on
+  converging routes within NEAR_MISS_DIST (2.5 m), one above NEAR_MISS_SPEED_MIN.
+
+SUCCESS CRITERIA
+- proximity_alert fires when FL0–P0 distance < 1.0 m.
+- No physical contact between FL0 and P0.
+- Scene reads as a quiet, almost-missed event — not a dramatic stop.
+- Both actors moving throughout (no pre-alert stop).
+
+FAILURE CONDITIONS
+- FL0 stops before reaching near-miss distance (too cautious — alert never approaches).
+- P0 turns or stops — awareness breaks the "unaware" quality.
+- Contact occurs (collision, not near-miss).
+- Camera angle misses the closing gap — distance not readable in viewport.
+
+OBSERVABILITY
+Log:
+- FL0_P0_distance per frame
+- proximity_alert_fired timestamp (and distance value at trigger)
+- FL0_speed at trigger
+- FL0_reverse_flag (confirm reversing, not forward travel)
+- P0_aware_flag (should remain False throughout)
+
+Mobile alert context:
+  "Forklift near miss — <1 m | Aisle 8"

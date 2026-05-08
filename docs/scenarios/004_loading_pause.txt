@@ -1,0 +1,78 @@
+SCENE ID: WAREHOUSE_LOADING_PAUSE_004
+TITLE: Loading Pause – Door Closure Mid-Cycle
+
+INT. WAREHOUSE – DOCK DOORS / STAGING AREA – DAY
+
+PURPOSE
+Show operational disruption: a dock door closes unexpectedly mid-cycle, stalling
+forklifts that were approaching and causing idle time to accumulate at the dock.
+The cycle visibly resumes once the door reopens.
+
+CAMERA
+Shot type: Static, dock-facing or south-facing wide
+Frame: Dock doors + staging area; forklifts visible at approach and hold positions
+Focus: Door 2 closure event and forklift response
+Lens / height: Wide angle, elevated 3–4 m  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Door 2 loading zone
+Z2: Staging area (approach / hold positions)
+Z3: Shelf aisles (origin of cycle)
+
+ACTORS
+FL0: forklift, FSM-driven, approaching dock when door closes
+FL1: forklift, FSM-driven, in staging when door closes
+FL2: forklift, FSM-driven, in shelf aisle when door closes
+
+INITIAL STATE
+t=0.0
+- Door 2: open
+- FL0, FL1, FL2: cycling normally — shelves → staging → dock
+- Normal loading pace established; at least one load cycle already completed
+
+TIMELINE / ACTION BEATS
+00.0–30.0
+- FL0, FL1, FL2 shuttle pallets in normal FSM cycle.
+- Dock, staging, and aisle zones all active.
+
+30.0
+- Door 2 closes (gate descends).
+- FL0 (approaching dock) stops advancing — holds position.
+- FL1 (in staging) holds. FL2 (completing shelf pick) arrives at staging and holds.
+
+30.0–50.0
+- All forklifts hold near dock approach or staging.
+- No loading progress. Idle time accumulates.
+- door_idle_accumulation counter runs per forklift.
+
+50.0
+- Door 2 reopens.
+- Forklifts advance to dock in queue order. Normal cycle resumes.
+
+COORDINATION RULES
+- No forklift may enter the loading zone while door is closed.
+- Forklifts hold at staging or approach — do not return to shelves.
+- Resumption follows queue position at time of closure (FL0 first, then FL1, FL2).
+
+SUCCESS CRITERIA
+- Door closes at 30 s, visible in viewport.
+- All forklifts stop advancing within 2 s of closure.
+- idle_alert fires for each forklift during the 30–50 s window.
+- Door reopens at 50 s and cycle resumes in correct order.
+
+FAILURE CONDITIONS
+- Any forklift enters loading zone while door is closed.
+- Forklifts drift back to shelves instead of holding.
+- Door close/open not clearly visible in viewport.
+- Resumption order is random instead of queue-based.
+
+OBSERVABILITY
+Log:
+- door_state (open/closed) over time
+- forklift_hold_start per FL (timestamp each stops due to closure)
+- idle_accumulation_per_FL (seconds waiting at door)
+- door_reopen_timestamp
+- idle_alert_fired timestamp
+
+Mobile alert context:
+  "Door 12 inactive — 20 min | no loading"

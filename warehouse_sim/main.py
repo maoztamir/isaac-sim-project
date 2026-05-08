@@ -6,15 +6,31 @@ Run inside Isaac Sim Script Editor:
     Window > Script Editor > Open this file > Ctrl+Enter
 
 Change SCENARIO below to switch presets:
-    "dock_queue"       — forklifts queue at loading dock
-    "loading_pause"    — one forklift stalls, others reroute
-    "area_buildup"     — all converge on staging area
-    "aisle_congestion" — forklifts funnel through one aisle
+
+  ── Scripted spec scenarios (scripted timeline, focus camera) ──────────────
+    "dock_queue_forming"      — FL0 loading at door 2; FL1 arrives from left
+                                staging; FL2 arrives from centre staging.
+                                Door 2 open. 8 s scripted timeline.
+    "door_idle"               — Door 2 open, 2 pallets at entrance, no loading.
+                                2 background forklifts patrol left/right columns.
+                                2 IRA pedestrians walk east/west loops.
+
+  ── FSM-driven scenarios (forklifts run autonomously) ─────────────────────
+    "dock_queue"              — 4 forklifts queue at loading dock (long load)
+    "dock_queue_pedestrian"   — dock_queue + 1 warehouse worker walking patrol
+    "loading_pause"           — door closes mid-cycle; forklifts wait
+    "area_buildup"            — staging fills up with waiting forklifts
+    "aisle_congestion"        — forklifts bottleneck through one shelf aisle
+    "mixed_floor"             — 3 forklifts + 3 IRA-animated pedestrians
+    "showcase"                — full feature demo (all zones active)
+    "door_cycle"              — animated door open / close sequence
+    "vehicle_idle"            — some forklifts parked idle (alert detection)
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
-SCENARIO = "dock_queue_pedestrian"
-SEED = 42
+SCENARIO    = "door_idle"
+SEED        = 42
+START_DELAY = 30   # seconds to wait after build — use this time to start recording
 # ─────────────────────────────────────────────────────────────────────────────
 
 import asyncio
@@ -135,6 +151,17 @@ async def _run():
     print(f"[main] Instantiating {cls.__name__} ...")
     scenario = cls(seed=SEED)
     await scenario.build()
+
+    print(f"[main] Scene ready — {START_DELAY}s delay before simulation starts.")
+    print(f"[main] Start your screen recorder now, then wait for the countdown.")
+    for remaining in range(START_DELAY, 0, -5):
+        print(f"[main]   {remaining}s ...")
+        import omni.kit.app
+        app = omni.kit.app.get_app()
+        for _ in range(int(5 * 60)):   # ~5 s at 60 app-updates/s
+            await app.next_update_async()
+
+    print(f"[main] Starting simulation now.")
     scenario.start()
     _state.scenario = scenario   # persist for next re-run
 

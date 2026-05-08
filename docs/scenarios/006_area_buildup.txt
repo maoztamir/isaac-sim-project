@@ -1,0 +1,75 @@
+SCENE ID: WAREHOUSE_AREA_BUILDUP_006
+TITLE: Staging Area Build-Up
+
+INT. WAREHOUSE – STAGING AREA / LOADING ZONES – OVERHEAD – DAY
+
+PURPOSE
+Show staging saturation: forklifts arrive in staging faster than the dock releases
+them, causing a visible pile-up of vehicles and pallets. Pallets are not stacked
+cleanly — the area looks packed and disorganised. Forward progress stalls.
+
+CAMERA
+Shot type: Overhead or elevated south-facing wide
+Frame: Full staging area + all dock loading zones
+Focus: Progressive forklift and pallet accumulation; density rising over time
+Lens / height: Overhead, 5–8 m elevated  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Staging area (capacity: 6 forklifts)
+Z2: Dock loading zones (slow-release bottleneck)
+Z3: Shelf aisles (origin)
+
+ACTORS
+FL0–FL4: 5 forklifts, FSM-driven, full cycle
+
+INITIAL STATE
+t=0.0
+- All dock doors: open
+- FL0–FL4: distributed across shelf aisles and staging, cycling normally
+- Dock release interval: 8 s between releases (intentionally slow)
+- Loading duration per forklift: 12 s
+
+TIMELINE / ACTION BEATS
+00.0–30.0
+- Forklifts pick pallets and arrive at staging progressively.
+- Dock releases slowly — forklifts accumulate faster than dock clears.
+- Staging occupancy climbs: 1 → 2 → 3.
+- Pallets visible in staging — scattered, not stacked cleanly.
+
+30.0–60.0
+- Staging continues filling: 3 → 4 → 5.
+- Forklifts that arrive hold positions with pallets.
+- Dock continues slow release. Packed staging visible from above.
+
+60.0+
+- buildup_threshold fires when staging occupancy >= 6.
+- All remaining forklifts queue and wait.
+- Forward progress visually stalled. Scene holds at saturation.
+
+COORDINATION RULES
+- Dock release interval must remain at 8 s — do not accelerate during scene.
+- Forklifts must not skip staging and go directly to dock.
+- Staging forklifts hold in place — no return to shelves while waiting.
+- buildup_threshold fires at occupancy >= 6, not before.
+
+SUCCESS CRITERIA
+- Staging occupancy reaches capacity (6) by ~60 s.
+- buildup_threshold event fires at or before 60 s.
+- Visual density in staging is clearly congested — packed forklifts and pallets visible.
+- Dock loading activity continues throughout (dock itself is not stalled).
+
+FAILURE CONDITIONS
+- Forklifts return to shelves instead of holding in staging.
+- Dock release interval accelerates, clearing staging too fast.
+- buildup_threshold never fires.
+- Staging looks sparse or orderly when alert fires.
+
+OBSERVABILITY
+Log:
+- staging_occupancy per frame
+- buildup_threshold_fired timestamp
+- dock_release_count over time
+- forklift_wait_duration per FL (seconds held in staging)
+
+Mobile alert context:
+  "Staging congestion — 7 min | 12–15 pallets"

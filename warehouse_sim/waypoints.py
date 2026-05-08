@@ -45,6 +45,64 @@ def get_staging_hold_positions() -> list[tuple[float, float]]:
             for offset in C.GATE_OFFSETS]
 
 
+def get_far_approach_positions() -> list[tuple[float, float]]:
+    """One approach point per gate column, on free floor north of staging.
+
+    Used as a "starting point" for forklifts that arrive into the dock area
+    from elsewhere in the warehouse.  Ordered LEFT → RIGHT.
+    """
+    approach_y = C.STAGING_Y_FAR + 4.0
+    return [(C.WAREHOUSE_CX + offset, approach_y) for offset in C.GATE_OFFSETS]
+
+
+# Side-offset (metres) used when a named position has a `_left` or `_right`
+# suffix.  Three pallets fit inside the LOAD_W=4.0 m loading zone with this
+# spacing.
+_SUB_POS_SIDE_OFFSET = 1.2
+
+
+def named_position(key: str) -> tuple[float, float]:
+    """Resolve a string key like 'dock_service_1' or 'dock_service_1_left' to (x, y).
+
+    Supported keys:
+      dock_service_N           — centre of loading zone in front of gate N
+      dock_service_N_left      — same, offset -1.2 m in X
+      dock_service_N_right     — same, offset +1.2 m in X
+      dock_queue_N             — queue spot just north of gate N's loading zone
+      dock_queue_back_N        — second-in-line queue spot, ~3 m north of queue
+      staging_hold_N           — hold position inside staging in column N
+      far_approach_N           — point on open floor north of staging, column N
+    """
+    if key.startswith("dock_service_"):
+        rest = key[len("dock_service_"):]
+        if "_" in rest:
+            idx_str, suffix = rest.split("_", 1)
+            base_x, base_y = get_dock_service_position(int(idx_str))
+            if suffix == "left":
+                return (base_x - _SUB_POS_SIDE_OFFSET, base_y)
+            if suffix == "right":
+                return (base_x + _SUB_POS_SIDE_OFFSET, base_y)
+            raise ValueError(f"named_position: unknown suffix in '{key}'")
+        return get_dock_service_position(int(rest))
+
+    if key.startswith("dock_queue_back_"):
+        # ~3 m further north of dock_queue_N — second-in-line queue spot
+        idx = int(key[len("dock_queue_back_"):])
+        x, y = get_dock_queue_spots()[idx]
+        return (x, y + 3.0)
+
+    if key.startswith("dock_queue_"):
+        return get_dock_queue_spots()[int(key[len("dock_queue_"):])]
+
+    if key.startswith("staging_hold_"):
+        return get_staging_hold_positions()[int(key[len("staging_hold_"):])]
+
+    if key.startswith("far_approach_"):
+        return get_far_approach_positions()[int(key[len("far_approach_"):])]
+
+    raise ValueError(f"named_position: unknown key '{key}'")
+
+
 def get_pickup_points(shelf_map: ShelfMap) -> list[tuple[float, float]]:
     """One pickup point per detected aisle, on the open floor just south of the
     shelf boundary.  Forklifts stop here rather than entering the aisles.

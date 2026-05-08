@@ -1,0 +1,75 @@
+SCENE ID: WAREHOUSE_FORKLIFT_IDLE_007
+TITLE: Forklift Idle – Subtle / Hidden
+
+INT. WAREHOUSE – SIDE AISLE / LOW-TRAFFIC CORNER – DAY
+
+PURPOSE
+Show hidden inefficiency: a forklift sits idle in a low-visibility corner — not
+clearly broken, not properly parked, not obviously on break. The contrast with
+faint background activity makes the idle state feel like something is wrong, but
+it's easy to miss from central operations.
+
+CAMERA
+Shot type: Fixed, slightly elevated — CCTV feel
+Frame: Idle forklift in foreground; active main aisle faintly visible in background
+Focus: FL0 FG / active area BG — contrast between idle and working is essential
+Lens / height: Fixed elevated, 3–5 m, slight downward angle  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Side aisle / low-traffic corner (FL0 idle position)
+Z2: Main aisle (background — light activity only)
+
+ACTORS
+FL0: forklift, idle, no pallets — in side aisle, not near docks or parking
+FL1, FL2 (optional): background forklifts cycling in main aisle; not foregrounded
+
+INITIAL STATE
+t=0.0
+- FL0: stationary in side aisle or low-traffic corner
+- Position: not near docks, not in designated parking, not blocking a path
+- FL1, FL2 (optional): cycling normally in background main aisle
+
+TIMELINE / ACTION BEATS
+00.0–03.0
+- FL0 stationary. No movement. No pallet handling.
+- Background forklifts (if present) pass through main aisle.
+
+03.0–05.0
+- FL0 makes a small positional micro-adjustment — slight wheel turn or minor shift.
+- Does NOT look like departure or parking. Reads as an operator check, nothing more.
+
+05.0–08.0
+- FL0 returns to idle. Remains stationary.
+- Background activity continues undisturbed.
+
+08.0+
+- idle_alert fires for FL0.
+- Scene holds at full idle.
+
+COORDINATION RULES
+- FL0 must NOT be near docks, loading zones, or designated parking spots.
+- FL0 must NOT look broken, intentionally parked, or clearly on break.
+- Micro-adjustment at 3–5 s must not read as departure — operator fidget only.
+- Background FLs must stay in background — they must not approach FL0.
+
+SUCCESS CRITERIA
+- idle_alert fires for FL0 at or after configured idle threshold.
+- FL0 remains in side aisle / corner for full scene duration.
+- Background activity visible but clearly separate from FL0.
+- Scene reads as hidden inefficiency — not obvious at a glance.
+
+FAILURE CONDITIONS
+- FL0 looks broken or intentionally parked (defeats the "hidden" quality).
+- FL0 departs or approaches a dock or active zone.
+- Background forklifts draw attention away from FL0.
+- FL0 idle position is too central — visible from main operations view.
+
+OBSERVABILITY
+Log:
+- FL0_idle_duration (continuous seconds stationary)
+- FL0_position (confirm side aisle / corner, not dock / main area)
+- idle_alert_fired timestamp
+- background_FL_count (confirm background activity present)
+
+Mobile alert context:
+  "Forklift idle — 9 min | side aisle"

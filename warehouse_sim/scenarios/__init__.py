@@ -7,6 +7,17 @@ from .aisle_congestion         import AisleCongestionScenario
 from .showcase                 import ShowcaseScenario
 from .door_cycle               import DoorCycleScenario
 from .mixed_floor              import MixedFloorScenario
+from .spec_runner              import SpecScenario
+from .door_idle                import DoorIdleScenario
+from .specs.dock_queue_forming import SPEC as _SPEC_DOCK_QUEUE_FORMING
+
+
+def _make_spec_factory(spec):
+    def _factory(seed: int = 42):
+        return SpecScenario(spec, seed=seed)
+    _factory.__name__ = f"SpecScenario[{spec['name']}]"
+    return _factory
+
 
 PRESETS = {
     "dock_queue":              DockQueueScenario,
@@ -17,6 +28,8 @@ PRESETS = {
     "showcase":                ShowcaseScenario,
     "door_cycle":              DoorCycleScenario,
     "mixed_floor":             MixedFloorScenario,
+    "dock_queue_forming":      _make_spec_factory(_SPEC_DOCK_QUEUE_FORMING),
+    "door_idle":               DoorIdleScenario,
 }
 
 

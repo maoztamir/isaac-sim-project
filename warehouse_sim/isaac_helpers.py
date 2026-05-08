@@ -775,3 +775,22 @@ def spawn_camera(stage, path, eye, target, fov_deg=70.0):
     cam.CreateClippingRangeAttr(Gf.Vec2f(0.1, 100000.0))
 
     return cam
+
+
+def set_active_camera(cam_prim_path: str) -> bool:
+    """Set the active viewport camera to *cam_prim_path*.
+
+    Returns True if the viewport was switched, False otherwise.
+    """
+    try:
+        from omni.kit.viewport.utility import get_active_viewport
+        vp = get_active_viewport()
+        if vp is None:
+            print(f"[ih] set_active_camera: no active viewport")
+            return False
+        vp.camera_path = cam_prim_path
+        print(f"[ih] active camera → {cam_prim_path}")
+        return True
+    except Exception as e:
+        print(f"[ih] set_active_camera failed: {e}")
+        return False

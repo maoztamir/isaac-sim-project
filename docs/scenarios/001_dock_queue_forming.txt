@@ -1,0 +1,84 @@
+SCENE ID: WAREHOUSE_DOCK_QUEUE_001
+TITLE: Dock Queue Forming
+
+INT. WAREHOUSE – LOADING DOCK 2 / STAGING AREA – DAY
+
+PURPOSE
+Show queue formation behind an active dock-loading forklift.
+
+CAMERA
+Shot type: Static / wide operational shot
+Frame: Door 2 centered; loading zone foreground; staging lanes visible behind
+Focus: FL0 at dock, FL1 and FL2 queue behavior
+Lens / height: 24–35mm equivalent, elevated 3–5 m  [MANUAL ADJUSTMENT]
+
+LAYOUT / ZONES
+Z1: Door 2 loading zone
+Z2: Left staging area near Door 1
+Z3: Center staging area near Door 2
+Z4: Center dock queue lane
+
+ACTORS
+FL0: forklift, unloaded/working, dock operator
+FL1: forklift, loaded, first queue entrant
+FL2: forklift, loaded, second queue entrant
+P0: pallet beside FL0 in loading zone
+
+INITIAL STATE
+t=0.0
+- Door 2: open
+- FL0: parked at center loading zone, mid-loading
+- P0: in loading zone beside FL0
+- FL1: left staging area, loaded, facing dock
+- FL2: center staging area, loaded, facing dock
+
+TIMELINE / ACTION BEATS
+00.0–02.0
+- FL1 drives from left staging area to center dock queue position.
+- FL1 stops at Queue_Position_1.
+- FL0 holds.
+- FL2 holds.
+
+02.0–06.0
+- FL0 performs small forward/back micro-adjustments at dock.
+- FL1 waits in queue.
+- FL2 waits in staging.
+
+06.0–08.0
+- FL2 drives south from center staging area.
+- FL2 stops behind FL1 at Queue_Position_2.
+- FL0 continues micro-adjustments.
+- FL1 holds.
+
+08.0+
+- FL0, FL1, FL2 hold final positions.
+
+COORDINATION RULES
+- Queue order: FL1 before FL2.
+- FL2 must not enter queue until FL1 has stopped.
+- Maintain minimum forklift spacing: 1.5–2.0 m.
+- FL0 dock zone has priority; queued forklifts do not enter loading zone.
+
+SUCCESS CRITERIA
+- FL1 reaches first queue position by 2s.
+- FL2 reaches second queue position by 8s.
+- No collisions or overlap.
+- Queue ordering is visually clear.
+- Door 2 and loading activity remain visible throughout.
+
+FAILURE CONDITIONS
+- FL2 overtakes or blocks FL1.
+- Any forklift clips pallet, door frame, or another forklift.
+- Camera loses staging or queue context.
+- FL0 micro-adjustments look like full departure instead of loading activity.
+
+OBSERVABILITY
+Log:
+- queue_length over time
+- FL1_wait_start
+- FL2_wait_start
+- min_distance_FL1_FL2
+- dock_occupied_by_FL0
+
+Mobile alert context:
+  "Door 2 queue forming — 10 min | 3–5 forklifts"
