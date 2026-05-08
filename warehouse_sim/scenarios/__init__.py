@@ -2,6 +2,7 @@ from .base                     import Scenario
 from .dock_queue               import DockQueueScenario
 from .dock_queue_pedestrian    import DockQueuePedestrianScenario
 from .loading_pause            import LoadingPauseScenario
+from .loading_pause_004        import LoadingPause004Scenario
 from .area_buildup             import AreaBuildUpScenario
 from .aisle_congestion         import AisleCongestionScenario
 from .showcase                 import ShowcaseScenario
@@ -23,6 +24,7 @@ PRESETS = {
     "dock_queue":              DockQueueScenario,
     "dock_queue_pedestrian":   DockQueuePedestrianScenario,
     "loading_pause":           LoadingPauseScenario,
+    "loading_pause_004":       LoadingPause004Scenario,
     "area_buildup":            AreaBuildUpScenario,
     "aisle_congestion":        AisleCongestionScenario,
     "showcase":                ShowcaseScenario,

@@ -14,6 +14,9 @@ Change SCENARIO below to switch presets:
     "door_idle"               — Door 2 open, 2 pallets at entrance, no loading.
                                 2 background forklifts patrol left/right columns.
                                 2 IRA pedestrians walk east/west loops.
+    "loading_pause_004"       — 3 forklifts FSM cycle; centre door closes at
+                                30 s, reopens at 50 s. Forklifts hold in
+                                staging during closure then resume.
 
   ── FSM-driven scenarios (forklifts run autonomously) ─────────────────────
     "dock_queue"              — 4 forklifts queue at loading dock (long load)
@@ -28,7 +31,7 @@ Change SCENARIO below to switch presets:
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
-SCENARIO    = "door_idle"
+SCENARIO    = "loading_pause_004"
 SEED        = 42
 START_DELAY = 30   # seconds to wait after build — use this time to start recording
 # ─────────────────────────────────────────────────────────────────────────────
