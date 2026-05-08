@@ -8,8 +8,13 @@
 [dock_queue] Resolving assets root...
 [dock_queue] Clearing /World...
 [dock_queue] Loading warehouse USD...
-[dock_queue] 3 loading dock gates spawned.
-[dock_queue] Scene built: 4 forklifts, 3 areas.
+[spawn_cameras_from_usd] cam_south → /World/Cameras/cam_south
+[spawn_cameras_from_usd] cam_north → /World/Cameras/cam_north
+[spawn_cameras_from_usd] cam_west → /World/Cameras/cam_west
+[spawn_cameras_from_usd] cam_east → /World/Cameras/cam_east
+[dock_queue] 4 surveillance cameras loaded from USD.
+[dock_queue] 3 loading dock gates + crates spawned.
+[dock_queue] Scene built: 4 forklifts, 3 areas, 3 doors.
 [ShelfMap] trying decal-based scan first
 [ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X11'               cx=-20.36 cy=8.65
 [ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=8.65

@@ -15,7 +15,7 @@ Usage:
     python frames_to_video.py /media/storage/replicator/_out_sdrec
     python frames_to_video.py /media/storage/replicator/_out_sdrec --fps 24 --out /tmp/videos
     python frames_to_video.py /media/storage/replicator/_out_sdrec --dry-run
-    conda run -n isaac_scenario python frames_to_video.py /media/storage/replicator/_out_sdrec_2 --fps 24 --out /media/storage/replicator/_out_sdrec_2
+    conda run -n isaac_scenario python frames_to_video.py /media/storage/replicator/_out_sdrec_2 --fps 35 --out /media/storage/replicator/_out_sdrec_2
 """
 
 from __future__ import annotations
@@ -47,11 +47,20 @@ def find_frame_folders(root: str) -> list[tuple[str, list[str]]]:
 
 
 def make_output_path(frame_folder: str, root: str, out_dir: str | None) -> str:
-    """Derive the MP4 path from the frame folder's position under root."""
-    rel = os.path.relpath(frame_folder, root)
-    slug = rel.replace(os.sep, "_")
-    base = out_dir if out_dir else root
-    return os.path.join(base, slug + ".mp4")
+    """Derive the MP4 path from the frame folder's position under root.
+
+    Default (no --out): MP4 is written next to the frame folder, in its
+    parent directory, named after the frame folder itself.
+    Custom --out: MP4 is written into out_dir using a slug of the relative path.
+    """
+    if out_dir:
+        rel  = os.path.relpath(frame_folder, root)
+        slug = rel.replace(os.sep, "_")
+        return os.path.join(out_dir, slug + ".mp4")
+    else:
+        parent      = os.path.dirname(frame_folder)
+        folder_name = os.path.basename(frame_folder)
+        return os.path.join(parent, folder_name + ".mp4")
 
 
 def frames_to_video(
@@ -147,7 +156,8 @@ def main():
     parser.add_argument("--fps", type=int, default=DEFAULT_FPS,
                         help=f"Frames per second (default {DEFAULT_FPS}).")
     parser.add_argument("--out", default=None,
-                        help="Output directory for MP4 files (default: root folder).")
+                        help="Output directory for MP4 files "
+                             "(default: same directory as each frame folder).")
     parser.add_argument("--dry-run", action="store_true",
                         help="Print what would be done without running ffmpeg.")
     args = parser.parse_args()
@@ -164,24 +174,35 @@ def main():
     print(f"Found {total_vids} frame folder(s) under {root}\n")
 
     ok = 0
-    for idx, (folder, frames) in enumerate(folders, 1):
+    outer = tqdm(
+        folders,
+        desc="Overall",
+        unit="video",
+        ncols=80,
+        colour="blue",
+        position=0,
+        leave=True,
+    )
+    for folder, frames in outer:
         output = make_output_path(folder, root, args.out)
-        rel = os.path.relpath(folder, root)
-        print(f"[{idx}/{total_vids}]  {rel}  ({len(frames)} frames)  →  {os.path.basename(output)}")
+        rel    = os.path.relpath(folder, root)
+        outer.set_postfix_str(rel[:40])
+        tqdm.write(f"\n→  {rel}  ({len(frames)} frames)  →  {os.path.basename(output)}")
 
         if args.dry_run:
+            ok += 1
             continue
 
         success = frames_to_video(folder, frames, output, args.fps, label=rel)
         if success:
             size_mb = os.path.getsize(output) / 1e6
-            print(f"  ✓  {output}  ({size_mb:.1f} MB)\n")
+            tqdm.write(f"   ✓  {output}  ({size_mb:.1f} MB)")
             ok += 1
         else:
-            print(f"  ✗  failed — see errors above\n")
+            tqdm.write(f"   ✗  failed — see errors above")
 
-    if not args.dry_run:
-        print(f"{ok}/{total_vids} videos created.")
+    outer.close()
+    print(f"\n{ok}/{total_vids} videos created.")
 
 
 if __name__ == "__main__":

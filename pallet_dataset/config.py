@@ -13,7 +13,7 @@ LOCAL_5_0 = "/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0"
 
 # ── Output ────────────────────────────────────────────────────────────────────
 OUTPUT_DIR   = "/media/storage/pallet_dataset"
-NUM_FRAMES   = 500
+NUM_FRAMES   = 3600   # targets ~5,300 synthetic images ≈ 16% supplement to 27,948 real
 RESOLUTION   = (960, 540)   # lower than 1280×720 to reduce RTX VRAM per render product
 SEED         = 42
 RT_SUBFRAMES = 1            # 4 subframes × 4 cameras was the main VRAM pressure
@@ -24,11 +24,13 @@ RT_SUBFRAMES = 1            # 4 subframes × 4 cameras was the main VRAM pressur
 # chosen once at startup; set to None to use the full list.
 ASSET_POOL_SIZE = 20   # max unique pallet types per run
 
-# ── Object density ────────────────────────────────────────────────────────────
-MIN_PALLETS           = 2
-MAX_PALLETS           = 5
-MAX_OBJECTS_PER_IMAGE = 10    # frames exceeding this are discarded entirely
-FORKLIFT_PROB         = 0.3   # probability of adding 1 forklift per scene
+# ── Object density — unified budget ──────────────────────────────────────────
+# Total objects per frame across all classes (pallets + forklifts + boxes).
+MIN_OBJECTS           = 2
+MAX_OBJECTS           = 5
+MAX_FORKLIFTS         = 2     # VRAM guard: articulated robot meshes are large
+MAX_OBJECTS_PER_IMAGE = 6     # discard filter (buffer above MAX_OBJECTS budget)
+MAX_PALLETS           = 5     # pallet slot pre-allocation count (= MAX_OBJECTS)
 
 # ── Placement geometry ────────────────────────────────────────────────────────
 # Cluster centre is sampled from CLUSTER_* bounds; individual pallets scatter
@@ -48,8 +50,10 @@ MIN_PALLET_SEPARATION =   0.8   # min distance between pallet centres (m)
 N_CAMERAS           = 2     # 4 simultaneous RTX render products consumed too much VRAM
 CAM_HEIGHT_MIN      = 1.5    # metres above floor
 CAM_HEIGHT_MAX      = 4.0
-CAM_DIST_MIN        = 3.0    # horizontal distance from cluster centre (m)
-CAM_DIST_MAX        = 10.0
+CAM_DIST_CLOSE_MIN  = 1.5    # close camera band: 1.5–4 m from cluster centre
+CAM_DIST_CLOSE_MAX  = 4.0
+CAM_DIST_FAR_MIN    = 8.0    # far camera band:   8–18 m from cluster centre
+CAM_DIST_FAR_MAX    = 18.0
 FOCAL_MM_MIN        = 24.0   # 35 mm-equivalent focal length
 FOCAL_MM_MAX        = 50.0
 CAM_SENSOR_WIDTH_MM = 36.0   # horizontal aperture (mm) — standard 35 mm equiv
@@ -181,11 +185,9 @@ _REMOTE_PALLETS = [
 ]
 
 # ── Forklift asset list ───────────────────────────────────────────────────────
-# All three are authored in metres (same Isaac Sim robot family) → scale 1.0.
+# Yellow prop forklift only — matches the target class in the real dataset.
 _FORKLIFT_CANDIDATES = [
-    (LOCAL_5_1 + "/Isaac/Props/Forklift/forklift.usd",               1.0),
-    (LOCAL_5_1 + "/Isaac/Robots/IsaacSim/ForkliftB/forklift_b.usd",  1.0),
-    (LOCAL_5_1 + "/Isaac/Robots/IsaacSim/ForkliftC/forklift_c.usd",  1.0),
+    (LOCAL_5_1 + "/Isaac/Props/Forklift/forklift.usd", 1.0),
 ]
 
 # ── Master asset lists (missing files auto-filtered) ─────────────────────────
@@ -205,8 +207,7 @@ ALL_PALLET_ASSETS = (
 FORKLIFT_ASSETS = _available(_FORKLIFT_CANDIDATES)
 
 # ── Scenario forklift slots ───────────────────────────────────────────────────
-N_FORKLIFT_SLOTS  = 3      # max forklifts visible per frame (mirrors live scenarios)
-FORKLIFT_SCENE_PROB = 0.65  # probability of having at least 1 forklift per frame
+N_FORKLIFT_SLOTS  = 2      # pre-allocated USD slots (budget caps at MAX_FORKLIFTS=2)
 
 # ── Gate state randomisation ──────────────────────────────────────────────────
 GATE_OPEN_PROB = 0.35  # per-gate probability of being open each frame
@@ -223,11 +224,25 @@ ALL_BOX_ASSETS = _available(_BOX_CANDIDATES)
 
 # ── Box placement ─────────────────────────────────────────────────────────────
 # Boxes are scattered in the loading + staging zone corridor
-N_BOX_SLOTS      = 6    # pre-allocated USD slots in stage
-MIN_BOXES        = 0
-MAX_BOXES        = 5
+N_BOX_SLOTS      = 4    # pre-allocated USD slots (max = MAX_OBJECTS − 1 pallet)
 # Bounding rectangle for box scatter (loading dock + staging corridor)
 BOX_X_MIN        = -21.0
 BOX_X_MAX        =  -1.0
 BOX_Y_MIN        = -23.0  # just inside the south wall (loading zone)
 BOX_Y_MAX        =  -4.0  # northern edge of staging zone
+
+# ── Lighting randomisation ────────────────────────────────────────────────────
+DOME_INTENSITY_MIN   =   50.0   # ambient dome dim (overcast indoor feel)
+DOME_INTENSITY_MAX   = 1500.0   # ambient dome bright (open-sky feel)
+LIGHT_INTENSITY_MIN  =  300.0   # directional light dim (overcast)
+LIGHT_INTENSITY_MAX  = 8000.0   # directional light bright (noon sun)
+LIGHT_COLOR_TEMP_MIN = 3000.0   # K — warm incandescent
+LIGHT_COLOR_TEMP_MAX = 7500.0   # K — cool daylight
+LIGHT_ELEV_MIN       =   15.0   # sun elevation above horizon (degrees)
+LIGHT_ELEV_MAX       =   75.0   # sun elevation above horizon (degrees)
+
+# ── Real dataset reference (seeteria_ds — snapshot for proportional summary) ──
+REAL_DATASET_IMAGES     = 27948
+REAL_DATASET_PALLETS    = 43755
+REAL_DATASET_FORKLIFTS  = 22013
+REAL_DATASET_BOXES      = 0

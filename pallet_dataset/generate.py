@@ -62,7 +62,7 @@ import time
 
 import numpy as np
 from PIL import Image
-from pxr import Gf, PhysxSchema, Sdf, Usd, UsdGeom, UsdPhysics
+from pxr import Gf, PhysxSchema, Sdf, Usd, UsdGeom, UsdLux, UsdPhysics
 
 # Load pallet_dataset/config.py by direct exec — spec_from_file_location can
 # return a partially-initialised module under Isaac Sim's embedded Python when
@@ -178,15 +178,18 @@ def _update_camera(cam_prim, eye_xyz, target_xyz, focal_mm):
         fl_attr.Set(float(focal_mm))
 
 
-def _random_camera_pose(rng, cx, cy):
+def _random_camera_pose(rng, cx, cy, close=False):
     """Return (eye, target, focal_mm) for a realistic CCTV-style viewpoint.
 
-    The camera is placed at a random height (1.5–4 m), horizontal distance
-    (3–10 m) and azimuth around the pallet cluster centre (cx, cy).
+    close=True  → 1.5–4 m (detail shots, object fills frame)
+    close=False → 8–18 m (context shots, multiple objects visible)
     focal_mm is a 35 mm-equivalent focal length (24–50 mm).
     """
     height   = rng.uniform(C.CAM_HEIGHT_MIN, C.CAM_HEIGHT_MAX)
-    distance = rng.uniform(C.CAM_DIST_MIN,   C.CAM_DIST_MAX)
+    if close:
+        distance = rng.uniform(C.CAM_DIST_CLOSE_MIN, C.CAM_DIST_CLOSE_MAX)
+    else:
+        distance = rng.uniform(C.CAM_DIST_FAR_MIN,   C.CAM_DIST_FAR_MAX)
     azimuth  = rng.uniform(0.0, 2.0 * math.pi)
     focal_mm = rng.uniform(C.FOCAL_MM_MIN,   C.FOCAL_MM_MAX)
 
@@ -221,6 +224,21 @@ def _check_brightness(arr):
         return False
     mean = float(arr[:, :, :3].mean())
     return C.BRIGHTNESS_MIN <= mean <= C.BRIGHTNESS_MAX
+
+
+def _kelvin_to_rgb(temp_k):
+    """Approximate Gf.Vec3f RGB for a blackbody at temp_k Kelvin (Tanner Helland 2012)."""
+    t = temp_k / 100.0
+    if t <= 66:
+        r = 1.0
+        g = max(0.0, min(1.0, (99.4708025861 * math.log(t) - 161.1195681661) / 255.0))
+        b = (0.0 if t <= 19 else
+             max(0.0, min(1.0, (138.5177312231 * math.log(t - 10) - 305.0447927307) / 255.0)))
+    else:
+        r = max(0.0, min(1.0, 329.698727446  * math.pow(t - 60, -0.1332047592) / 255.0))
+        g = max(0.0, min(1.0, 288.1221695283 * math.pow(t - 60, -0.0755148492) / 255.0))
+        b = 1.0
+    return Gf.Vec3f(r, g, b)
 
 
 def _save_rgb(arr, path):
@@ -381,6 +399,20 @@ async def _run():
     print("[pallet_dataset] 3 dock gates spawned.")
     await _next_update()
 
+    # ── Pre-allocate randomisable lights ──────────────────────────────────────
+    UsdGeom.Xform.Define(stage, "/World/DatasetLights")
+    dome_light = UsdLux.DomeLight.Define(stage, "/World/DatasetLights/dome")
+    dome_light.CreateIntensityAttr(500.0)
+    dist_light = UsdLux.DistantLight.Define(stage, "/World/DatasetLights/distant")
+    dist_light.CreateIntensityAttr(2000.0)
+    dist_light.CreateAngleAttr(0.5)
+    dist_light.CreateColorAttr(Gf.Vec3f(1.0, 1.0, 1.0))
+    _dist_xf  = UsdGeom.Xformable(dist_light.GetPrim())
+    _dist_rot = _dist_xf.AddRotateXYZOp()
+    _dist_rot.Set(Gf.Vec3f(-45.0, 0.0, 0.0))
+    print("[pallet_dataset] Randomisable lights created (dome + distant).")
+    await _next_update()
+
     # ── Create N_CAMERAS cameras at realistic heights ─────────────────────────
     # spawn_camera() builds look-at matrix and sets xformOp:transform once.
     # Per-frame updates go via _update_camera(), which overwrites that value
@@ -486,9 +518,9 @@ async def _run():
     info = {
         "num_frames":         C.NUM_FRAMES,
         "resolution":         list(C.RESOLUTION),
-        "min_pallets":        C.MIN_PALLETS,
-        "max_pallets":        C.MAX_PALLETS,
-        "forklift_scene_prob": C.FORKLIFT_SCENE_PROB,
+        "min_objects":        C.MIN_OBJECTS,
+        "max_objects":        C.MAX_OBJECTS,
+        "max_forklifts":      C.MAX_FORKLIFTS,
         "gate_open_prob":     C.GATE_OPEN_PROB,
         "num_pallet_types":   len(C.ALL_PALLET_ASSETS),
         "num_forklift_types": len(C.FORKLIFT_ASSETS),
@@ -500,25 +532,46 @@ async def _run():
 
     # ── Generation loop ───────────────────────────────────────────────────────
     print(f"[pallet_dataset] Starting: {C.NUM_FRAMES} frames × {C.N_CAMERAS} cameras")
-    t0              = time.time()
-    images_saved    = 0
-    frames_with_any = 0
+    t0                   = time.time()
+    images_saved         = 0
+    frames_with_any      = 0
+    placed_pallets_sum   = 0
+    placed_forklifts_sum = 0
+    placed_boxes_sum     = 0
+    combo_counts         = {}
 
     for frame_idx in range(C.NUM_FRAMES):
+
+        # Randomise per-frame lighting
+        dome_light.GetIntensityAttr().Set(rng.uniform(C.DOME_INTENSITY_MIN, C.DOME_INTENSITY_MAX))
+        dist_light.GetIntensityAttr().Set(rng.uniform(C.LIGHT_INTENSITY_MIN, C.LIGHT_INTENSITY_MAX))
+        dist_light.GetColorAttr().Set(
+            _kelvin_to_rgb(rng.uniform(C.LIGHT_COLOR_TEMP_MIN, C.LIGHT_COLOR_TEMP_MAX))
+        )
+        _dist_rot.Set(Gf.Vec3f(
+            -rng.uniform(C.LIGHT_ELEV_MIN, C.LIGHT_ELEV_MAX),
+            0.0,
+            rng.uniform(0.0, 360.0),
+        ))
 
         # Cluster centre — all pallets and cameras reference this point
         cx = rng.uniform(C.CLUSTER_X_MIN, C.CLUSTER_X_MAX)
         cy = rng.uniform(C.CLUSTER_Y_MIN, C.CLUSTER_Y_MAX)
 
-        # Reposition each camera to a new random viewpoint of this cluster
-        for cam_prim in cam_prims:
-            eye, target, focal_mm = _random_camera_pose(rng, cx, cy)
+        # Reposition cameras: even index → close shot, odd index → far shot
+        for i, cam_prim in enumerate(cam_prims):
+            eye, target, focal_mm = _random_camera_pose(rng, cx, cy, close=(i % 2 == 0))
             _update_camera(cam_prim, eye, target, focal_mm)
 
-        # Place 2–5 pallets with minimum separation enforced
-        n_active = rng.randint(C.MIN_PALLETS, C.MAX_PALLETS)
-        poses    = _place_with_spacing(
-            rng, n_active, cx, cy, C.SCATTER_RADIUS, C.MIN_PALLET_SEPARATION
+        # Unified object budget: pallets + forklifts + boxes = n_total
+        n_total     = rng.randint(C.MIN_OBJECTS, C.MAX_OBJECTS)
+        n_forklifts = rng.randint(0, min(n_total - 1, C.MAX_FORKLIFTS)) if forklift_pool else 0
+        remaining   = n_total - n_forklifts
+        n_pallets   = rng.randint(1, remaining)
+        n_boxes     = remaining - n_pallets
+
+        poses = _place_with_spacing(
+            rng, n_pallets, cx, cy, C.SCATTER_RADIUS, C.MIN_PALLET_SEPARATION
         )
 
         for i, slot_prim in enumerate(slot_prims):
@@ -540,10 +593,7 @@ async def _run():
             else:
                 close_gate(stage, _gi, WC.PANEL_N)
 
-        # Place 0–N_FORKLIFT_SLOTS forklifts (pose + visibility only; ref fixed at startup)
-        n_forklifts = 0
-        if forklift_pool and rng.random() < C.FORKLIFT_SCENE_PROB:
-            n_forklifts = rng.randint(1, C.N_FORKLIFT_SLOTS)
+        # Place forklifts (pose + visibility only; ref fixed at startup)
         for _fi, (fl_prim, fl_scale) in enumerate(zip(fl_prims, fl_scales)):
             if _fi < n_forklifts:
                 fl_x = rng.uniform(WC.NAV_X_MIN, WC.NAV_X_MAX)
@@ -553,8 +603,7 @@ async def _run():
             else:
                 _set_visibility(fl_prim, False)
 
-        # Place 0–MAX_BOXES cardboard boxes (pose + visibility only; ref fixed at startup)
-        n_boxes = rng.randint(C.MIN_BOXES, C.MAX_BOXES) if box_pool else 0
+        # Place boxes (pose + visibility only; ref fixed at startup)
         for _bi, (box_prim, bx_scale) in enumerate(zip(box_prims, box_scales)):
             if _bi < n_boxes:
                 bx_x = rng.uniform(C.BOX_X_MIN, C.BOX_X_MAX)
@@ -598,7 +647,12 @@ async def _run():
             images_saved += 1
 
         if frame_saved > 0:
-            frames_with_any += 1
+            frames_with_any      += 1
+            placed_pallets_sum   += n_pallets
+            placed_forklifts_sum += n_forklifts
+            placed_boxes_sum     += n_boxes
+            key = (n_pallets, n_forklifts, n_boxes)
+            combo_counts[key] = combo_counts.get(key, 0) + 1
 
         if (frame_idx + 1) % 50 == 0 or frame_idx == 0:
             elapsed = time.time() - t0
@@ -606,29 +660,70 @@ async def _run():
             remain  = (C.NUM_FRAMES - frame_idx - 1) / max(fps, 1e-6)
             print(
                 f"[pallet_dataset] frame {frame_idx+1:4d}/{C.NUM_FRAMES}"
-                f"  pallets={len(poses)}"
-                f"  forklifts={n_forklifts}"
-                f"  boxes={n_boxes}"
+                f"  total={n_total}(p={n_pallets} f={n_forklifts} b={n_boxes})"
                 f"  saved={frame_saved}/{C.N_CAMERAS}"
                 f"  {fps:.1f} fps  ETA {remain/60:.1f} min"
             )
 
     # ── Finalise ──────────────────────────────────────────────────────────────
-    elapsed = time.time() - t0
+    elapsed  = time.time() - t0
+    saved_f  = frames_with_any
+
+    # Combined totals (synthetic placed + real dataset reference)
+    comb_pallets   = placed_pallets_sum   + C.REAL_DATASET_PALLETS
+    comb_forklifts = placed_forklifts_sum + C.REAL_DATASET_FORKLIFTS
+    comb_boxes     = placed_boxes_sum     + C.REAL_DATASET_BOXES
+    comb_total     = comb_pallets + comb_forklifts + comb_boxes
+
+    SEP = "─" * 78
+    print(f"\n{SEP}")
+    print("  Dataset Distribution Summary")
+    print(SEP)
+    print(f"  Real dataset (seeteria_ds reference):")
+    print(f"    images    : {C.REAL_DATASET_IMAGES:>8,}")
+    print(f"    pallets   : {C.REAL_DATASET_PALLETS:>8,}   forklifts : {C.REAL_DATASET_FORKLIFTS:>8,}   boxes : {C.REAL_DATASET_BOXES:>6,}")
+    print(SEP)
+    print(f"  Synthetic — frames attempted : {C.NUM_FRAMES:,}")
+    print(f"  Synthetic — frames saved     : {saved_f:,}  ({images_saved:,} images, cam_0=close cam_1=far)")
+    if saved_f > 0:
+        avg_p = placed_pallets_sum   / saved_f
+        avg_f = placed_forklifts_sum / saved_f
+        avg_b = placed_boxes_sum     / saved_f
+        print(SEP)
+        print(f"  Synthetic annotations placed (saved frames):")
+        print(f"    pallets   : {placed_pallets_sum:>8,}   avg {avg_p:.2f}/frame   (real: {C.REAL_DATASET_PALLETS:,})")
+        print(f"    forklifts : {placed_forklifts_sum:>8,}   avg {avg_f:.2f}/frame   (real: {C.REAL_DATASET_FORKLIFTS:,})")
+        print(f"    boxes     : {placed_boxes_sum:>8,}   avg {avg_b:.2f}/frame   (real: {C.REAL_DATASET_BOXES:,})")
+        print(SEP)
+        print(f"  Combined totals (real + synthetic placed):")
+        print(f"    pallets   : {comb_pallets:>8,}   ({100*comb_pallets/comb_total:.1f}% of combined)")
+        print(f"    forklifts : {comb_forklifts:>8,}   ({100*comb_forklifts/comb_total:.1f}% of combined)")
+        print(f"    boxes     : {comb_boxes:>8,}   ({100*comb_boxes/comb_total:.1f}% of combined)")
+        synth_img_pct = 100 * images_saved / (C.REAL_DATASET_IMAGES + images_saved)
+        print(f"    images    : {C.REAL_DATASET_IMAGES + images_saved:>8,}   (synthetic {synth_img_pct:.1f}% of combined)")
+        print(SEP)
+        top = sorted(combo_counts, key=lambda k: -combo_counts[k])[:10]
+        print(f"  Top object combinations (p=pallets  f=forklifts  b=boxes):")
+        for p, f, b in top:
+            cnt = combo_counts[(p, f, b)]
+            print(f"    p={p} f={f} b={b} : {cnt:5,} frames  ({100*cnt/saved_f:.1f}%)")
+    print(f"{SEP}\n")
+
     info.update({
-        "total_seconds":      round(elapsed, 1),
-        "frames_attempted":   C.NUM_FRAMES,
-        "frames_with_images": frames_with_any,
-        "images_saved":       images_saved,
+        "total_seconds":         round(elapsed, 1),
+        "frames_attempted":      C.NUM_FRAMES,
+        "frames_with_images":    frames_with_any,
+        "images_saved":          images_saved,
+        "placed_pallets_sum":    placed_pallets_sum,
+        "placed_forklifts_sum":  placed_forklifts_sum,
+        "placed_boxes_sum":      placed_boxes_sum,
+        "combined_pallets":      comb_pallets,
+        "combined_forklifts":    comb_forklifts,
+        "combined_boxes":        comb_boxes,
+        "combo_distribution":    {f"p{p}f{f}b{b}": c for (p, f, b), c in combo_counts.items()},
     })
     with open(os.path.join(C.OUTPUT_DIR, "dataset_info.json"), "w") as fh:
         json.dump(info, fh, indent=2)
-
-    print(
-        f"[pallet_dataset] Done — {images_saved} images saved"
-        f" ({frames_with_any}/{C.NUM_FRAMES} frames had ≥1 valid camera)"
-        f"  →  {C.OUTPUT_DIR}"
-    )
 
 
 asyncio.ensure_future(_run())
