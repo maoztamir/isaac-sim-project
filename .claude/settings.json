@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/ubuntu/isaac_sim_samples/isaac-sim-project && git add -u && git diff --cached --quiet || (git commit -m \"auto: session changes\" && git push)",
+            "statusMessage": "Committing and pushing changes..."
+          }
+        ]
+      }
+    ]
+  }
+}
