@@ -28,6 +28,8 @@ Change SCENARIO below to switch presets:
     "showcase"                — full feature demo (all zones active)
     "door_cycle"              — animated door open / close sequence
     "vehicle_idle"            — some forklifts parked idle (alert detection)
+    "live_alerts"             — full alert escalation: blocked aisle, near-miss,
+                                area overload, dock queue, idle door, idle forklift
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
