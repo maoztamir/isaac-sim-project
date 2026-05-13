@@ -459,3 +459,496 @@
 [test]   FL6: pos=(-10.4,-17.4)  state=idle
 [test] START_SIM=False — scene is frozen for inspection.
 [test] Set START_SIM=True and re-run to watch alert escalation.
+[runner] hot-reload done
+[runner] sys.path[0] = /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk
+[runner] stdlib imports OK
+[runner] yaml OK
+[runner] actors OK
+[runner] dataset_writer OK
+[runner] logger OK
+[runner] risk_metrics OK
+[runner] importing Isaac Sim APIs...
+[runner] omni.kit.app OK
+[runner] omni.kit.commands OK
+[runner] omni.timeline OK
+[runner] isaacsim.core.utils.stage OK
+[runner] isaacsim.storage.native OK
+[runner] pxr OK
+[runner] all imports done
+[runner] scheduling _run()
+[runner] ensure_future returned — async loop will drive _run()
+[runner] _run() started
+[runner] config loaded: blind_corner
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0010
+[runner] getting stage + assets root
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] building scene...
+[runner] warehouse USD referenced
+[runner] spawned forklift_01 at [-6, 0, 0] -> /World/Actors/forklift_01
+[runner] spawned forklift_02 at [0, -6, 0] -> /World/Actors/forklift_02
+[runner] spawned pedestrian_01 at [-2, -2, 0] -> /World/Actors/pedestrian_01
+[runner] scene built: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] actors created: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] starting timeline...
+[runner] timeline.play() called
+[runner] frame 1 done
+[runner] frame 2 done — assets should be loaded
+[runner] entering loop: 120 steps
+[runner] step 0/120  T=0.1s  safe  score=0.33
+[runner] step 20/120  T=2.1s  warning  score=0.66
+[runner] step 40/120  T=4.1s  critical  score=0.93
+[runner] step 60/120  T=6.1s  warning  score=0.71
+[runner] step 80/120  T=8.1s  safe  score=0.47
+[runner] step 100/120  T=10.1s  safe  score=0.11
+[loading_pause_004] t=210.0s
+  FL0: ( -10.8,  -2.0) spd=0.8 state=move_to_loading area=open
+  FL1: ( -11.1, -15.2) spd=0.6 state=returning area=open
+  FL2: ( -10.2,  -9.0) spd=0.7 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=27.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.73m/s  entries=9  exits=8  peak=2  occ-s=171.5  max_dwell=57.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[runner] timeline stopped
+[runner] DONE  run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0010
+  max_risk_score  : 0.928
+  critical_frames : 16
+  near_miss_frames: 12
+[runner] hot-reload done
+[runner] sys.path[0] = /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk
+[runner] stdlib imports OK
+[runner] yaml OK
+[runner] actors OK
+[runner] dataset_writer OK
+[runner] logger OK
+[runner] risk_metrics OK
+[runner] importing Isaac Sim APIs...
+[runner] omni.kit.app OK
+[runner] omni.kit.commands OK
+[runner] omni.timeline OK
+[runner] isaacsim.core.utils.stage OK
+[runner] isaacsim.storage.native OK
+[runner] pxr OK
+[runner] all imports done
+[runner] scheduling _run()
+[runner] ensure_future returned — async loop will drive _run()
+[runner] _run() started
+[runner] config loaded: blind_corner
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0011
+[runner] getting stage + assets root
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] building scene...
+[runner] warehouse USD referenced
+[runner] spawned forklift_01 at [-6, 0, 0] -> /World/Actors/forklift_01
+[runner] spawned forklift_02 at [0, -6, 0] -> /World/Actors/forklift_02
+[runner] spawned pedestrian_01 at [-2, -2, 0] -> /World/Actors/pedestrian_01
+[runner] scene built: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] actors created: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] starting timeline...
+[runner] timeline.play() called
+[runner] frame 1 done
+[runner] frame 2 done — assets should be loaded
+[runner] entering loop: 120 steps
+[runner] step 0/120  T=0.1s  safe  score=0.33
+[runner] step 20/120  T=2.1s  warning  score=0.66
+[runner] step 40/120  T=4.1s  critical  score=0.93
+[runner] step 60/120  T=6.1s  warning  score=0.71
+[runner] step 80/120  T=8.1s  safe  score=0.47
+[runner] step 100/120  T=10.1s  safe  score=0.11
+[runner] timeline stopped
+[runner] DONE  run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0011
+  max_risk_score  : 0.928
+  critical_frames : 16
+  near_miss_frames: 12
+[runner] hot-reload done
+[runner] sys.path[0] = /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk
+[runner] stdlib imports OK
+[runner] yaml OK
+[runner] actors OK
+[runner] dataset_writer OK
+[runner] logger OK
+[runner] risk_metrics OK
+[runner] importing Isaac Sim APIs...
+[runner] omni.kit.app OK
+[runner] omni.kit.commands OK
+[runner] omni.timeline OK
+[runner] isaacsim.core.utils.stage OK
+[runner] isaacsim.storage.native OK
+[runner] pxr OK
+[runner] all imports done
+[runner] scheduling _run()
+[runner] ensure_future returned — async loop will drive _run()
+[runner] _run() started
+[runner] config loaded: blind_corner
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0012
+[runner] getting stage + assets root
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] building scene...
+[runner] warehouse USD referenced
+[runner] spawned forklift_01 (forklift) at [-6, 0, 0]
+[runner] spawned forklift_02 (forklift) at [0, -6, 0]
+[runner] spawned pedestrian_01 (pedestrian) at [-2, -2, 0]
+[runner] scene built: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] actors created: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] starting timeline...
+[runner] timeline.play() called
+[runner] frame 1 done
+[runner] frame 2 done — assets should be loaded
+[runner] entering loop: 120 steps
+[runner] step 0/120  T=0.1s  safe  score=0.33
+[runner] step 20/120  T=2.1s  warning  score=0.66
+[runner] step 40/120  T=4.1s  critical  score=0.93
+[runner] step 60/120  T=6.1s  warning  score=0.71
+[runner] step 80/120  T=8.1s  safe  score=0.47
+[runner] step 100/120  T=10.1s  safe  score=0.11
+[runner] timeline stopped
+[runner] DONE  run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0012
+  max_risk_score  : 0.928
+  critical_frames : 16
+  near_miss_frames: 12
+[runner] hot-reload done
+[runner] sys.path[0] = /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk
+[runner] stdlib imports OK
+[runner] yaml OK
+[runner] actors OK
+[runner] dataset_writer OK
+[runner] logger OK
+[runner] risk_metrics OK
+[runner] importing Isaac Sim APIs...
+[runner] omni.kit.app OK
+[runner] omni.kit.commands OK
+[runner] omni.timeline OK
+[runner] isaacsim.core.utils.stage OK
+[runner] isaacsim.storage.native OK
+[runner] pxr OK
+[runner] all imports done
+[runner] scheduling _run()
+[runner] ensure_future returned — async loop will drive _run()
+[runner] _run() started
+[runner] config loaded: blind_corner
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0013
+[runner] getting stage + assets root
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] building scene...
+[runner] warehouse loaded
+[runner] spawned forklift_01 (forklift) at (-6.0, 0.0, 0.0)
+[runner] spawned forklift_02 (forklift) at (0.0, -6.0, 0.0)
+[runner] spawned pedestrian_01 (pedestrian) at (-2.0, -2.0, 0.0)
+[runner] scene built: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] actors created: ['forklift_01', 'forklift_02', 'pedestrian_01']
+[runner] starting timeline...
+[runner] timeline.play() called
+[runner] frame 1 done
+[runner] frame 2 done — assets should be loaded
+[runner] entering loop: 120 steps
+[runner] step 0/120  T=0.1s  safe  score=0.33
+[runner] step 20/120  T=2.1s  warning  score=0.66
+[runner] step 40/120  T=4.1s  critical  score=0.93
+[runner] step 60/120  T=6.1s  warning  score=0.71
+[runner] step 80/120  T=8.1s  safe  score=0.47
+[runner] step 100/120  T=10.1s  safe  score=0.11
+[runner] timeline stopped
+[runner] DONE  run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0013
+  max_risk_score  : 0.928
+  critical_frames : 16
+  near_miss_frames: 12
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0014
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] forklift spawned: forklift_01 at (-6.0, 0.0)
+[runner] forklift spawned: forklift_02 at (0.0, -6.0)
+[runner] entering loop: 120 steps × dt=0.1s
+[runner] T=0.1s  safe  score=0.00
+[runner] T=2.1s  warning  score=0.68
+[runner] T=4.1s  critical  score=0.99
+[runner] T=6.1s  warning  score=0.76
+[runner] T=8.1s  safe  score=0.32
+[runner] T=10.1s  safe  score=0.00
+
+[runner] Complete: /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0014
+  Max risk score  : 0.987
+  Critical frames : 25
+  Near-miss frames: 14
+[loading_pause_004] t=220.0s
+  FL0: ( -10.8,  -2.3) spd=0.4 state=move_to_loading area=open
+  FL1: ( -11.1, -14.9) spd=0.4 state=returning area=open
+  FL2: ( -10.2,  -8.7) spd=0.4 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=37.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.40m/s  entries=9  exits=8  peak=2  occ-s=181.5  max_dwell=57.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0015
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0016
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] forklift spawned: forklift_01 at (-6.0, 0.0)
+[runner] forklift spawned: forklift_02 at (0.0, -6.0)
+[runner] entering loop: 120 steps × dt=0.1s
+[runner] T=0.1s  safe  score=0.00
+[runner] T=2.1s  warning  score=0.60
+[runner] T=4.1s  critical  score=0.81
+[runner] T=6.1s  safe  score=0.32
+[runner] T=8.1s  safe  score=0.00
+[runner] T=10.1s  safe  score=0.00
+
+[runner] Complete: /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0016
+  Max risk score  : 0.837
+  Critical frames : 12
+  Near-miss frames: 5
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0017
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] forklift spawned: forklift_01 at (-6.0, 0.0)
+[runner] forklift spawned: forklift_02 at (0.0, -6.0)
+[runner] entering loop: 120 steps × dt=0.1s
+[runner] T=0.1s  safe  score=0.00
+[runner] T=2.1s  warning  score=0.60
+[runner] T=4.1s  critical  score=0.81
+[runner] T=6.1s  warning  score=0.74
+[runner] T=8.1s  safe  score=0.35
+[runner] T=10.1s  safe  score=0.15
+
+[runner] Complete: /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0017
+  Max risk score  : 0.845
+  Critical frames : 22
+  Near-miss frames: 9
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0018
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0019
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] forklift spawned: forklift_01 at (-6.0, 0.0)
+[runner] forklift spawned: forklift_02 at (0.0, -6.0)
+[runner] entering loop: 120 steps × dt=0.1s
+[runner] T=0.1s  safe  score=0.00
+[runner] T=2.1s  warning  score=0.60
+[runner] T=4.1s  critical  score=0.81
+[runner] T=6.1s  safe  score=0.32
+[runner] T=8.1s  safe  score=0.00
+[runner] T=10.1s  safe  score=0.00
+[loading_pause_004] t=230.0s
+  FL0: ( -10.8,  -2.4) spd=0.0 state=move_to_loading area=open
+  FL1: ( -11.1, -14.8) spd=0.0 state=returning area=open
+  FL2: ( -10.2,  -8.6) spd=0.0 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=47.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=9  exits=8  peak=2  occ-s=191.5  max_dwell=57.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+
+[runner] Complete: /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0019
+  Max risk score  : 0.837
+  Critical frames : 12
+  Near-miss frames: 5
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0020
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[runner] forklift spawned: forklift_01 at (-6.0, 0.0)
+[runner] forklift spawned: forklift_02 at (0.0, -6.0)
+[runner] entering loop: 120 steps × dt=0.1s
+[runner] T=0.1s  safe  score=0.00
+[runner] T=2.1s  warning  score=0.60
+[runner] T=4.1s  critical  score=0.81
+[runner] T=6.1s  safe  score=0.32
+[runner] T=8.1s  safe  score=0.00
+[runner] T=10.1s  safe  score=0.00
+
+[runner] Complete: /home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0020
+  Max risk score  : 0.837
+  Critical frames : 12
+  Near-miss frames: 5
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0021
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
+[loading_pause_004] t=240.0s
+  FL0: ( -10.8,  -1.9) spd=0.5 state=move_to_loading area=open
+  FL1: ( -11.1, -15.3) spd=0.4 state=returning area=open
+  FL2: ( -10.2,  -9.1) spd=0.5 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=57.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.48m/s  entries=9  exits=8  peak=2  occ-s=201.5  max_dwell=57.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[loading_pause_004] t=250.0s
+  FL0: ( -10.8,  -2.4) spd=0.0 state=move_to_loading area=open
+  FL1: ( -11.1, -14.8) spd=0.0 state=returning area=open
+  FL2: ( -10.2,  -8.6) spd=0.0 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=67.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=9  exits=8  peak=2  occ-s=211.5  max_dwell=67.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[loading_pause_004] t=260.0s
+  FL0: ( -10.8,  -2.4) spd=0.0 state=move_to_loading area=open
+  FL1: ( -11.1, -14.8) spd=0.0 state=returning area=open
+  FL2: ( -10.2,  -8.6) spd=0.0 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=77.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=9  exits=8  peak=2  occ-s=221.5  max_dwell=77.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[loading_pause_004] t=270.0s
+  FL0: ( -10.8,  -2.0) spd=0.4 state=move_to_loading area=open
+  FL1: ( -11.1, -15.3) spd=0.4 state=returning area=open
+  FL2: ( -10.2,  -9.1) spd=0.4 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=6  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=17  FL2=87.5s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=2  occ-s=107.7  max_dwell=47.4s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.40m/s  entries=9  exits=8  peak=2  occ-s=231.5  max_dwell=87.5s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=29.1  max_dwell=11.0s
+  [events] total=6734  proximity=4  idle=0  queue=375  buildup=6353  ped_near_miss=0
+[runner] hot-reload done
+[runner] Phase 1 modules OK
+[runner] Isaac Sim APIs OK
+[runner] IRA extension enabled
+[runner] scheduling _run()
+[runner] ensure_future returned
+[runner] _run() started
+[runner] run_dir=/home/ubuntu/isaac_sim_samples/warehouse-risk-lab/warehouse_risk/dataset/runs/run_0022
+[runner] assets_root=/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1
+[runner] IRA config → /tmp/warehouse_risk_ira.yaml
+[runner] IRA: loading scene + baking NavMesh (30-60 s first run)...
+[runner] IRA setup complete — NavMesh ready
+[runner] pedestrian commands → /tmp/warehouse_risk_cmds.txt
+  Character GoTo 2.00 2.00 0.0 _
+  Character Idle 1.0
+  Character GoTo -2.00 -2.00 0.0 _
+  Character Idle 1.0
+[runner] pedestrian_01 → IRA prim /World/Characters/Character/ManRoot/female_adult_police_01
