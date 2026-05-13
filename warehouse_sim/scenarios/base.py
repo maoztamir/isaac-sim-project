@@ -77,6 +77,10 @@ class Scenario:
         self.loading_duration: float = C.LOADING_DURATION
         self.pickup_duration:  float = C.PICKUP_DURATION
 
+        # Gate layout — subclasses override before build() for non-standard layouts
+        self.gate_offsets:      list  = list(C.GATE_OFFSETS)
+        self.gate_door_numbers: list | None = None   # None → labels 1, 2, 3, …
+
         # Internal timers
         self.sim_time = 0.0
         self._telemetry_timer = 0.0
@@ -125,7 +129,7 @@ class Scenario:
         # LoadingDoor objects must exist before _spawn_loading_doors() so that
         # method can wire crate_prim_path onto each door.
         self.doors = [LoadingDoor(i, is_open=False)
-                      for i in range(len(C.GATE_OFFSETS))]
+                      for i in range(len(self.gate_offsets))]
 
         self._spawn_loading_doors()
         await ih.next_update()
@@ -134,8 +138,8 @@ class Scenario:
         self._spawn_staging_markings()
         await ih.next_update()
 
-        # Areas
-        for name, (x0, x1, y0, y1) in C.ZONES.items():
+        # Areas — computed from this scenario's gate layout
+        for name, (x0, x1, y0, y1) in C.compute_zones(self.gate_offsets).items():
             cap = C.LOADING_AREA_CAPACITY if name == "LoadingZone" else \
                   C.STAGING_AREA_CAPACITY if name == "StagingArea" else None
             self.area_mgr.add(name, x0, x1, y0, y1, capacity=cap)
@@ -173,6 +177,7 @@ class Scenario:
             assets_root=self.assets_root,
             loading_duration=self.loading_duration,
             pickup_duration=self.pickup_duration,
+            gate_offsets=self.gate_offsets,
         )
 
         print(f"[{self.name}] Scene built: {len(self.forklifts)} forklifts, "
@@ -512,26 +517,27 @@ class Scenario:
         print(f"[{self.name}] {len(created)} surveillance cameras loaded from USD.")
 
     def _spawn_loading_doors(self):
-        """3 loading dock gates on the south wall, each with a hidden dock crate."""
-        for i, offset in enumerate(C.GATE_OFFSETS):
+        """Loading dock gates on the south wall, each with a hidden dock crate."""
+        for i, offset in enumerate(self.gate_offsets):
             door_cx = C.WAREHOUSE_CX + offset
             ih.spawn_gate(self.stage, i, door_cx, C)
 
-            # Spawn a crate at the gate's service position, hidden by default.
-            # It becomes visible whenever door.open() is called.
-            cx, cy = wp.get_dock_service_position(i)
+            # Crate at the dock service position — hidden until door.open() is called.
             crate_path = f"/World/DockCrates/crate_gate_{i}"
             ih.spawn_asset(self.stage, crate_path, C.CRATE_USD,
-                           cx, cy, 0.0, 0.0, scale=C.CRATE_SCALE)
+                           door_cx, C.WALL_Y_MIN + C.LOAD_D / 2.0,
+                           0.0, 0.0, scale=C.CRATE_SCALE)
             ih.make_invisible(self.stage, crate_path)
             self.doors[i].crate_prim_path = crate_path
-            ih.spawn_door_label(self.stage, i, door_cx, C)
 
-        print(f"[{self.name}] 3 loading dock gates + crates spawned.")
+            door_num = self.gate_door_numbers[i] if self.gate_door_numbers else i + 1
+            ih.spawn_door_label(self.stage, i, door_cx, C, number=door_num)
+
+        print(f"[{self.name}] {len(self.gate_offsets)} loading dock gates + crates spawned.")
 
     def _spawn_loading_markings(self):
         """Zebra tape around each loading zone in front of the doors."""
-        for i, offset in enumerate(C.GATE_OFFSETS):
+        for i, offset in enumerate(self.gate_offsets):
             door_cx = C.WAREHOUSE_CX + offset
             load_cy = C.WALL_Y_MIN + C.LOAD_D / 2.0
             ih.spawn_zebra_rect(self.stage, f"/World/LoadingAreas/zone_{i}",
@@ -539,7 +545,7 @@ class Scenario:
 
     def _spawn_staging_markings(self):
         """Zebra tape around each staging zone (between loading and shelves)."""
-        for i, offset in enumerate(C.GATE_OFFSETS):
+        for i, offset in enumerate(self.gate_offsets):
             ih.spawn_zebra_rect(self.stage, f"/World/StagingAreas/zone_{i}",
                                 C.WAREHOUSE_CX + offset,
                                 C.STAGING_CENTER_Y,

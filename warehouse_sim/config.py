@@ -78,22 +78,26 @@ YELLOW       = [(1.0, 0.85, 0.0)]
 BLACK        = [(0.10, 0.10, 0.10)]
 
 # ── Zone rectangles (x_min, x_max, y_min, y_max) ────────────────────────────
-# LoadingZone: spans all 3 loading doors on the south wall
-_load_x_min = WAREHOUSE_CX + GATE_OFFSETS[0] - LOAD_W / 2.0
-_load_x_max = WAREHOUSE_CX + GATE_OFFSETS[-1] + LOAD_W / 2.0
-_load_y_min = WALL_Y_MIN
-_load_y_max = WALL_Y_MIN + LOAD_D
 
-# StagingArea: spans all 3 staging zones between loading and shelves
-_stag_x_min = WAREHOUSE_CX + GATE_OFFSETS[0] - STAGING_W / 2.0
-_stag_x_max = WAREHOUSE_CX + GATE_OFFSETS[-1] + STAGING_W / 2.0
+def compute_zones(gate_offsets):
+    """Return LoadingZone / StagingArea / ShelvesArea bounds for any gate layout."""
+    lx_min = WAREHOUSE_CX + gate_offsets[0]  - LOAD_W    / 2.0
+    lx_max = WAREHOUSE_CX + gate_offsets[-1] + LOAD_W    / 2.0
+    sx_min = WAREHOUSE_CX + gate_offsets[0]  - STAGING_W / 2.0
+    sx_max = WAREHOUSE_CX + gate_offsets[-1] + STAGING_W / 2.0
+    return {
+        "LoadingZone": (lx_min, lx_max, WALL_Y_MIN, WALL_Y_MIN + LOAD_D),
+        "StagingArea": (sx_min, sx_max, STAGING_Y_NEAR, STAGING_Y_FAR),
+        "ShelvesArea": (NAV_X_MIN, NAV_X_MAX, _SHELF_START_EST, NAV_Y_MAX),
+    }
 
-# ShelvesArea: refined by shelf detection; these are initial bounds
-ZONES = {
-    "LoadingZone": (_load_x_min, _load_x_max, _load_y_min, _load_y_max),
-    "StagingArea": (_stag_x_min, _stag_x_max, STAGING_Y_NEAR, STAGING_Y_FAR),
-    "ShelvesArea": (NAV_X_MIN, NAV_X_MAX, _SHELF_START_EST, NAV_Y_MAX),
-}
+# ZONES keeps the standard 3-gate layout for all existing scenarios.
+ZONES = compute_zones(GATE_OFFSETS)
+
+# ── Live Alerts scenario gate layout ─────────────────────────────────────────
+# 4 gates with 6 m spacing, labeled to match Nashville DC demo video.
+LIVE_ALERTS_GATE_OFFSETS = [-9.0, -3.0, 3.0, 9.0]
+GATE_DOOR_NUMBERS        = [12, 4, 7, 9]   # display label per gate index
 
 # ── Forklift kinematic model ────────────────────────────────────────────────
 FORKLIFT_WHEELBASE   = 2.4

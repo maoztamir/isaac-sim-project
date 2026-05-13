@@ -495,22 +495,26 @@ def spawn_gate(stage, idx, door_cx, C):
     lintel.GetDisplayColorAttr().Set(C.WALL_COLOR)
 
 
-def spawn_door_label(stage, idx, door_cx, C):
-    """Spawn a yellow 7-segment digit (1, 2, or 3) above loading dock gate idx.
+def spawn_door_label(stage, idx, door_cx, C, number=None):
+    """Spawn yellow 7-segment digit(s) above loading dock gate idx.
 
-    Segments are cube prims under /World/DockLabels/label_{idx}, centred on
-    door_cx at Z = GATE_TOTAL_H + 0.6 m (just above the drum housing).
+    number: integer to display (e.g. 12, 4, 7).  Defaults to idx+1 when None.
+    Supports 1- and 2-digit numbers.  Segments are cube prims under
+    /World/DockLabels/label_{idx}, centred on door_cx at Z = GATE_TOTAL_H + 0.6 m.
     """
-    digit    = idx + 1                      # gates 0-indexed → labels 1, 2, 3
-    gate_y   = C.WALL_Y_MIN + C.GATE_D / 2
-    label_z  = C.GATE_TOTAL_H + 0.6        # centre Z of the glyph
-    h_half   = 0.50                         # half glyph height  (total = 1.0 m)
-    w_half   = 0.30                         # half glyph width   (total = 0.6 m)
-    q_half   = 0.25                         # quarter height for vert segments
-    seg_t    = 0.10                         # bar thickness
-    depth    = 0.08                         # Y extent of each bar
+    display   = number if number is not None else idx + 1
+    digits    = [int(d) for d in str(display)]   # e.g. 12 → [1, 2]
 
-    # (cx_off, cz_off, half_sx, half_sz)
+    gate_y  = C.WALL_Y_MIN + C.GATE_D / 2
+    label_z = C.GATE_TOTAL_H + 0.6
+    h_half  = 0.50
+    w_half  = 0.30
+    q_half  = 0.25
+    seg_t   = 0.10
+    depth   = 0.08
+    # Horizontal distance between digit centres for 2-digit numbers
+    digit_step = w_half * 2 + 0.12
+
     segs = {
         "top": ( 0,       +h_half, w_half,           seg_t / 2),
         "mid": ( 0,        0,      w_half,           seg_t / 2),
@@ -521,24 +525,40 @@ def spawn_door_label(stage, idx, door_cx, C):
         "br":  (+w_half,  -q_half, seg_t / 2, q_half - seg_t / 2),
     }
     patterns = {
+        0: {"top", "tl", "tr", "bl", "br", "bot"},
         1: {"tr", "br"},
         2: {"top", "tr", "mid", "bl", "bot"},
         3: {"top", "tr", "mid", "br", "bot"},
+        4: {"tl", "tr", "mid", "br"},
+        5: {"top", "tl", "mid", "br", "bot"},
+        6: {"top", "tl", "mid", "bl", "br", "bot"},
+        7: {"top", "tr", "br"},
+        8: {"top", "tl", "tr", "mid", "bl", "br", "bot"},
+        9: {"top", "tl", "tr", "mid", "br", "bot"},
     }
 
     color = [(1.0, 0.85, 0.0)]  # yellow
     root  = f"/World/DockLabels/label_{idx}"
     UsdGeom.Xform.Define(stage, root)
 
-    for seg_name, (cx_off, cz_off, hsx, hsz) in segs.items():
-        if seg_name not in patterns[digit]:
-            continue
-        p = UsdGeom.Cube.Define(stage, f"{root}/{seg_name}")
-        # Negate cx_off so digits read correctly from the north camera
-        # (looking south: camera-right = west = -X).
-        p.AddTranslateOp().Set(Gf.Vec3d(door_cx - cx_off, gate_y, label_z + cz_off))
-        p.AddScaleOp().Set(Gf.Vec3d(hsx, depth / 2, hsz))
-        p.GetDisplayColorAttr().Set(color)
+    n = len(digits)
+    # Centre the whole number: left edge of first digit at door_cx - total_w/2
+    total_w = n * digit_step - (digit_step - w_half * 2)
+    first_cx = door_cx - total_w / 2 + w_half
+
+    for di, digit in enumerate(digits):
+        digit_cx = first_cx + di * digit_step
+        active = patterns.get(digit, set())
+        for seg_name, (cx_off, cz_off, hsx, hsz) in segs.items():
+            if seg_name not in active:
+                continue
+            p = UsdGeom.Cube.Define(stage, f"{root}/d{di}_{seg_name}")
+            # Negate cx_off so digits read correctly from the north camera
+            # (looking south: camera-right = west = -X).
+            p.AddTranslateOp().Set(
+                Gf.Vec3d(digit_cx - cx_off, gate_y, label_z + cz_off))
+            p.AddScaleOp().Set(Gf.Vec3d(hsx, depth / 2, hsz))
+            p.GetDisplayColorAttr().Set(color)
 
 
 def open_gate(stage, idx, panel_n):

@@ -16,43 +16,33 @@ from .areas import Area
 
 # ── Explicit deterministic waypoints ────────────────────────────────────────
 
-def get_dock_service_position(gate_idx: int) -> tuple[float, float]:
-    """Centre of the loading zone directly in front of gate gate_idx.
-
-    This is where a forklift parks to hand off a pallet to the truck.
-    """
-    cx = C.WAREHOUSE_CX + C.GATE_OFFSETS[gate_idx]
+def get_dock_service_position(gate_idx: int,
+                              gate_offsets=None) -> tuple[float, float]:
+    """Centre of the loading zone directly in front of gate gate_idx."""
+    offsets = gate_offsets if gate_offsets is not None else C.GATE_OFFSETS
+    cx = C.WAREHOUSE_CX + offsets[gate_idx]
     y  = C.WALL_Y_MIN + C.LOAD_D / 2.0
     return (cx, y)
 
 
-def get_dock_queue_spots() -> list[tuple[float, float]]:
-    """One queue-hold position per gate, just north of the loading zone edge.
-
-    Forklifts wait here when the dock slot is occupied. Ordered LEFT → RIGHT.
-    """
+def get_dock_queue_spots(gate_offsets=None) -> list[tuple[float, float]]:
+    """One queue-hold position per gate, just north of the loading zone edge."""
+    offsets = gate_offsets if gate_offsets is not None else C.GATE_OFFSETS
     queue_y = C.WALL_Y_MIN + C.LOAD_D + 2.0
-    return [(C.WAREHOUSE_CX + offset, queue_y) for offset in C.GATE_OFFSETS]
+    return [(C.WAREHOUSE_CX + offset, queue_y) for offset in offsets]
 
 
-def get_staging_hold_positions() -> list[tuple[float, float]]:
-    """One hold position per gate column inside the staging area.
-
-    Used as intermediate stops when staging is the next destination.
-    Ordered LEFT → RIGHT.
-    """
-    return [(C.WAREHOUSE_CX + offset, C.STAGING_CENTER_Y)
-            for offset in C.GATE_OFFSETS]
+def get_staging_hold_positions(gate_offsets=None) -> list[tuple[float, float]]:
+    """One hold position per gate column inside the staging area."""
+    offsets = gate_offsets if gate_offsets is not None else C.GATE_OFFSETS
+    return [(C.WAREHOUSE_CX + offset, C.STAGING_CENTER_Y) for offset in offsets]
 
 
-def get_far_approach_positions() -> list[tuple[float, float]]:
-    """One approach point per gate column, on free floor north of staging.
-
-    Used as a "starting point" for forklifts that arrive into the dock area
-    from elsewhere in the warehouse.  Ordered LEFT → RIGHT.
-    """
+def get_far_approach_positions(gate_offsets=None) -> list[tuple[float, float]]:
+    """One approach point per gate column, on free floor north of staging."""
+    offsets = gate_offsets if gate_offsets is not None else C.GATE_OFFSETS
     approach_y = C.STAGING_Y_FAR + 4.0
-    return [(C.WAREHOUSE_CX + offset, approach_y) for offset in C.GATE_OFFSETS]
+    return [(C.WAREHOUSE_CX + offset, approach_y) for offset in offsets]
 
 
 # Side-offset (metres) used when a named position has a `_left` or `_right`
@@ -115,13 +105,15 @@ def get_pickup_points(shelf_map: ShelfMap) -> list[tuple[float, float]]:
     return [(ax, approach_y) for ax in shelf_map.aisle_xs]
 
 
-def get_return_path(gate_idx: int, shelf_map: ShelfMap) -> list[tuple[float, float]]:
+def get_return_path(gate_idx: int, shelf_map: ShelfMap,
+                    gate_offsets=None) -> list[tuple[float, float]]:
     """Waypoints guiding an empty forklift from a dock back toward the shelves.
 
     Route: dock queue spot → staging hold → nearest aisle entrance.
     Falls back to open floor staging if shelf_map not ready.
     """
-    cx = C.WAREHOUSE_CX + C.GATE_OFFSETS[gate_idx]
+    offsets = gate_offsets if gate_offsets is not None else C.GATE_OFFSETS
+    cx = C.WAREHOUSE_CX + offsets[gate_idx]
     path: list[tuple[float, float]] = [
         (cx, C.WALL_Y_MIN + C.LOAD_D + 2.0),   # clear the dock
         (cx, C.STAGING_CENTER_Y),               # staging midpoint

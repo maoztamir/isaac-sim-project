@@ -36,7 +36,8 @@ class RuleEngine:
                  stage,
                  assets_root:      str | None = None,
                  loading_duration: float | None = None,
-                 pickup_duration:  float | None = None):
+                 pickup_duration:  float | None = None,
+                 gate_offsets:     list | None = None):
         self.forklifts  = forklifts
         self.doors      = doors
         self.pallets    = pallets
@@ -48,6 +49,8 @@ class RuleEngine:
         # Per-scenario timing overrides (fall back to config defaults when None)
         self._loading_duration = loading_duration if loading_duration is not None else C.LOADING_DURATION
         self._pickup_duration  = pickup_duration  if pickup_duration  is not None else C.PICKUP_DURATION
+        # Gate layout — used for all dock/staging position calculations
+        self._gate_offsets = list(gate_offsets) if gate_offsets is not None else list(C.GATE_OFFSETS)
 
         # One pallet per forklift (index = forklift id); None when unloaded
         # Populated lazily as forklifts pick up pallets
@@ -99,26 +102,26 @@ class RuleEngine:
 
         elif state == C.STATE_MOVE_TO_STAGING:
             gate = self._preferred_gate(fl)
-            pts = wp.get_staging_hold_positions()
+            pts = wp.get_staging_hold_positions(self._gate_offsets)
             dest = pts[gate] if gate < len(pts) else pts[0]
             route = wp.aisle_route((fl.pos[0], fl.pos[1]), dest, sm)
             fl.set_waypoints(route)
 
         elif state == C.STATE_WAIT_IN_STAGING:
             gate = self._preferred_gate(fl)
-            pts = wp.get_staging_hold_positions()
+            pts = wp.get_staging_hold_positions(self._gate_offsets)
             dest = pts[gate] if gate < len(pts) else pts[0]
             fl.set_waypoints([dest])
             fl.speed = 0.0
 
         elif state == C.STATE_MOVE_TO_LOADING:
             gate = self._preferred_gate(fl)
-            dest = wp.get_dock_service_position(gate)
+            dest = wp.get_dock_service_position(gate, self._gate_offsets)
             fl.set_waypoints([dest])
 
         elif state == C.STATE_WAIT_AT_DOCK_QUEUE:
             gate = self._preferred_gate(fl)
-            pts = wp.get_dock_queue_spots()
+            pts = wp.get_dock_queue_spots(self._gate_offsets)
             dest = pts[gate] if gate < len(pts) else pts[0]
             fl.set_waypoints([dest])
             fl.speed = 0.0
@@ -128,7 +131,7 @@ class RuleEngine:
 
         elif state == C.STATE_RETURNING:
             gate = self._preferred_gate(fl)
-            route = wp.get_return_path(gate, sm)
+            route = wp.get_return_path(gate, sm, self._gate_offsets)
             fl.set_waypoints(route)
 
         elif state == C.STATE_IDLE:
@@ -158,7 +161,7 @@ class RuleEngine:
             pallet = self._fl_pallet.get(fl.id)
             if pallet:
                 drop_xy = wp.get_dock_service_position(
-                    self._preferred_gate(fl)
+                    self._preferred_gate(fl), self._gate_offsets
                 )
                 release_pallet(fl, pallet, stage,
                                drop_location=LOC_DOCK, drop_xy=drop_xy)
@@ -171,7 +174,7 @@ class RuleEngine:
 
     def _preferred_gate(self, fl: Forklift) -> int:
         """Gate index whose X is nearest to the forklift's current X."""
-        gate_xs = [C.WAREHOUSE_CX + off for off in C.GATE_OFFSETS]
+        gate_xs = [C.WAREHOUSE_CX + off for off in self._gate_offsets]
         return min(range(len(gate_xs)), key=lambda i: abs(gate_xs[i] - fl.pos[0]))
 
     def _find_free_pallet(self) -> Pallet | None:
