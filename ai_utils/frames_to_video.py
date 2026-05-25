@@ -34,9 +34,11 @@ DEFAULT_FPS = 30
 
 
 def find_frame_folders(root: str) -> list[tuple[str, list[str]]]:
-    """Return (folder_path, sorted_frame_list) for every folder containing images."""
+    """Return (folder_path, sorted_frame_list) for every rgb/ folder containing images."""
     results = []
     for dirpath, dirnames, filenames in os.walk(root):
+        if os.path.basename(dirpath) != "rgb":
+            continue
         frames = sorted(
             [f for f in filenames if os.path.splitext(f)[1].lower() in IMAGE_EXTS],
             key=lambda n: [int(c) if c.isdigit() else c for c in re.split(r"(\d+)", n)],
