@@ -52,6 +52,24 @@ STEP 5: Gate schedule (requires start())
            — gate 2 opening". Crate prims visible only at bays 0 and 2.
   FAIL SIGN: All three gates open, or gate 0/2 crates not visible after opening.
 
+STEP 6: Pedestrians registered
+  EXPECT: Console prints two "[showcase] Pedestrian N registered" lines during
+          build().  Two Pedestrian objects appear in scenario.pedestrians with
+          correct waypoint counts (4 waypoints each, loop=True).
+  PASS IF: len(scenario.pedestrians) == 2; each has 4 waypoints; assertion passes.
+  FAIL SIGN: pedestrians list is empty (setup_pedestrians() not called) or only
+             one pedestrian registered.
+
+STEP 7: IRA pedestrians visible (requires start() with IRA extension active)
+  NOTE: IRA extension must be loaded in the Isaac Sim session.
+  EXPECT: Two warehouse-worker figures appear on the main floor — one patrolling
+          the east half (between warehouse centre and east wall) and one on the
+          west half (between west wall and warehouse centre). Both walk looping
+          rectangular routes between the loading zone and staging area.
+  PASS IF: Two human figures visible in viewport; characters loop continuously.
+  FAIL SIGN: Orange capsules instead of figures (IRA extension not loaded) or no
+             characters at all (IRA command file write error — check /tmp/).
+
 ────────────────────────────────────────────────────────────────────────────────
 """
 
@@ -134,12 +152,23 @@ async def _run():
         assert p.assigned_forklift_id is None, \
             f"FAIL: Pallet {p.id} already assigned at scene build time"
 
+    # Verify pedestrians were registered
+    assert len(scenario.pedestrians) == 2, \
+        f"FAIL: expected 2 pedestrians, got {len(scenario.pedestrians)}"
+    for ped in scenario.pedestrians:
+        assert len(ped.waypoints) == 4, \
+            f"FAIL: Pedestrian {ped.id} has {len(ped.waypoints)} waypoints, expected 4"
+        assert ped.loop, f"FAIL: Pedestrian {ped.id} loop=False, expected True"
+    print(f"[test] Pedestrian 0: {scenario.pedestrians[0]}")
+    print(f"[test] Pedestrian 1: {scenario.pedestrians[1]}")
+
     print("[test] PASS — all assertions OK")
     print("[test] Visually confirm:")
     print("  • 4 pallet props visible in staging zone (yellow stripe area)")
     print("  • 0 crates visible at loading bays (all doors closed)")
     print("  • No pallets visible near shelves (tracked pallets hidden)")
     print("  • 4 forklifts present near south wall")
+    print("  • 2 pedestrians registered (IRA figures visible when start() called)")
 
 
 asyncio.ensure_future(_run())

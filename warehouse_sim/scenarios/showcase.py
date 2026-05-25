@@ -10,6 +10,8 @@ Designed for visual impact:
   - 4 visible staging scenery pallets fill the staging zone from the start.
   - 18 s loading duration keeps loaded forklifts at dock long enough to be
     clearly visible; staging queue builds naturally.
+  - 2 IRA pedestrians patrol opposite halves of the main floor, creating
+    natural near-miss interactions with the forklifts.
   - Per-step telemetry prints loaded/unloaded counts and queue depth every 10 s.
 """
 
@@ -123,6 +125,43 @@ class ShowcaseScenario(Scenario):
                            C.PALLET_USD, sx, sy, 0.0, 0.0,
                            scale=C.PALLET_SCALE)
         print(f"[{self.name}] {len(props)} staging scenery props spawned")
+
+    def setup_pedestrians(self):
+        """Two workers patrolling opposite halves of the main open floor.
+
+        PED 0 covers the east half (right of centre), PED 1 covers the west
+        half (left of centre).  Both routes run between the top of the loading
+        zone and the north edge of the staging area — the busiest corridor for
+        forklift traffic — for maximum visual impact.
+        """
+        y_near = C.WALL_Y_MIN + C.LOAD_D + 1.5   # just north of loading zone
+        y_far  = C.STAGING_Y_FAR + 1.0            # just north of staging area
+
+        # East half: from warehouse centre to east nav boundary
+        x_mid  = C.WAREHOUSE_CX + 1.0
+        x_east = C.NAV_X_MAX - 2.0
+        self.spawn_pedestrian(
+            waypoints=[
+                (x_mid,  y_near),
+                (x_east, y_near),
+                (x_east, y_far),
+                (x_mid,  y_far),
+            ],
+            loop=True,
+        )
+
+        # West half: from west nav boundary to warehouse centre
+        x_west = C.NAV_X_MIN + 2.0
+        x_mid_w = C.WAREHOUSE_CX - 1.0
+        self.spawn_pedestrian(
+            waypoints=[
+                (x_west,  y_near),
+                (x_mid_w, y_near),
+                (x_mid_w, y_far),
+                (x_west,  y_far),
+            ],
+            loop=True,
+        )
 
     # ── Per-frame logic ───────────────────────────────────────────────────────
 
