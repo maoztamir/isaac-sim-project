@@ -785,6 +785,9 @@ def spawn_camera(stage, path, eye, target, fov_deg=70.0):
     )
 
     cam = UsdGeom.Camera.Define(stage, path)
+    # Clear any existing xform ops so re-running in the Script Editor does not
+    # raise "xformOp already exists in xformOpOrder" on the second call.
+    UsdGeom.Xformable(cam).ClearXformOpOrder()
     cam.AddTransformOp().Set(mat)
 
     # Focal length from horizontal FOV and standard 20.955 mm aperture
