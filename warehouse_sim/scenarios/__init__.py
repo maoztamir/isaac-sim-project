@@ -11,6 +11,7 @@ from .mixed_floor              import MixedFloorScenario
 from .spec_runner              import SpecScenario
 from .door_idle                import DoorIdleScenario
 from .live_alerts              import LiveAlertsScenario
+from .pallet_occupancy         import PalletOccupancyScenario
 from .specs.dock_queue_forming import SPEC as _SPEC_DOCK_QUEUE_FORMING
 
 
@@ -34,6 +35,7 @@ PRESETS = {
     "dock_queue_forming":      _make_spec_factory(_SPEC_DOCK_QUEUE_FORMING),
     "door_idle":               DoorIdleScenario,
     "live_alerts":             LiveAlertsScenario,
+    "pallet_occupancy":        PalletOccupancyScenario,
 }
 
 
