@@ -30,6 +30,8 @@ EVENT_PALLET_TRANSFER    = "pallet_transfer"
 EVENT_PROXIMITY_ALERT        = "proximity_alert"
 EVENT_IDLE_ALERT             = "idle_alert"
 EVENT_PEDESTRIAN_NEAR_MISS   = "pedestrian_near_miss"
+EVENT_FLOOR_OCCUPANCY        = "floor_occupancy"        # zone % coverage snapshot
+EVENT_OVERSPILL_DETECTED     = "overspill_detected"     # pallet/box outside zone boundary
 
 
 @dataclass
@@ -139,6 +141,41 @@ class EventLogger:
             "distance": distance,
             "fl_speed": fl_speed,
             "stopped":  stopped,
+        }))
+
+    def log_floor_occupancy(self, sim_time: float, zone_name: str,
+                            n_pallets: int, n_boxes: int,
+                            covered_m2: float, zone_area_m2: float,
+                            occupancy_pct: float) -> None:
+        """Snapshot of how much of a zone floor is covered by pallets / boxes.
+
+        occupancy_pct = covered_m2 / zone_area_m2 * 100, clamped to [0, 100].
+        """
+        self._append(Event(EVENT_FLOOR_OCCUPANCY, sim_time, {
+            "zone":           zone_name,
+            "n_pallets":      n_pallets,
+            "n_boxes":        n_boxes,
+            "covered_m2":     round(covered_m2, 3),
+            "zone_area_m2":   round(zone_area_m2, 3),
+            "occupancy_pct":  round(occupancy_pct, 2),
+        }))
+
+    def log_overspill(self, sim_time: float, zone_name: str,
+                      prim_path: str, prim_type: str,
+                      x: float, y: float,
+                      dist_to_zone: float) -> None:
+        """A pallet or box is outside *zone_name* but within the overspill buffer.
+
+        prim_type: 'pallet' or 'box'.
+        dist_to_zone: distance in metres from the nearest zone boundary edge.
+        """
+        self._append(Event(EVENT_OVERSPILL_DETECTED, sim_time, {
+            "zone":          zone_name,
+            "prim_path":     prim_path,
+            "prim_type":     prim_type,
+            "x":             round(x, 3),
+            "y":             round(y, 3),
+            "dist_to_zone":  round(dist_to_zone, 3),
         }))
 
     # ── Query API ─────────────────────────────────────────────────────────────

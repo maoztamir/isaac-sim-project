@@ -41,6 +41,44 @@ class Area:
 
     # ── Geometry ─────────────────────────────────────────────────────────────
 
+    @property
+    def floor_area(self) -> float:
+        """Total floor area of this zone in square metres."""
+        return (self.x_max - self.x_min) * (self.y_max - self.y_min)
+
+    def floor_occupancy_pct(self, n_pallets: int, n_boxes: int,
+                            pallet_w: float, pallet_d: float,
+                            box_w: float, box_d: float) -> float:
+        """Return percentage [0, 100] of zone floor covered by pallets and boxes.
+
+        Footprint areas are summed and divided by the zone's total floor area.
+        Clamped to 100 % in case pallets overlap or spill slightly past bounds.
+        """
+        covered = n_pallets * pallet_w * pallet_d + n_boxes * box_w * box_d
+        fa = self.floor_area
+        if fa <= 0.0:
+            return 0.0
+        return min(100.0, covered / fa * 100.0)
+
+    def dist_to_boundary(self, x: float, y: float) -> float:
+        """Return distance from point (x, y) to the nearest zone edge.
+
+        Returns 0.0 if the point is inside the zone.
+        Returns a positive float (metres) when the point is outside.
+        """
+        dx = max(self.x_min - x, 0.0, x - self.x_max)
+        dy = max(self.y_min - y, 0.0, y - self.y_max)
+        return (dx * dx + dy * dy) ** 0.5
+
+    def in_vicinity(self, x: float, y: float, buffer: float) -> bool:
+        """True when (x, y) is within *buffer* metres outside the zone.
+
+        Points inside the zone always return False (they are not overspill).
+        """
+        if self.contains(x, y):
+            return False
+        return self.dist_to_boundary(x, y) <= buffer
+
     def contains(self, x: float, y: float) -> bool:
         return (self.x_min <= x <= self.x_max and
                 self.y_min <= y <= self.y_max)

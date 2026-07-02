@@ -257,6 +257,21 @@ SHELF_KEYWORDS = frozenset({
 # ── Staging props ───────────────────────────────────────────────────────────
 PALLET_H = 0.15
 
+# ── Pallet / box footprint dimensions (metres) ───────────────────────────────
+# PALLET_USD is authored at 112 × 112 cm; PALLET_SCALE = 0.01 → 1.12 × 1.12 m.
+PALLET_FOOTPRINT_W = 1.12   # pallet width  (X axis)
+PALLET_FOOTPRINT_D = 1.12   # pallet depth  (Y axis)
+
+# BOX_USDS are Isaac Simple_Warehouse cardboard box props.
+# Approximate footprint derived from visual inspection.
+BOX_FOOTPRINT_W = 0.60   # loose box width  (X axis)
+BOX_FOOTPRINT_D = 0.60   # loose box depth  (Y axis)
+
+# ── Overspill detection ──────────────────────────────────────────────────────
+# Distance (metres) outside a zone boundary at which a misplaced pallet/box
+# is still considered "in the vicinity" and therefore an overspill alert.
+OVERSPILL_BUFFER_M = 1.5
+
 # ── Asset paths ──────────────────────────────────────────────────────────────
 # WAREHOUSE_USD and FORKLIFT_USD are relative paths appended to assets_root.
 # PALLET_USD is an absolute URL and must be used directly (no assets_root prefix).
