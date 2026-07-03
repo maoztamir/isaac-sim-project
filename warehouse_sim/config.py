@@ -100,40 +100,28 @@ ZONES = compute_zones(GATE_OFFSETS)
 # Format: { name: (eye_xyz, target_xyz, fov_deg) }
 #
 # Target for all cameras: midpoint between loading and staging zone centres.
-_CAM_TARGET_X = WAREHOUSE_CX
-_CAM_TARGET_Y = (WALL_Y_MIN + STAGING_Y_FAR) / 2.0   # ≈ -13.77
-_CAM_TARGET   = (_CAM_TARGET_X, _CAM_TARGET_Y, 0.5)
-_CAM_FOV      = 80.0
-
-import math as _math
-
-# cam_east: angular balance between near zone edge (X≈-0.93) and far (X≈-21.43)
-_CAM_EZ_EAST  = 8.0
-_CAM_EX_EAST  = WALL_X_MAX - 1.0
-_ANG_NEAR     = _math.degrees(_math.atan2(_CAM_EZ_EAST, _CAM_EX_EAST - (-0.93)))
-_ANG_FAR      = _math.degrees(_math.atan2(_CAM_EZ_EAST, _CAM_EX_EAST - (-21.43)))
-_DX_EAST      = (_CAM_EZ_EAST - 0.5) / _math.tan(_math.radians((_ANG_NEAR + _ANG_FAR) / 2.0))
-
 SURVEILLANCE_CAMERAS = {
+    # Positions taken from output/camera_position.usd (saved from Isaac Sim).
+    # Target is the floor point (Z=0) along each camera's look direction.
     "cam_south": (
-        (WAREHOUSE_CX, WALL_Y_MIN + 1.0, 7.0),  # south wall, looking north
-        _CAM_TARGET,
-        _CAM_FOV,
+        (-10.4350, -23.3793, 7.7380),
+        (-10.9655,  -7.0220, 0.0),
+        80.0,
     ),
     "cam_north": (
-        (WAREHOUSE_CX, STAGING_Y_FAR + 8.0, 12.0),  # north of staging, looking south
-        _CAM_TARGET,
-        _CAM_FOV,
+        (-10.2238,   7.4602, 8.3547),
+        (-10.1859,  -6.5637, 0.0),
+        80.0,
     ),
     "cam_west": (
-        (WALL_X_MIN + 1.0, _CAM_TARGET_Y, 8.0),  # west wall, looking east
-        _CAM_TARGET,
-        _CAM_FOV,
+        (-25.3300, -13.7750, 8.0000),
+        (-13.6872, -14.5627, 0.0),
+        80.0,
     ),
     "cam_east": (
-        (_CAM_EX_EAST, _CAM_TARGET_Y, _CAM_EZ_EAST),  # east wall, looking west
-        (_CAM_EX_EAST - _DX_EAST, _CAM_TARGET_Y, 0.5),
-        _CAM_FOV,
+        (  4.4600, -13.7750, 8.0000),
+        ( -6.3118, -13.7750, 0.0),
+        80.0,
     ),
 }
 
