@@ -53,37 +53,10 @@ if _project_root not in sys.path:
 import warehouse_sim.config as WC
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-CAMERAS_USD  = WC.CAMERA_POSITIONS_USD   # tests/camera_position.usd
 IMAGE_WIDTH  = 1920
 IMAGE_HEIGHT = 1080
 OUTPUT_DIR   = os.path.join(_project_root, "output", "homography")
-
-# ── Programmatic camera overrides ─────────────────────────────────────────────
-# cam_north and cam_east are spawned from config zone bounds at runtime by the
-# test script (ih.spawn_camera).  Their positions are NEVER stored back to
-# camera_position.usd, so we compute them here from the same formulas.
-# cam_south and cam_west are manually positioned and read from the USD file.
-_APERTURE  = 20.955
-_ZONES_CX  = WC.WAREHOUSE_CX
-_ZONES_CY  = (WC.WALL_Y_MIN + WC.STAGING_Y_FAR) / 2.0
-
-_EYE_NORTH = (_ZONES_CX, WC.STAGING_Y_FAR + 8.0, 12.0)
-_TGT_NORTH = (_ZONES_CX, _ZONES_CY, 0.5)
-_FOV_NORTH = 80.0
-
-_EZ_EAST    = 8.0
-_EX_EAST    = WC.WALL_X_MAX - 1.0
-_ANG_NEAR   = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - (-0.93)))
-_ANG_FAR    = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - (-21.43)))
-_DX_EAST    = (_EZ_EAST - 0.5) / math.tan(math.radians((_ANG_NEAR + _ANG_FAR) / 2.0))
-_EYE_EAST   = (_EX_EAST, _ZONES_CY, _EZ_EAST)
-_TGT_EAST   = (_EX_EAST - _DX_EAST, _ZONES_CY, 0.5)
-_FOV_EAST   = 80.0
-
-PROGRAMMATIC_CAMERAS = {
-    "cam_north": (_EYE_NORTH, _TGT_NORTH, _FOV_NORTH),
-    "cam_east":  (_EYE_EAST,  _TGT_EAST,  _FOV_EAST),
-}
+_APERTURE    = 20.955   # mm — default used by ih.spawn_camera()
 
 # Verification points: warehouse floor corners + centre (world X, Y, Z=0)
 VERIFY_POINTS = [
@@ -281,32 +254,14 @@ def project_image_to_floor(H_inv, pixel_uv):
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    cameras = parse_cameras_usd(CAMERAS_USD)
-    if not cameras:
-        print(f"No cameras found in {CAMERAS_USD}")
-        return
-    print(f"Loaded {len(cameras)} camera(s) from {CAMERAS_USD}")
+    print(f"Building homographies from WC.SURVEILLANCE_CAMERAS "
+          f"({len(WC.SURVEILLANCE_CAMERAS)} cameras)\n")
 
-    for cam in cameras:
-        if cam["name"] not in PROGRAMMATIC_CAMERAS:
-            continue
-        eye, target, fov_deg = PROGRAMMATIC_CAMERAS[cam["name"]]
-        R_w2c, t = eye_target_to_r_t(eye, target)
-        focal_mm = _APERTURE / (2.0 * math.tan(math.radians(fov_deg / 2.0)))
-        cam.update(R_w2c=R_w2c, t=t,
-                   tx=eye[0], ty=eye[1], tz=eye[2],
-                   focal_length_mm=focal_mm, horiz_aperture_mm=_APERTURE)
-        print(f"  [{cam['name']}] overridden from config  "
-              f"eye=({eye[0]:.2f},{eye[1]:.2f},{eye[2]:.2f})")
-    print()
-
-    for cam in cameras:
-        name        = cam["name"]
-        tx, ty, tz  = cam["tx"], cam["ty"], cam["tz"]
-        R_w2c       = cam["R_w2c"]
-        t           = cam["t"]
-        focal_mm    = cam["focal_length_mm"]
-        aperture_mm = cam["horiz_aperture_mm"]
+    for name, (eye, target, fov_deg) in WC.SURVEILLANCE_CAMERAS.items():
+        tx, ty, tz  = eye
+        R_w2c, t    = eye_target_to_r_t(eye, target)
+        focal_mm    = _APERTURE / (2.0 * math.tan(math.radians(fov_deg / 2.0)))
+        aperture_mm = _APERTURE
 
         K        = build_intrinsics(focal_mm, aperture_mm, IMAGE_WIDTH, IMAGE_HEIGHT)
         H, H_inv = build_homography(K, R_w2c, t)
@@ -347,7 +302,7 @@ def main():
         print(f"         → {npz_path}")
         print(f"         → {json_path}")
 
-    print(f"\nDone. {len(cameras)} homography files written to {OUTPUT_DIR}/")
+    print(f"\nDone. {len(WC.SURVEILLANCE_CAMERAS)} homography files written to {OUTPUT_DIR}/")
 
 
 if __name__ == "__main__":

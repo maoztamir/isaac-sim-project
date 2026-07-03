@@ -94,6 +94,49 @@ def compute_zones(gate_offsets):
 # ZONES keeps the standard 3-gate layout for all existing scenarios.
 ZONES = compute_zones(GATE_OFFSETS)
 
+# ── Surveillance cameras ──────────────────────────────────────────────────────
+# All four cameras are defined here from the warehouse geometry so that the
+# test script and generate_homography.py share one source of truth.
+# Format: { name: (eye_xyz, target_xyz, fov_deg) }
+#
+# Target for all cameras: midpoint between loading and staging zone centres.
+_CAM_TARGET_X = WAREHOUSE_CX
+_CAM_TARGET_Y = (WALL_Y_MIN + STAGING_Y_FAR) / 2.0   # ≈ -13.77
+_CAM_TARGET   = (_CAM_TARGET_X, _CAM_TARGET_Y, 0.5)
+_CAM_FOV      = 80.0
+
+import math as _math
+
+# cam_east: angular balance between near zone edge (X≈-0.93) and far (X≈-21.43)
+_CAM_EZ_EAST  = 8.0
+_CAM_EX_EAST  = WALL_X_MAX - 1.0
+_ANG_NEAR     = _math.degrees(_math.atan2(_CAM_EZ_EAST, _CAM_EX_EAST - (-0.93)))
+_ANG_FAR      = _math.degrees(_math.atan2(_CAM_EZ_EAST, _CAM_EX_EAST - (-21.43)))
+_DX_EAST      = (_CAM_EZ_EAST - 0.5) / _math.tan(_math.radians((_ANG_NEAR + _ANG_FAR) / 2.0))
+
+SURVEILLANCE_CAMERAS = {
+    "cam_south": (
+        (WAREHOUSE_CX, WALL_Y_MIN + 1.0, 7.0),  # south wall, looking north
+        _CAM_TARGET,
+        _CAM_FOV,
+    ),
+    "cam_north": (
+        (WAREHOUSE_CX, STAGING_Y_FAR + 8.0, 12.0),  # north of staging, looking south
+        _CAM_TARGET,
+        _CAM_FOV,
+    ),
+    "cam_west": (
+        (WALL_X_MIN + 1.0, _CAM_TARGET_Y, 8.0),  # west wall, looking east
+        _CAM_TARGET,
+        _CAM_FOV,
+    ),
+    "cam_east": (
+        (_CAM_EX_EAST, _CAM_TARGET_Y, _CAM_EZ_EAST),  # east wall, looking west
+        (_CAM_EX_EAST - _DX_EAST, _CAM_TARGET_Y, 0.5),
+        _CAM_FOV,
+    ),
+}
+
 # ── Live Alerts scenario gate layout ─────────────────────────────────────────
 # 4 gates with 6 m spacing, labeled to match Nashville DC demo video.
 LIVE_ALERTS_GATE_OFFSETS = [-9.0, -3.0, 3.0, 9.0]
