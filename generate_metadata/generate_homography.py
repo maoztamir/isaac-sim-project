@@ -58,6 +58,33 @@ IMAGE_WIDTH  = 1920
 IMAGE_HEIGHT = 1080
 OUTPUT_DIR   = os.path.join(_project_root, "output", "homography")
 
+# ── Programmatic camera overrides ─────────────────────────────────────────────
+# cam_north and cam_east are spawned from config zone bounds at runtime by the
+# test script (ih.spawn_camera).  Their positions are NEVER stored back to
+# camera_position.usd, so we compute them here from the same formulas.
+# cam_south and cam_west are manually positioned and read from the USD file.
+_APERTURE  = 20.955
+_ZONES_CX  = WC.WAREHOUSE_CX
+_ZONES_CY  = (WC.WALL_Y_MIN + WC.STAGING_Y_FAR) / 2.0
+
+_EYE_NORTH = (_ZONES_CX, WC.STAGING_Y_FAR + 8.0, 12.0)
+_TGT_NORTH = (_ZONES_CX, _ZONES_CY, 0.5)
+_FOV_NORTH = 80.0
+
+_EZ_EAST    = 8.0
+_EX_EAST    = WC.WALL_X_MAX - 1.0
+_ANG_NEAR   = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - (-0.93)))
+_ANG_FAR    = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - (-21.43)))
+_DX_EAST    = (_EZ_EAST - 0.5) / math.tan(math.radians((_ANG_NEAR + _ANG_FAR) / 2.0))
+_EYE_EAST   = (_EX_EAST, _ZONES_CY, _EZ_EAST)
+_TGT_EAST   = (_EX_EAST - _DX_EAST, _ZONES_CY, 0.5)
+_FOV_EAST   = 80.0
+
+PROGRAMMATIC_CAMERAS = {
+    "cam_north": (_EYE_NORTH, _TGT_NORTH, _FOV_NORTH),
+    "cam_east":  (_EYE_EAST,  _TGT_EAST,  _FOV_EAST),
+}
+
 # Verification points: warehouse floor corners + centre (world X, Y, Z=0)
 VERIFY_POINTS = [
     (WC.WALL_X_MIN, WC.WALL_Y_MIN),   # SW wall corner
@@ -66,47 +93,6 @@ VERIFY_POINTS = [
     (WC.WALL_X_MAX, WC.WALL_Y_MAX),   # NE wall corner
     (WC.WAREHOUSE_CX, WC.WAREHOUSE_CY),  # warehouse centre
 ]
-
-# ── Programmatic camera overrides ─────────────────────────────────────────────
-# cam_north and cam_east are repositioned at runtime by
-# test_scenario_pallet_occupancy_visual.py using ih.spawn_camera() with
-# positions derived from the zone bounds.  camera_position.usd is NOT updated
-# when the test runs, so the USD-file positions would be wrong here.
-#
-# These overrides replicate the exact eye/target/fov formulas from the test so
-# that the homography always matches the actual recorded camera view.
-#
-# Keep in sync with the spawn_camera() calls in the test script.
-_ZONES_CX  = WC.WAREHOUSE_CX
-_ZONES_CY  = (WC.WALL_Y_MIN + WC.STAGING_Y_FAR) / 2.0   # ≈ -13.77
-_TARGET_Z  = 0.5                                           # floor aim point
-_APERTURE  = 20.955                                        # mm (spawn_camera default)
-
-# cam_north — north of staging looking south over both zones
-_EYE_NORTH = (_ZONES_CX, WC.STAGING_Y_FAR + 8.0, 12.0)
-_TGT_NORTH = (_ZONES_CX, _ZONES_CY, _TARGET_Z)
-_FOV_NORTH = 80.0
-
-# cam_east  — near east wall looking west, elevation chosen so near/far zone
-#             edges balance within the vertical FOV (same formula as the test)
-_EZ_EAST   = 8.0
-_EX_EAST   = WC.WALL_X_MAX - 1.0
-_NEAR_X    = -0.93    # loading zone east edge
-_FAR_X     = -21.43   # staging zone west edge
-_ANG_NEAR  = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - _NEAR_X))
-_ANG_FAR   = math.degrees(math.atan2(_EZ_EAST, _EX_EAST - _FAR_X))
-_CENTRE_DEP = (_ANG_NEAR + _ANG_FAR) / 2.0
-_DX_EAST   = (_EZ_EAST - _TARGET_Z) / math.tan(math.radians(_CENTRE_DEP))
-_EYE_EAST  = (_EX_EAST, _ZONES_CY, _EZ_EAST)
-_TGT_EAST  = (_EX_EAST - _DX_EAST, _ZONES_CY, _TARGET_Z)
-_FOV_EAST  = 80.0
-
-# Map camera name → (eye, target, fov_deg).
-# Any camera listed here overrides the position read from camera_position.usd.
-PROGRAMMATIC_CAMERAS: dict[str, tuple] = {
-    "cam_north": (_EYE_NORTH, _TGT_NORTH, _FOV_NORTH),
-    "cam_east":  (_EYE_EAST,  _TGT_EAST,  _FOV_EAST),
-}
 
 
 # ── USD parser ────────────────────────────────────────────────────────────────
@@ -301,20 +287,17 @@ def main():
         return
     print(f"Loaded {len(cameras)} camera(s) from {CAMERAS_USD}")
 
-    # Apply programmatic overrides for cameras repositioned by the test script.
     for cam in cameras:
         if cam["name"] not in PROGRAMMATIC_CAMERAS:
             continue
         eye, target, fov_deg = PROGRAMMATIC_CAMERAS[cam["name"]]
         R_w2c, t = eye_target_to_r_t(eye, target)
         focal_mm = _APERTURE / (2.0 * math.tan(math.radians(fov_deg / 2.0)))
-        cam["R_w2c"]          = R_w2c
-        cam["t"]              = t
-        cam["tx"], cam["ty"], cam["tz"] = eye
-        cam["focal_length_mm"]  = focal_mm
-        cam["horiz_aperture_mm"] = _APERTURE
-        print(f"  [{cam['name']}] position overridden from PROGRAMMATIC_CAMERAS"
-              f" eye=({eye[0]:.2f},{eye[1]:.2f},{eye[2]:.2f})")
+        cam.update(R_w2c=R_w2c, t=t,
+                   tx=eye[0], ty=eye[1], tz=eye[2],
+                   focal_length_mm=focal_mm, horiz_aperture_mm=_APERTURE)
+        print(f"  [{cam['name']}] overridden from config  "
+              f"eye=({eye[0]:.2f},{eye[1]:.2f},{eye[2]:.2f})")
     print()
 
     for cam in cameras:
