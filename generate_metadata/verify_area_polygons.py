@@ -39,7 +39,7 @@ if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
 # ── Knobs ─────────────────────────────────────────────────────────────────────
-DEFAULT_FRAMES_DIR = "/media/storage/replicator/_out_sdrec_2"
+DEFAULT_FRAMES_DIR = "/media/storage/replicator/_out_sdrec_5"
 DEFAULT_FRAME_IDX  = 0
 AREAS_JSON         = os.path.join(_project_root, "output", "area_polygons.json")
 HOMOGRAPHY_DIR     = os.path.join(_project_root, "output", "homography")
