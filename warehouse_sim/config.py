@@ -101,12 +101,28 @@ ZONES = compute_zones(GATE_OFFSETS)
 #
 # Target for all cameras: midpoint between loading and staging zone centres.
 SURVEILLANCE_CAMERAS = {
-    # Positions from tests/camera_position.usd — match the _out_sdrec_5 recording.
+    # Positions taken from output/camera_position.usd (saved from Isaac Sim).
     # Target is the floor point (Z=0) along each camera's look direction.
-    "cam_south": ((-9.8341, -22.5330, 6.9060), (-10.7264,  -5.1664, 0.0), 70.0),
-    "cam_north": ((-10.5431,  9.8619, 8.2098), (-10.6338,  -6.9230, 0.0), 70.0),
-    "cam_west":  ((-25.4845,  6.1854, 6.6975), (-14.8844,  -5.0847, 0.0), 70.0),
-    "cam_east":  ((  4.0934,  6.2543, 8.3897), ( -5.4913,  -3.1932, 0.0), 70.0),
+    "cam_south": (
+        (-10.435, -23.3793, 7.738),
+        (-10.9655, -7.022, 0.0),
+        80.0,
+    ),
+    "cam_north": (
+        (-10.2238, 7.4602, 8.3547),
+        (-10.1859, -6.5637, 0.0),
+        80.0,
+    ),
+    "cam_west": (
+        (-25.33, -13.775, 8.0),
+        (-13.6872, -14.5627, 0.0),
+        80.0,
+    ),
+    "cam_east": (
+        (4.8787, -3.0585, 7.1737),
+        (-4.4601, -9.3719, 0.0),
+        80.0,
+    ),
 }
 
 # ── Live Alerts scenario gate layout ─────────────────────────────────────────
