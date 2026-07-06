@@ -86,7 +86,7 @@ def main():
     print(f"  Homography: {_bev.HOMOGRAPHY_DIR}/")
     print(f"  Output    : {args.bev_output}")
     print("=" * 60)
-    _bev.main(args.bev_output)
+    _bev.main(args.bev_output, args.areas_output)
 
     # ── Step 4: visual verification ───────────────────────────────────────────
     print()
@@ -104,6 +104,7 @@ def main():
     print(f"  Areas        : {args.areas_output}")
     print(f"  BEV map      : {args.bev_output}")
     print(f"  Verification : {_ver.OUTPUT_DIR}/")
+    print(f"  POV images   : {_ver.OUTPUT_POV_DIR}/")
 
 
 if __name__ == "__main__":

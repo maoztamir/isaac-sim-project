@@ -44,6 +44,7 @@ DEFAULT_FRAME_IDX  = 0
 AREAS_JSON         = os.path.join(_project_root, "output", "area_polygons.json")
 HOMOGRAPHY_DIR     = os.path.join(_project_root, "output", "homography")
 OUTPUT_DIR         = os.path.join(_project_root, "output", "area_verification")
+OUTPUT_POV_DIR     = os.path.join(_project_root, "output", "area_pov")
 
 POLY_ALPHA = 0.25
 POLY_LW    = 2.0
@@ -276,6 +277,36 @@ def main(frames_dir, frame_idx, areas_path, output_dir):
         fig.savefig(out_path, dpi=100, bbox_inches="tight")
         plt.close(fig)
         print(f"[{cam_name}] saved → {out_path}")
+
+    # ── Clean single-panel POV images ─────────────────────────────────────────
+    os.makedirs(OUTPUT_POV_DIR, exist_ok=True)
+    for cam_name in all_cam_names:
+        cd    = cam_data[cam_name]
+        img_w = cd["image_width"]
+        img_h = cd["image_height"]
+
+        fpath     = _frame_path(frames_dir, cam_name, frame_idx)
+        frame_arr = _load_frame(fpath, img_w, img_h)
+
+        stored_polys = []
+        for area in areas:
+            if cam_name not in area.get("visible_in", []):
+                continue
+            stored_px = area["camera_polygons"].get(cam_name)
+            if stored_px:
+                stored_polys.append((area, stored_px))
+
+        fig, ax = plt.subplots(1, 1, figsize=(img_w / 100, img_h / 100))
+        _setup_image_ax(ax, frame_arr, img_w, img_h,
+                        f"{cam_name} — area polygons")
+        seen = _draw_polygons(ax, stored_polys, img_w, img_h)
+        _add_legend(ax, seen)
+
+        plt.tight_layout(pad=0.2)
+        pov_path = os.path.join(OUTPUT_POV_DIR, f"{cam_name}.png")
+        fig.savefig(pov_path, dpi=100, bbox_inches="tight")
+        plt.close(fig)
+        print(f"[{cam_name}] POV saved → {pov_path}")
 
     # ── Composite: N rows × 2 cols ────────────────────────────────────────────
     fig, axes = plt.subplots(n_cams, 2, figsize=(9.6 * 2, n_cams * 5.4))

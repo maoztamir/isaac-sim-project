@@ -36,6 +36,16 @@ if _project_root not in sys.path:
 
 import warehouse_sim.config as WC
 
+DEFAULT_AREAS = os.path.join(_project_root, "output", "area_polygons.json")
+
+_AREA_TYPE_STYLE = {
+    "door":    {"color": "#E74C3C", "label": "Door"},
+    "loading": {"color": "#E67E22", "label": "Loading zone"},
+    "staging": {"color": "#2980B9", "label": "Staging zone"},
+    "shelf":   {"color": "#27AE60", "label": "Shelf column"},
+    "aisle":   {"color": "#1ABC9C", "label": "Aisle"},
+}
+
 # ── Derived geometry (all from WC) ───────────────────────────────────────────
 # Loading zones — one per door
 LOADING_ZONES = [
@@ -139,7 +149,51 @@ def _add_rect(ax, x0, x1, y0, y1, facecolor, edgecolor, lw=1.5,
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-def main(output_path):
+def _load_areas(areas_path):
+    if not areas_path or not os.path.isfile(areas_path):
+        return []
+    with open(areas_path) as f:
+        return json.load(f)["areas"]
+
+
+def _draw_area_polygons(ax, areas):
+    """Overlay world_polygon for each area onto the BEV axes."""
+    seen_types = set()
+    for area in areas:
+        poly = area.get("world_polygon")
+        if not poly:
+            continue
+        atype  = area["type"]
+        style  = _AREA_TYPE_STYLE.get(atype, {"color": "#AAAAAA", "label": atype})
+        color  = style["color"]
+        alpha  = 0.55 if atype == "door" else 0.25
+        lw     = 2.5  if atype == "door" else 1.5
+
+        patch = plt.Polygon(
+            poly, closed=True, fill=True,
+            facecolor=color, edgecolor=color,
+            linewidth=lw, alpha=alpha, zorder=6,
+        )
+        ax.add_patch(patch)
+
+        pts = np.array(poly)
+        cx, cy = pts[:, 0].mean(), pts[:, 1].mean()
+        short = (area["name"]
+                 .replace("_zone_", "\n")
+                 .replace("shelf_column_", "S")
+                 .replace("aisle_", "A"))
+        ax.text(cx, cy, short, ha="center", va="center",
+                fontsize=6.5, fontweight="bold", color="white",
+                bbox=dict(boxstyle="round,pad=0.15", facecolor=color,
+                          edgecolor="none", alpha=0.80),
+                zorder=7)
+        seen_types.add(atype)
+    return seen_types
+
+
+def main(output_path, areas_path=None):
+    if areas_path is None:
+        areas_path = DEFAULT_AREAS
     cameras = load_all_cameras()
     if not cameras:
         print(f"No homography JSON files found in {HOMOGRAPHY_DIR}")
@@ -239,6 +293,12 @@ def main(output_path):
             zorder=11
         )
 
+    # Area polygons overlay
+    areas = _load_areas(areas_path)
+    seen_area_types = _draw_area_polygons(ax, areas)
+    if areas:
+        print(f"Overlaid {len(areas)} area polygon(s) from {areas_path}")
+
     # Metric grid (5 m spacing)
     for xt in range(math.ceil(WC.WALL_X_MIN / 5) * 5, int(WC.WALL_X_MAX) + 1, 5):
         ax.axvline(xt, color="#DDDDDD", linewidth=0.5, zorder=0)
@@ -265,6 +325,14 @@ def main(output_path):
             mpatches.Patch(facecolor=color, alpha=0.4, edgecolor=color,
                            label=f"{cam['name']} FOV  z={cam['tz']:.1f}m")
         )
+    for atype in ("door", "loading", "staging", "shelf", "aisle"):
+        if atype in seen_area_types:
+            style = _AREA_TYPE_STYLE[atype]
+            legend_handles.append(
+                mpatches.Patch(facecolor=style["color"], alpha=0.5,
+                               edgecolor=style["color"],
+                               label=f"Area: {style['label']}")
+            )
     ax.legend(handles=legend_handles, loc="upper right", fontsize=8,
               framealpha=0.9, edgecolor="#CCCCCC")
 
@@ -287,5 +355,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate metric BEV warehouse map.")
     parser.add_argument("--output", default=DEFAULT_OUTPUT,
                         help=f"Output PNG path (default: {DEFAULT_OUTPUT})")
+    parser.add_argument("--areas", default=DEFAULT_AREAS,
+                        help=f"area_polygons.json path (default: {DEFAULT_AREAS})")
     args = parser.parse_args()
-    main(args.output)
+    main(args.output, args.areas)
