@@ -14,8 +14,7 @@ Verification frames are read from FRAMES_DIR (Replicator BasicWriter output).
 
 Usage:
     conda run -n isaac_scenario python generate_metadata/generate_all.py
-    conda run -n isaac_scenario python generate_metadata/generate_all.py \\
-        --frames-dir /media/storage/replicator/_out_sdrec_2 --frame 500
+    conda run -n isaac_scenario python generate_metadata/generate_all.py --frames-dir /media/storage/replicator/_out_sdrec_5 --frame 500
 
 Pass --help for all output path overrides.
 """
@@ -67,7 +66,6 @@ def main():
     # ── Step 1: homography ────────────────────────────────────────────────────
     print("=" * 60)
     print("STEP 1 — Homography")
-    print(f"  Source : {_hom.CAMERAS_USD}")
     print(f"  Output : {_hom.OUTPUT_DIR}/")
     print("=" * 60)
     _hom.main()
