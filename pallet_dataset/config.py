@@ -26,11 +26,37 @@ ASSET_POOL_SIZE = 20   # max unique pallet types per run
 
 # ── Object density — unified budget ──────────────────────────────────────────
 # Total objects per frame across all classes (pallets + forklifts + boxes).
+# This is the budget for "normal" mode frames — dense_boxes / forklift_focus
+# modes (see below) draw boxes from a separate, larger pool.
 MIN_OBJECTS           = 2
 MAX_OBJECTS           = 5
 MAX_FORKLIFTS         = 2     # VRAM guard: articulated robot meshes are large
-MAX_OBJECTS_PER_IMAGE = 6     # discard filter (buffer above MAX_OBJECTS budget)
+MAX_OBJECTS_PER_IMAGE = 30    # discard filter — raised to admit dense_boxes frames
 MAX_PALLETS           = 5     # pallet slot pre-allocation count (= MAX_OBJECTS)
+
+# ── Scene mode weighting ──────────────────────────────────────────────────────
+# Each frame randomly picks a scene mode, biasing placement toward two
+# training-signal gaps the plain uniform sampler above misses: dense box
+# clutter, and forklift viewpoint/occlusion diversity. Values are relative
+# weights (need not sum to 1 — passed straight to random.choices()).
+SCENE_MODE_WEIGHTS = {
+    "normal":         0.4,
+    "dense_boxes":    0.3,
+    "forklift_focus": 0.3,
+}
+
+# Dense-box-clutter mode — boxes packed around the cluster centre with a much
+# smaller separation than pallets so they crowd/partially overlap like real
+# dense stacks, instead of the sparse uniform scatter used in "normal" mode.
+MIN_BOXES_DENSE      =  8
+MAX_BOXES_DENSE       = 20     # box count target for "dense_boxes" scenes
+MIN_BOX_SEPARATION   = 0.35    # much tighter than MIN_PALLET_SEPARATION (0.8)
+
+# Forklift-focus mode — guarantees a forklift near the camera's look-at point
+# and sweeps camera azimuth fully around it, instead of "normal" mode's
+# camera-cluster / forklift-position independence (which frequently leaves
+# forklifts out of frame or off to one side).
+FORKLIFT_FOCUS_OCCLUDER_PROB = 0.5   # chance of placing 1-2 occluders in front
 
 # ── Placement geometry ────────────────────────────────────────────────────────
 # Cluster centre is sampled from CLUSTER_* bounds; individual pallets scatter
@@ -61,9 +87,19 @@ CAM_SENSOR_WIDTH_MM = 36.0   # horizontal aperture (mm) — standard 35 mm equiv
 # ── Annotation filtering ──────────────────────────────────────────────────────
 MIN_BOX_SIZE          = 0.02  # min bbox w or h as fraction of image dimension
 MAX_BOX_SIZE          = 0.90  # max bbox w or h as fraction of image dimension
-MIN_VISIBLE_FRACTION  = 0.25  # reject if clipped to < 25 % of raw bbox area
+MIN_VISIBLE_FRACTION  = 0.25  # default: reject if clipped to < 25 % of raw bbox area
 BRIGHTNESS_MIN        = 20    # mean pixel value lower bound  (reject too-dark)
 BRIGHTNESS_MAX        = 230   # mean pixel value upper bound  (reject too-bright)
+
+# Per-class override of MIN_VISIBLE_FRACTION. Forklift gets a much lower floor
+# than pallet/box: partially-occluded forklift instances are exactly the
+# training signal forklift_focus mode exists to produce, so the blanket 0.25
+# filter above would otherwise discard them before they ever reach the dataset.
+MIN_VISIBLE_FRACTION_BY_CLASS = {
+    "pallet":   MIN_VISIBLE_FRACTION,
+    "box":      MIN_VISIBLE_FRACTION,
+    "forklift": 0.10,
+}
 
 # ── Pallet asset lists ────────────────────────────────────────────────────────
 
@@ -223,13 +259,17 @@ _BOX_CANDIDATES = [
 ALL_BOX_ASSETS = _available(_BOX_CANDIDATES)
 
 # ── Box placement ─────────────────────────────────────────────────────────────
-# Boxes are scattered in the loading + staging zone corridor
-N_BOX_SLOTS      = 4    # pre-allocated USD slots (max = MAX_OBJECTS − 1 pallet)
+# Boxes are scattered in the loading + staging zone corridor ("normal" mode).
+N_BOX_SLOTS      = MAX_BOXES_DENSE   # pre-allocated USD slots — sized for dense_boxes mode
 # Bounding rectangle for box scatter (loading dock + staging corridor)
 BOX_X_MIN        = -21.0
 BOX_X_MAX        =  -1.0
 BOX_Y_MIN        = -23.0  # just inside the south wall (loading zone)
 BOX_Y_MAX        =  -4.0  # northern edge of staging zone
+
+# dense_boxes mode packs boxes around the cluster centre (cx, cy) instead of
+# the fixed corridor rectangle above, using the same radius as pallet scatter.
+DENSE_BOX_SCATTER_RADIUS = SCATTER_RADIUS
 
 # ── Lighting randomisation ────────────────────────────────────────────────────
 DOME_INTENSITY_MIN   =   50.0   # ambient dome dim (overcast indoor feel)

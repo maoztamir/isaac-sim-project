@@ -250,16 +250,20 @@ def _save_rgb(arr, path):
 def _save_yolo(bbox_data, img_w, img_h, path):
     """Write a YOLO label file after applying all quality filters.
 
-    Returns the number of annotations written.
-    Returns 0 (without writing) if the frame should be discarded entirely
-    (zero valid annotations, or annotation count exceeds MAX_OBJECTS_PER_IMAGE).
+    Returns (count, forklift_vis_fracs):
+      count               number of annotations written (0 if the frame is
+                           discarded entirely — zero valid annotations, or
+                           annotation count exceeds MAX_OBJECTS_PER_IMAGE)
+      forklift_vis_fracs  visible-area fraction of each admitted forklift
+                           annotation, for occlusion-diversity reporting
     """
     if not isinstance(bbox_data, dict):
-        return 0
+        return 0, []
     data   = bbox_data.get("data")
     labels = (bbox_data.get("info") or {}).get("idToLabels", {})
 
     lines = []
+    fl_vis_fracs = []
     if data is not None and len(data) > 0:
         for row in data:
             sem_id  = int(row["semanticId"])
@@ -283,14 +287,20 @@ def _save_yolo(bbox_data, img_w, img_h, path):
             if x_max < 0 or y_max < 0 or x_min >= img_w or y_min >= img_h:
                 continue
 
-            # Reject heavily clipped boxes (visible area < MIN_VISIBLE_FRACTION)
+            # Reject heavily clipped boxes (visible area < per-class floor).
+            # Forklift uses a much lower floor than pallet/box — partially
+            # occluded forklift instances are the training signal
+            # forklift_focus mode exists to produce, not noise to discard.
+            min_vis_frac = C.MIN_VISIBLE_FRACTION_BY_CLASS.get(
+                sem_lbl, C.MIN_VISIBLE_FRACTION
+            )
             raw_area = (x_max - x_min) * (y_max - y_min)
             cx_min   = max(0.0, x_min)
             cy_min   = max(0.0, y_min)
             cx_max   = min(float(img_w), x_max)
             cy_max   = min(float(img_h), y_max)
-            vis_area = max(0.0, cx_max - cx_min) * max(0.0, cy_max - cy_min)
-            if raw_area > 0 and vis_area / raw_area < C.MIN_VISIBLE_FRACTION:
+            vis_frac = vis_area / raw_area if raw_area > 0 else 0.0
+            if vis_frac < min_vis_frac:
                 continue
 
             # Normalise using the clamped (visible) box
@@ -304,15 +314,17 @@ def _save_yolo(bbox_data, img_w, img_h, path):
             if bw > C.MAX_BOX_SIZE or bh > C.MAX_BOX_SIZE:
                 continue
 
+            if sem_lbl == "forklift":
+                fl_vis_fracs.append(vis_frac)
             lines.append(f"{class_id} {cx_n:.6f} {cy_n:.6f} {bw:.6f} {bh:.6f}")
 
     count = len(lines)
     if count == 0 or count > C.MAX_OBJECTS_PER_IMAGE:
-        return 0
+        return 0, []
 
     with open(path, "w") as fh:
         fh.write("\n".join(lines))
-    return count
+    return count, fl_vis_fracs
 
 
 # ── Main generation coroutine ─────────────────────────────────────────────────
@@ -539,6 +551,11 @@ async def _run():
     placed_forklifts_sum = 0
     placed_boxes_sum     = 0
     combo_counts         = {}
+    scene_modes          = list(C.SCENE_MODE_WEIGHTS.keys())
+    scene_mode_weights   = list(C.SCENE_MODE_WEIGHTS.values())
+    scene_mode_attempted = {m: 0 for m in scene_modes}
+    scene_mode_saved     = {m: 0 for m in scene_modes}
+    forklift_vis_fracs   = []
 
     for frame_idx in range(C.NUM_FRAMES):
 
@@ -558,17 +575,49 @@ async def _run():
         cx = rng.uniform(C.CLUSTER_X_MIN, C.CLUSTER_X_MAX)
         cy = rng.uniform(C.CLUSTER_Y_MIN, C.CLUSTER_Y_MAX)
 
-        # Reposition cameras: even index → close shot, odd index → far shot
-        for i, cam_prim in enumerate(cam_prims):
-            eye, target, focal_mm = _random_camera_pose(rng, cx, cy, close=(i % 2 == 0))
-            _update_camera(cam_prim, eye, target, focal_mm)
+        # Scene mode — biases placement toward dense box clutter or forklift
+        # viewpoint/occlusion diversity, on top of the "normal" uniform sampler.
+        scene_mode = rng.choices(scene_modes, weights=scene_mode_weights)[0]
+        scene_mode_attempted[scene_mode] += 1
 
         # Unified object budget: pallets + forklifts + boxes = n_total
-        n_total     = rng.randint(C.MIN_OBJECTS, C.MAX_OBJECTS)
-        n_forklifts = rng.randint(0, min(n_total - 1, C.MAX_FORKLIFTS)) if forklift_pool else 0
-        remaining   = n_total - n_forklifts
-        n_pallets   = rng.randint(1, remaining)
-        n_boxes     = remaining - n_pallets
+        if scene_mode == "dense_boxes":
+            n_boxes     = rng.randint(C.MIN_BOXES_DENSE, C.MAX_BOXES_DENSE)
+            n_forklifts = rng.randint(0, min(1, C.MAX_FORKLIFTS)) if forklift_pool else 0
+            n_pallets   = rng.randint(0, min(3, C.MAX_PALLETS))
+        elif scene_mode == "forklift_focus":
+            n_forklifts = 1 if forklift_pool else 0
+            remaining   = rng.randint(C.MIN_OBJECTS, C.MAX_OBJECTS) - n_forklifts
+            n_pallets   = rng.randint(1, max(1, remaining))
+            n_boxes     = max(0, remaining - n_pallets)
+        else:  # "normal"
+            n_total     = rng.randint(C.MIN_OBJECTS, C.MAX_OBJECTS)
+            n_forklifts = rng.randint(0, min(n_total - 1, C.MAX_FORKLIFTS)) if forklift_pool else 0
+            remaining   = n_total - n_forklifts
+            n_pallets   = rng.randint(1, remaining)
+            n_boxes     = remaining - n_pallets
+
+        # forklift_focus: pin the (single) forklift near the cluster centre and
+        # point the cameras at IT instead of (cx, cy) — the "normal" sampler
+        # places forklifts fully independently of camera focus, so most
+        # forklift instances end up off-centre or outside the frustum.
+        fl_focus_xy = None
+        if scene_mode == "forklift_focus" and n_forklifts > 0:
+            jr, jt = rng.uniform(0.0, 1.5), rng.uniform(0.0, 2.0 * math.pi)
+            fl_focus_xy = (
+                max(C.FLOOR_X_MIN, min(C.FLOOR_X_MAX, cx + jr * math.cos(jt))),
+                max(C.FLOOR_Y_MIN, min(C.FLOOR_Y_MAX, cy + jr * math.sin(jt))),
+            )
+        look_x, look_y = fl_focus_xy if fl_focus_xy is not None else (cx, cy)
+
+        # Reposition cameras: even index → close shot, odd index → far shot.
+        # cam_0's eye is kept for forklift_focus occluder placement below.
+        cam0_eye = None
+        for i, cam_prim in enumerate(cam_prims):
+            eye, target, focal_mm = _random_camera_pose(rng, look_x, look_y, close=(i % 2 == 0))
+            _update_camera(cam_prim, eye, target, focal_mm)
+            if i == 0:
+                cam0_eye = eye
 
         poses = _place_with_spacing(
             rng, n_pallets, cx, cy, C.SCATTER_RADIUS, C.MIN_PALLET_SEPARATION
@@ -593,21 +642,53 @@ async def _run():
             else:
                 close_gate(stage, _gi, WC.PANEL_N)
 
-        # Place forklifts (pose + visibility only; ref fixed at startup)
+        # Place forklifts (pose + visibility only; ref fixed at startup).
+        # In forklift_focus mode, slot 0 goes to the camera-targeted position.
         for _fi, (fl_prim, fl_scale) in enumerate(zip(fl_prims, fl_scales)):
             if _fi < n_forklifts:
-                fl_x = rng.uniform(WC.NAV_X_MIN, WC.NAV_X_MAX)
-                fl_y = rng.uniform(WC.NAV_Y_MIN, WC.NAV_Y_MAX)
+                if _fi == 0 and fl_focus_xy is not None:
+                    fl_x, fl_y = fl_focus_xy
+                else:
+                    fl_x = rng.uniform(WC.NAV_X_MIN, WC.NAV_X_MAX)
+                    fl_y = rng.uniform(WC.NAV_Y_MIN, WC.NAV_Y_MAX)
                 _set_prim_pose(fl_prim, fl_x, fl_y, rng.uniform(0.0, 360.0), fl_scale)
                 _set_visibility(fl_prim, True)
             else:
                 _set_visibility(fl_prim, False)
 
+        # Determine box positions for this frame.
+        if scene_mode == "dense_boxes":
+            # Packed around the cluster centre with a tight separation so
+            # boxes crowd/partially overlap like real dense stacks.
+            box_positions = [
+                (x, y) for x, y, _ in _place_with_spacing(
+                    rng, n_boxes, cx, cy, C.DENSE_BOX_SCATTER_RADIUS, C.MIN_BOX_SEPARATION
+                )
+            ]
+        else:
+            box_positions = [
+                (rng.uniform(C.BOX_X_MIN, C.BOX_X_MAX), rng.uniform(C.BOX_Y_MIN, C.BOX_Y_MAX))
+                for _ in range(n_boxes)
+            ]
+
+        # forklift_focus: optionally inject 1-2 occluders on the line between
+        # cam_0 and the forklift, so it's genuinely partially blocked rather
+        # than just clipped by the frame edge.
+        if (scene_mode == "forklift_focus" and fl_focus_xy is not None
+                and cam0_eye is not None and rng.random() < C.FORKLIFT_FOCUS_OCCLUDER_PROB):
+            ex, ey, _ = cam0_eye
+            fx0, fy0  = fl_focus_xy
+            occluders = []
+            for _ in range(rng.randint(1, 2)):
+                t = rng.uniform(0.3, 0.7)
+                occluders.append((ex + t * (fx0 - ex), ey + t * (fy0 - ey)))
+            box_positions = (occluders + box_positions)[:C.N_BOX_SLOTS]
+            n_boxes = len(box_positions)
+
         # Place boxes (pose + visibility only; ref fixed at startup)
         for _bi, (box_prim, bx_scale) in enumerate(zip(box_prims, box_scales)):
-            if _bi < n_boxes:
-                bx_x = rng.uniform(C.BOX_X_MIN, C.BOX_X_MAX)
-                bx_y = rng.uniform(C.BOX_Y_MIN, C.BOX_Y_MAX)
+            if _bi < len(box_positions):
+                bx_x, bx_y = box_positions[_bi]
                 _set_prim_pose(box_prim, bx_x, bx_y, rng.uniform(0.0, 360.0), bx_scale)
                 _set_visibility(box_prim, True)
             else:
@@ -635,8 +716,8 @@ async def _run():
             if not _check_brightness(arr):
                 continue
 
-            lbl_path = os.path.join(C.OUTPUT_DIR, cam_name, "labels", f"{fname}.txt")
-            count    = _save_yolo(bbox_data, W, H, lbl_path)
+            lbl_path       = os.path.join(C.OUTPUT_DIR, cam_name, "labels", f"{fname}.txt")
+            count, fl_vis  = _save_yolo(bbox_data, W, H, lbl_path)
             if count == 0:
                 if os.path.exists(lbl_path):
                     os.remove(lbl_path)
@@ -645,12 +726,14 @@ async def _run():
             _save_rgb(arr, os.path.join(C.OUTPUT_DIR, cam_name, "rgb", f"{fname}.png"))
             frame_saved  += 1
             images_saved += 1
+            forklift_vis_fracs.extend(fl_vis)
 
         if frame_saved > 0:
             frames_with_any      += 1
             placed_pallets_sum   += n_pallets
             placed_forklifts_sum += n_forklifts
             placed_boxes_sum     += n_boxes
+            scene_mode_saved[scene_mode] += 1
             key = (n_pallets, n_forklifts, n_boxes)
             combo_counts[key] = combo_counts.get(key, 0) + 1
 
@@ -660,7 +743,7 @@ async def _run():
             remain  = (C.NUM_FRAMES - frame_idx - 1) / max(fps, 1e-6)
             print(
                 f"[pallet_dataset] frame {frame_idx+1:4d}/{C.NUM_FRAMES}"
-                f"  total={n_total}(p={n_pallets} f={n_forklifts} b={n_boxes})"
+                f"  mode={scene_mode}(p={n_pallets} f={n_forklifts} b={n_boxes})"
                 f"  saved={frame_saved}/{C.N_CAMERAS}"
                 f"  {fps:.1f} fps  ETA {remain/60:.1f} min"
             )
@@ -707,6 +790,18 @@ async def _run():
         for p, f, b in top:
             cnt = combo_counts[(p, f, b)]
             print(f"    p={p} f={f} b={b} : {cnt:5,} frames  ({100*cnt/saved_f:.1f}%)")
+        print(SEP)
+        print(f"  Scene mode breakdown (attempted → saved):")
+        for m in scene_modes:
+            print(f"    {m:<15} : {scene_mode_attempted[m]:>5,} → {scene_mode_saved[m]:>5,}")
+        if forklift_vis_fracs:
+            avg_vis = sum(forklift_vis_fracs) / len(forklift_vis_fracs)
+            n_partial = sum(1 for v in forklift_vis_fracs if v < 0.6)
+            print(f"  Forklift occlusion/angle diversity:")
+            print(f"    annotations        : {len(forklift_vis_fracs):>8,}")
+            print(f"    avg visible frac   : {avg_vis:.2f}")
+            print(f"    partial (<60% vis) : {n_partial:>8,}"
+                  f"   ({100*n_partial/len(forklift_vis_fracs):.1f}%)")
     print(f"{SEP}\n")
 
     info.update({
@@ -721,6 +816,12 @@ async def _run():
         "combined_forklifts":    comb_forklifts,
         "combined_boxes":        comb_boxes,
         "combo_distribution":    {f"p{p}f{f}b{b}": c for (p, f, b), c in combo_counts.items()},
+        "scene_mode_attempted":  scene_mode_attempted,
+        "scene_mode_saved":      scene_mode_saved,
+        "forklift_vis_frac_avg": (
+            sum(forklift_vis_fracs) / len(forklift_vis_fracs) if forklift_vis_fracs else None
+        ),
+        "forklift_vis_frac_n":   len(forklift_vis_fracs),
     })
     with open(os.path.join(C.OUTPUT_DIR, "dataset_info.json"), "w") as fh:
         json.dump(info, fh, indent=2)
