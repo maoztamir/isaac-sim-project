@@ -12,8 +12,12 @@ LOCAL_5_1 = "/home/ubuntu/isaacsim_assets/Assets/Isaac/5.1"
 LOCAL_5_0 = "/home/ubuntu/isaacsim_assets/Assets/Isaac/5.0"
 
 # ── Output ────────────────────────────────────────────────────────────────────
-OUTPUT_DIR   = "/media/storage/pallet_dataset"
-NUM_FRAMES   = 3600   # targets ~5,300 synthetic images ≈ 16% supplement to 27,948 real
+# PILOT RUN: pointed at a separate dir with a small frame count to sanity-check
+# the new scene-mode sampler before committing to a full run. Revert both
+# lines to OUTPUT_DIR="/media/storage/pallet_dataset" and NUM_FRAMES=3600 for
+# the real run — the existing 3600-frame dataset there must not be overwritten.
+OUTPUT_DIR   = "/media/storage/pallet_dataset_pilot"
+NUM_FRAMES   = 100     # pilot size (full run target is 3600 → ~5,300 images)
 RESOLUTION   = (960, 540)   # lower than 1280×720 to reduce RTX VRAM per render product
 SEED         = 42
 RT_SUBFRAMES = 1            # 4 subframes × 4 cameras was the main VRAM pressure
