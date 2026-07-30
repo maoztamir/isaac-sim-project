@@ -74,12 +74,13 @@ def frames_to_video(
     fps: int,
     preset: str,
     label: str,
-    show_progress: bool = True,
+    master_bar: "tqdm | None" = None,
 ) -> bool:
     """Encode a sorted frame list to MP4.
 
-    Uses ffmpeg's -progress pipe:1 to stream frame counts to stdout so
-    the bar updates in real time without polling.
+    Streams frame counts from ffmpeg's -progress pipe and updates *master_bar*
+    (a shared tqdm instance) so the caller can show a unified ETA across all
+    videos. Thread-safe: multiple workers can update the same bar in parallel.
     Returns True on success.
     """
     list_path = os.path.join(frame_folder, "_ffmpeg_input.txt")
@@ -123,34 +124,26 @@ def frames_to_video(
         t = threading.Thread(target=_drain, args=(proc.stderr, stderr_lines), daemon=True)
         t.start()
 
-        if show_progress:
-            with tqdm(
-                total=total,
-                desc=f"  {label}",
-                unit="fr",
-                ncols=80,
-                colour="green",
-                leave=True,
-            ) as bar:
-                last = 0
-                for line in proc.stdout:
-                    if line.startswith("frame="):
-                        try:
-                            n = int(line.split("=", 1)[1].strip())
-                            bar.update(n - last)
-                            last = n
-                        except ValueError:
-                            pass
-                bar.update(total - last)
-        else:
-            proc.stdout.read()
+        last = 0
+        for line in proc.stdout:
+            if line.startswith("frame="):
+                try:
+                    n = int(line.split("=", 1)[1].strip())
+                    if master_bar is not None:
+                        master_bar.update(n - last)
+                    last = n
+                except ValueError:
+                    pass
+        # Flush any remaining frames ffmpeg didn't report in the final tick
+        if master_bar is not None and total > last:
+            master_bar.update(total - last)
 
         proc.wait()
         t.join()
 
         if proc.returncode != 0:
             err = "".join(stderr_lines)
-            print(f"  [ERROR] ffmpeg failed for {label}:\n{err[-800:]}", file=sys.stderr)
+            tqdm.write(f"  [ERROR] ffmpeg failed for {label}:\n{err[-800:]}", file=sys.stderr)
             return False
         return True
 
@@ -205,52 +198,63 @@ def main():
         print(f"\n{total_vids} video(s) would be created.")
         return
 
+    total_frames = sum(len(f) for _, f, _ in tasks)
     ok = 0
 
-    if parallel:
-        # Parallel mode: one overall bar, per-video progress suppressed to avoid
-        # interleaved output from concurrent ffmpeg processes.
-        def _encode(task):
-            folder, frames, output = task
-            rel = os.path.relpath(folder, root)
-            success = frames_to_video(
-                folder, frames, output, args.fps, args.preset,
-                label=rel, show_progress=False,
-            )
-            return rel, output, success
+    # One master bar counting total frames across all videos.
+    # tqdm derives ETA from encoding speed (fr/s), which is far more accurate
+    # than counting videos (which vary in length).
+    with tqdm(
+        total=total_frames,
+        desc="Encoding",
+        unit="fr",
+        unit_scale=True,
+        ncols=90,
+        colour="blue",
+        dynamic_ncols=False,
+    ) as master:
 
-        with tqdm(total=total_vids, desc="Encoding", unit="video",
-                  ncols=80, colour="blue") as bar:
+        if parallel:
+            def _encode(task):
+                folder, frames, output = task
+                rel = os.path.relpath(folder, root)
+                master.set_postfix_str(
+                    f"{ok+1}/{total_vids} active", refresh=False
+                )
+                success = frames_to_video(
+                    folder, frames, output, args.fps, args.preset,
+                    label=rel, master_bar=master,
+                )
+                return rel, output, success
+
             with ThreadPoolExecutor(max_workers=args.jobs) as pool:
                 futures = {pool.submit(_encode, t): t for t in tasks}
                 for fut in as_completed(futures):
                     rel, output, success = fut.result()
                     if success:
                         size_mb = os.path.getsize(output) / 1e6
-                        tqdm.write(f"  ✓  {rel}  →  {output}  ({size_mb:.1f} MB)")
+                        tqdm.write(f"  ✓  {rel}  ({size_mb:.1f} MB)  →  {output}")
                         ok += 1
                     else:
                         tqdm.write(f"  ✗  {rel}  failed — see errors above")
-                    bar.update(1)
-    else:
-        # Sequential mode: per-video progress bar.
-        outer = tqdm(tasks, desc="Overall", unit="video",
-                     ncols=80, colour="blue", position=0, leave=True)
-        for folder, frames, output in outer:
-            rel = os.path.relpath(folder, root)
-            outer.set_postfix_str(rel[:40])
-            tqdm.write(f"\n→  {rel}  ({len(frames)} frames)  →  {os.path.basename(output)}")
-            success = frames_to_video(
-                folder, frames, output, args.fps, args.preset,
-                label=rel, show_progress=True,
-            )
-            if success:
-                size_mb = os.path.getsize(output) / 1e6
-                tqdm.write(f"   ✓  {output}  ({size_mb:.1f} MB)")
-                ok += 1
-            else:
-                tqdm.write(f"   ✗  failed — see errors above")
-        outer.close()
+                    master.set_postfix_str(f"{ok}/{total_vids} done", refresh=True)
+
+        else:
+            for folder, frames, output in tasks:
+                rel = os.path.relpath(folder, root)
+                tqdm.write(f"\n→  {rel}  ({len(frames)} frames)")
+                master.set_description(rel[-35:])
+                success = frames_to_video(
+                    folder, frames, output, args.fps, args.preset,
+                    label=rel, master_bar=master,
+                )
+                if success:
+                    size_mb = os.path.getsize(output) / 1e6
+                    tqdm.write(f"   ✓  {output}  ({size_mb:.1f} MB)")
+                    ok += 1
+                else:
+                    tqdm.write(f"   ✗  failed — see errors above")
+                master.set_postfix_str(f"{ok}/{total_vids} done", refresh=True)
 
     print(f"\n{ok}/{total_vids} videos created.")
 
