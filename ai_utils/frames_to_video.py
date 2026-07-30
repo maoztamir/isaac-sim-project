@@ -12,10 +12,17 @@ Expected layout:
         Replicator_02/rgb/rgb_0000.png ...
 
 Usage:
-    python frames_to_video.py /media/storage/replicator/_out_sdrec
-    python frames_to_video.py /media/storage/replicator/_out_sdrec --fps 24 --out /tmp/videos
-    python frames_to_video.py /media/storage/replicator/_out_sdrec --dry-run
-    conda run -n isaac_scenario python frames_to_video.py /media/storage/replicator/_out_sdrec_2 --fps 35 --out /media/storage/replicator/_out_sdrec_10
+    # Basic (sequential, veryfast preset):
+    python frames_to_video.py /media/storage/replicator/_out_sdrec6 --fps 35 --out /media/storage/replicator/videos
+
+    # Parallel — encode all cameras at once (fastest):
+    python frames_to_video.py /media/storage/replicator/_out_sdrec6 --fps 35 --out /media/storage/replicator/videos --jobs 4
+
+    # Parallel + ultrafast preset (biggest speed gain, slightly larger files):
+    python frames_to_video.py /media/storage/replicator/_out_sdrec6 --fps 35 --out /media/storage/replicator/videos --jobs 4 --preset ultrafast
+
+    # Dry run — print what would be encoded without running ffmpeg:
+    python frames_to_video.py /media/storage/replicator/_out_sdrec6 --dry-run
 """
 
 from __future__ import annotations
