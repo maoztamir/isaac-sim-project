@@ -1,7 +1,7 @@
 [main] logging to /home/ubuntu/isaac_sim_samples/isaac-sim-project/tests/output/main.log
 [main] Loading scenario: showcase
 [main] warehouse_sim loaded from: /home/ubuntu/isaac_sim_samples/isaac-sim-project/warehouse_sim/__init__.py
-[main] Preset scenarios:  ['dock_queue', 'dock_queue_pedestrian', 'loading_pause', 'loading_pause_004', 'area_buildup', 'aisle_congestion', 'showcase', 'door_cycle', 'mixed_floor', 'dock_queue_forming', 'door_idle', 'live_alerts']
+[main] Preset scenarios:  ['dock_queue', 'dock_queue_pedestrian', 'loading_pause', 'loading_pause_004', 'area_buildup', 'aisle_congestion', 'showcase', 'door_cycle', 'mixed_floor', 'dock_queue_forming', 'door_idle', 'live_alerts', 'pallet_occupancy', 'floor_occupancy', 'overspill_detection']
 [main] Config scenarios:  ['vehicle_idle']
 [main] STAGING_CENTER_Y = -7.65 (expect ~ -7.65)
 [main] Instantiating ShowcaseScenario ...
@@ -313,3 +313,2178 @@
   Pedestrian(id=0, name=Character, state=walking, wps=4)
   Pedestrian(id=1, name=Character_01, state=walking, wps=4)
   [events] total=4093  proximity=0  idle=1  queue=16  buildup=4076  ped_near_miss=0
+[showcase] t=100s | loaded=2 unloaded=2 | at_dock=3 staging_queue=0
+[showcase] t=100.0s
+  FL0: ( -17.7, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -14.4, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL2: (  -5.9, -19.1) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -14.4) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=9  FL0=12.7s FL1=29.5s FL2=2.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=14  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.00m/s  entries=6  exits=3  peak=3  occ-s=112.3  max_dwell=29.5s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=7  exits=7  peak=2  occ-s=26.3  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=3  occ-s=69.5  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=4693  proximity=0  idle=1  queue=16  buildup=4676  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL0
+[showcase] t=110s | loaded=1 unloaded=3 | at_dock=2 staging_queue=0
+[showcase] t=110.0s
+  FL0: ( -15.3, -19.2) spd=1.3 state=returning area=LoadingZone
+  FL1: ( -17.2,  -3.9) spd=2.9 state=returning area=open
+  FL2: (  -5.9, -20.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -15.9) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=10  FL0=22.7s FL2=12.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=16  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=6  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.67m/s  entries=6  exits=4  peak=3  occ-s=137.0  max_dwell=34.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=2  occ-s=28.8  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=3  occ-s=69.5  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=5293  proximity=0  idle=1  queue=16  buildup=5276  ped_near_miss=0
+[SDR][Warn] Disabling replicator capture on play flag during recording.
+[RuleEngine] FL1: returning → idle
+[RuleEngine] FL1: idle → pickup_at_shelves
+[RuleEngine] FL1: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL1 (pickup)
+[showcase] t=120s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=120.0s
+  FL0: ( -16.7,  -0.5) spd=0.4 state=returning area=open
+  FL1: ( -15.1,   5.6) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.9, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.4, -16.9) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=11  FL2=22.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=18  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=7  FL1=7.4s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=6  exits=5  peak=3  occ-s=147.2  max_dwell=34.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=9  exits=9  peak=2  occ-s=31.3  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.75m/s  entries=4  exits=3  peak=3  occ-s=76.9  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=5893  proximity=0  idle=1  queue=16  buildup=5876  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL1: move_to_staging → move_to_loading
+[SDR][Warn] Re-enabled replicator capture on play flag after recording.
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[showcase] t=130s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=130.0s
+  FL0: ( -15.7,   5.0) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL1: ( -17.8, -12.3) spd=2.8 state=move_to_loading area=open
+  FL2: (  -6.0, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.4, -17.2) spd=0.1 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=11  FL2=32.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=20  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=9  FL0=6.1s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=6  exits=5  peak=3  occ-s=157.2  max_dwell=34.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=10  exits=10  peak=2  occ-s=35.0  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.75m/s  entries=5  exits=4  peak=3  occ-s=85.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=6493  proximity=0  idle=1  queue=16  buildup=6476  ped_near_miss=0
+[RuleEngine] FL1: move_to_loading → loading
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=140s | loaded=3 unloaded=1 | at_dock=2 staging_queue=1
+[showcase] t=140.0s
+  FL0: ( -17.2,  -8.7) spd=2.6 state=move_to_loading area=StagingArea
+  FL1: ( -17.7, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL2: (  -6.1, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.4, -17.1) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=12  FL1=7.7s FL2=42.0s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=21  FL0=2.8s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=10  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=7  exits=5  peak=3  occ-s=175.0  max_dwell=42.0s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.63m/s  entries=11  exits=10  peak=2  occ-s=37.7  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=5  exits=5  peak=3  occ-s=89.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=7093  proximity=0  idle=1  queue=16  buildup=7076  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=150s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=150.0s
+  FL0: ( -17.8, -12.9) spd=0.0 state=move_to_loading area=open
+  FL1: ( -17.7, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL2: (  -5.4, -18.7) spd=0.0 state=returning area=open
+  FL3: (  -3.4, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=14  FL1=17.7s FL3=2.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=22  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=10  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=8  exits=6  peak=3  occ-s=197.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=11  exits=11  peak=2  occ-s=38.7  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=5  exits=5  peak=3  occ-s=89.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=7694  proximity=1  idle=1  queue=16  buildup=7676  ped_near_miss=0
+[RuleEngine] FL1: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL1
+[showcase] t=160s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=160.0s
+  FL0: ( -17.8, -14.0) spd=0.4 state=move_to_loading area=open
+  FL1: ( -15.2, -18.7) spd=0.4 state=returning area=open
+  FL2: (  -5.2, -18.2) spd=0.0 state=returning area=open
+  FL3: (  -3.4, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=15  FL3=12.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=22  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=10  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=8  exits=7  peak=3  occ-s=212.2  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=11  exits=11  peak=2  occ-s=38.7  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=5  exits=5  peak=3  occ-s=89.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=8294  proximity=1  idle=1  queue=16  buildup=8276  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 0 dropped at dock by FL3
+[showcase] t=170s | loaded=1 unloaded=3 | at_dock=1 staging_queue=0
+[showcase] t=170.0s
+  FL0: ( -17.8, -15.4) spd=0.7 state=move_to_loading area=open
+  FL1: ( -15.1, -20.0) spd=0.4 state=returning area=LoadingZone
+  FL2: (  -4.9,   3.6) spd=3.0 state=returning area=ShelvesArea
+  FL3: (  -1.1, -19.3) spd=1.3 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=19  FL1=6.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=24  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=11  FL2=0.0s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=10  exits=9  peak=3  occ-s=228.7  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=12  exits=12  peak=2  occ-s=41.1  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=2.99m/s  entries=6  exits=5  peak=3  occ-s=89.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=8895  proximity=2  idle=1  queue=16  buildup=8876  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 0 → FL2 (pickup)
+[showcase] t=180s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=180.0s
+  FL0: ( -17.7, -17.0) spd=0.5 state=move_to_loading area=open
+  FL1: ( -15.0, -21.5) spd=0.4 state=returning area=LoadingZone
+  FL2: (  -7.9,   4.0) spd=2.0 state=move_to_staging area=ShelvesArea
+  FL3: (  -4.7,   0.6) spd=1.2 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=19  FL1=16.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=26  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=11  FL2=10.0s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=10  exits=9  peak=3  occ-s=238.7  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=13  exits=13  peak=2  occ-s=43.6  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=1.96m/s  entries=6  exits=5  peak=3  occ-s=99.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=9495  proximity=2  idle=1  queue=16  buildup=9476  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=190s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=190.0s
+  FL0: ( -17.7, -17.5) spd=0.0 state=move_to_loading area=open
+  FL1: ( -14.9, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.9,   6.0) spd=0.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=20  FL1=26.6s FL2=0.3s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=28  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=13  FL3=8.7s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=11  exits=9  peak=3  occ-s=249.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=14  exits=14  peak=2  occ-s=47.3  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.82m/s  entries=7  exits=6  peak=3  occ-s=108.7  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=10095  proximity=2  idle=1  queue=16  buildup=10076  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[showcase] t=200s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=200.0s
+  FL0: ( -17.7, -18.0) spd=0.0 state=move_to_loading area=open
+  FL1: ( -14.8, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.6, -12.9) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=20  FL1=36.6s FL2=10.3s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=30  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=14  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=11  exits=9  peak=3  occ-s=269.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=15  exits=15  peak=2  occ-s=50.8  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=7  exits=7  peak=3  occ-s=110.7  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=10695  proximity=2  idle=1  queue=16  buildup=10676  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 0 dropped at dock by FL2
+[showcase] t=210s | loaded=2 unloaded=2 | at_dock=2 staging_queue=1
+[showcase] t=210.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -17.3,  -4.7) spd=3.0 state=returning area=StagingArea
+  FL2: (  -4.0, -20.3) spd=0.8 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.0) spd=0.7 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=22  FL0=7.2s FL2=20.3s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=31  FL1=2.3s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=14  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.38m/s  entries=12  exits=10  peak=3  occ-s=290.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.95m/s  entries=16  exits=15  peak=2  occ-s=53.1  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=7  exits=7  peak=3  occ-s=110.7  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=11296  proximity=3  idle=1  queue=16  buildup=11276  ped_near_miss=0
+[RuleEngine] FL1: returning → idle
+[RuleEngine] FL1: idle → pickup_at_shelves
+[RuleEngine] FL1: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 0 → FL1 (pickup)
+[showcase] t=220s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=220.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -15.2,   5.6) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.7, -18.5) spd=0.2 state=returning area=open
+  FL3: (  -3.6, -13.2) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=23  FL0=17.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=32  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=15  FL1=7.2s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=12  exits=11  peak=3  occ-s=303.4  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=16  exits=16  peak=2  occ-s=53.2  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.75m/s  entries=8  exits=7  peak=3  occ-s=117.9  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=11896  proximity=3  idle=1  queue=16  buildup=11876  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[RuleEngine] FL1: move_to_staging → move_to_loading
+[showcase] t=230s | loaded=2 unloaded=2 | at_dock=1 staging_queue=1
+[showcase] t=230.0s
+  FL0: ( -17.3, -13.7) spd=0.0 state=returning area=open
+  FL1: ( -17.0,  -7.8) spd=0.0 state=move_to_loading area=StagingArea
+  FL2: (  -5.8, -19.2) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.0) spd=0.5 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=25  FL2=3.8s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=33  FL1=3.8s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=16  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=13  exits=12  peak=3  occ-s=313.1  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=17  exits=16  peak=2  occ-s=57.0  max_dwell=5.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=3  occ-s=121.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=12473  proximity=3  idle=1  queue=16  buildup=12453  ped_near_miss=0
+[showcase] t=240s | loaded=2 unloaded=2 | at_dock=1 staging_queue=1
+[showcase] t=240.0s
+  FL0: ( -17.5, -12.7) spd=0.0 state=returning area=open
+  FL1: ( -16.7,  -6.8) spd=0.0 state=move_to_loading area=StagingArea
+  FL2: (  -6.0, -20.8) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.1) spd=1.1 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=25  FL2=13.8s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=33  FL1=13.8s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=16  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=13  exits=12  peak=3  occ-s=323.1  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=17  exits=16  peak=2  occ-s=67.0  max_dwell=13.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=3  occ-s=121.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=13073  proximity=3  idle=1  queue=16  buildup=13053  ped_near_miss=0
+[showcase] t=250s | loaded=2 unloaded=2 | at_dock=1 staging_queue=1
+[showcase] t=250.0s
+  FL0: ( -17.6, -11.5) spd=0.0 state=returning area=open
+  FL1: ( -16.4,  -5.7) spd=0.0 state=move_to_loading area=StagingArea
+  FL2: (  -6.2, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -18.6) spd=1.7 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=25  FL2=23.8s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=33  FL1=23.8s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=16  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=13  exits=12  peak=3  occ-s=333.1  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=17  exits=16  peak=2  occ-s=77.0  max_dwell=23.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=3  occ-s=121.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=13673  proximity=3  idle=1  queue=16  buildup=13653  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=260s | loaded=2 unloaded=2 | at_dock=2 staging_queue=2
+[showcase] t=260.0s
+  FL0: ( -17.7, -10.3) spd=0.0 state=returning area=StagingArea
+  FL1: ( -16.1,  -4.6) spd=0.0 state=move_to_loading area=StagingArea
+  FL2: (  -6.4, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=26  FL2=33.8s FL3=9.8s
+  [StagingArea] occupancy=2/6 full=False blocked=False pallets=0 transitions=36  FL0=4.4s FL1=33.8s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=16  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=14  exits=12  peak=3  occ-s=352.9  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=2  avg_spd=0.00m/s  entries=19  exits=17  peak=2  occ-s=93.9  max_dwell=33.8s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=3  occ-s=121.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=14687  proximity=3  idle=1  queue=430  buildup=14253  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL3
+[showcase] t=270s | loaded=1 unloaded=3 | at_dock=2 staging_queue=1
+[showcase] t=270.0s
+  FL0: ( -17.6,  -9.2) spd=0.0 state=returning area=StagingArea
+  FL1: ( -15.8,  -3.5) spd=0.0 state=move_to_loading area=open
+  FL2: (  -5.9, -19.5) spd=2.5 state=returning area=LoadingZone
+  FL3: (  -3.1, -20.2) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=26  FL2=43.8s FL3=19.8s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=37  FL0=14.4s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=16  
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=1.61m/s  entries=14  exits=12  peak=3  occ-s=372.9  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=19  exits=18  peak=2  occ-s=109.1  max_dwell=39.0s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=8  exits=8  peak=3  occ-s=121.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=15597  proximity=3  idle=1  queue=740  buildup=14853  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[showcase] t=280s | loaded=1 unloaded=3 | at_dock=0 staging_queue=1
+[showcase] t=280.0s
+  FL0: ( -17.6,  -7.7) spd=0.0 state=returning area=StagingArea
+  FL1: ( -15.5,  -2.1) spd=0.0 state=move_to_loading area=open
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.2,  -3.1) spd=3.0 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=28  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=41  FL0=24.4s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=17  FL2=1.4s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=14  exits=14  peak=3  occ-s=375.6  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=21  exits=20  peak=2  occ-s=124.0  max_dwell=39.0s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=9  exits=8  peak=3  occ-s=122.4  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=16037  proximity=3  idle=1  queue=1036  buildup=14997  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[showcase] t=290s | loaded=2 unloaded=2 | at_dock=0 staging_queue=1
+[showcase] t=290.0s
+  FL0: ( -17.4,  -6.2) spd=0.0 state=returning area=StagingArea
+  FL1: ( -15.1,  -0.7) spd=0.4 state=move_to_loading area=open
+  FL2: (  -7.9,   0.9) spd=2.5 state=move_to_staging area=open
+  FL3: (  -5.0,   2.9) spd=2.8 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=28  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=41  FL0=34.4s
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=18  
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=14  exits=14  peak=3  occ-s=375.6  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.03m/s  entries=21  exits=20  peak=2  occ-s=134.0  max_dwell=39.0s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=9  exits=9  peak=3  occ-s=131.2  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=16037  proximity=3  idle=1  queue=1036  buildup=14997  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=300s | loaded=3 unloaded=1 | at_dock=1 staging_queue=1
+[showcase] t=300.0s
+  FL0: ( -17.2,  -4.6) spd=0.6 state=returning area=StagingArea
+  FL1: ( -14.7,   0.8) spd=0.4 state=move_to_loading area=open
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.7,   5.3) spd=1.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=29  FL2=1.6s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=43  FL0=44.4s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=19  FL3=9.8s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=15  exits=14  peak=3  occ-s=377.2  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.63m/s  entries=22  exits=21  peak=2  occ-s=147.7  max_dwell=44.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=1.75m/s  entries=10  exits=9  peak=3  occ-s=141.0  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=16357  proximity=3  idle=1  queue=1257  buildup=15096  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[showcase] t=310s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=310.0s
+  FL0: ( -17.0,  -2.9) spd=0.4 state=returning area=open
+  FL1: ( -14.4,   2.4) spd=0.4 state=move_to_loading area=open
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -12.9) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=29  FL2=11.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=20  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=15  exits=14  peak=3  occ-s=387.2  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=10  exits=10  peak=3  occ-s=141.9  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=16957  proximity=3  idle=1  queue=1257  buildup=15696  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[showcase] t=320s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=320.0s
+  FL0: ( -16.7,  -1.2) spd=0.1 state=returning area=open
+  FL1: ( -14.0,   3.9) spd=0.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.0, -20.2) spd=0.8 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.3) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=29  FL2=21.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=21  FL1=0.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=15  exits=14  peak=3  occ-s=397.2  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=11  exits=10  peak=3  occ-s=142.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=17557  proximity=3  idle=1  queue=1257  buildup=16296  ped_near_miss=0
+[showcase] t=330s | loaded=2 unloaded=2 | at_dock=0 staging_queue=0
+[showcase] t=330.0s
+  FL0: ( -16.5,   0.3) spd=0.0 state=returning area=open
+  FL1: ( -13.7,   5.3) spd=0.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.4) spd=0.0 state=returning area=open
+  FL3: (  -3.6, -13.1) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=30  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=21  FL1=10.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=15  exits=15  peak=3  occ-s=398.6  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=11  exits=10  peak=3  occ-s=152.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=17638  proximity=3  idle=1  queue=1257  buildup=16377  ped_near_miss=0
+[showcase] t=340s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=340.0s
+  FL0: ( -16.3,   1.4) spd=0.0 state=returning area=open
+  FL1: ( -13.4,   6.4) spd=0.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -19.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.5) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=31  FL2=5.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=21  FL1=20.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=16  exits=15  peak=3  occ-s=403.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=11  exits=10  peak=3  occ-s=162.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=17951  proximity=3  idle=1  queue=1257  buildup=16690  ped_near_miss=0
+[showcase] t=350s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=350.0s
+  FL0: ( -16.1,   2.9) spd=0.0 state=returning area=open
+  FL1: ( -13.1,   7.8) spd=0.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.0) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.4) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=31  FL2=15.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=21  FL1=30.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=16  exits=15  peak=3  occ-s=413.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=11  exits=10  peak=3  occ-s=172.8  max_dwell=32.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=18551  proximity=3  idle=1  queue=1257  buildup=17290  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=360s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=360.0s
+  FL0: ( -15.8,   4.4) spd=0.0 state=returning area=ShelvesArea
+  FL1: ( -12.8,   9.2) spd=0.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=32  FL2=25.2s FL3=1.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=22  FL0=5.1s FL1=40.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=17  exits=15  peak=3  occ-s=425.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=0.00m/s  entries=12  exits=10  peak=3  occ-s=187.9  max_dwell=40.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=19151  proximity=3  idle=1  queue=1257  buildup=17890  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=370s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=370.0s
+  FL0: ( -15.8,   4.6) spd=0.4 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=2.9 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.4, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=32  FL2=35.2s FL3=11.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=22  FL0=15.1s FL1=50.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=17  exits=15  peak=3  occ-s=445.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.67m/s  entries=12  exits=10  peak=3  occ-s=207.9  max_dwell=50.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=19751  proximity=3  idle=1  queue=1257  buildup=18490  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL3
+[showcase] t=380s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=380.0s
+  FL0: ( -14.2,  -2.6) spd=2.7 state=move_to_staging area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.1, -16.6) spd=2.4 state=returning area=open
+  FL3: (  -2.1, -20.4) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=33  FL3=21.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=46  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=23  FL1=60.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=17  exits=16  peak=3  occ-s=463.9  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=2  occ-s=154.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=12  exits=11  peak=3  occ-s=225.2  max_dwell=60.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=20351  proximity=3  idle=1  queue=1257  buildup=19090  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[showcase] t=390s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=390.0s
+  FL0: ( -17.7, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.4,  -1.6) spd=0.0 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=35  FL0=3.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=52  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=24  FL1=70.9s FL2=2.7s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=18  exits=17  peak=3  occ-s=468.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=26  exits=26  peak=2  occ-s=162.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=13  exits=11  peak=3  occ-s=237.9  max_dwell=70.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=20723  proximity=3  idle=1  queue=1386  buildup=19333  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL2 (pickup)
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[showcase] t=400s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=400.0s
+  FL0: ( -17.7, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.7,  -2.5) spd=2.8 state=move_to_staging area=open
+  FL3: (  -5.2,   4.6) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=35  FL0=13.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=52  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=26  FL1=80.9s FL3=1.1s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=18  exits=17  peak=3  occ-s=478.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=26  exits=26  peak=2  occ-s=162.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=14  exits=12  peak=3  occ-s=256.5  max_dwell=80.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=21323  proximity=3  idle=1  queue=1386  buildup=19933  ped_near_miss=0
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=410s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=410.0s
+  FL0: ( -15.2, -18.9) spd=1.5 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -1.6,   2.6) spd=2.4 state=move_to_staging area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=37  FL2=3.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=54  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=27  FL1=90.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=19  exits=18  peak=3  occ-s=491.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=27  exits=27  peak=2  occ-s=166.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=14  exits=13  peak=3  occ-s=276.1  max_dwell=90.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=21923  proximity=3  idle=1  queue=1386  buildup=20533  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=420s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=420.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -12.6) spd=0.7 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=37  FL2=13.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=58  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=28  FL0=1.2s FL1=100.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=19  exits=18  peak=3  occ-s=501.0  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=29  exits=29  peak=2  occ-s=172.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=15  exits=13  peak=3  occ-s=287.2  max_dwell=100.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=22660  proximity=3  idle=1  queue=1523  buildup=21133  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL2
+[showcase] t=430s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=430.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.9) spd=1.5 state=returning area=open
+  FL3: (  -3.6, -14.3) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=38  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=58  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=28  FL0=11.2s FL1=110.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=19  exits=19  peak=3  occ-s=510.9  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=29  exits=29  peak=2  occ-s=172.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=15  exits=13  peak=3  occ-s=307.2  max_dwell=110.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=23259  proximity=3  idle=1  queue=1523  buildup=21732  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=440s | loaded=3 unloaded=1 | at_dock=1 staging_queue=1
+[showcase] t=440.0s
+  FL0: ( -16.4,  -6.6) spd=1.2 state=move_to_loading area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -19.4) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.2) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=39  FL2=5.9s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=59  FL0=1.6s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=29  FL1=120.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=20  exits=19  peak=3  occ-s=516.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=1.20m/s  entries=30  exits=29  peak=2  occ-s=174.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=15  exits=14  peak=3  occ-s=322.3  max_dwell=120.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=23612  proximity=3  idle=1  queue=1523  buildup=22085  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=450s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=450.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -20.9) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -15.7) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=40  FL0=5.3s FL2=15.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=60  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=29  FL1=130.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=21  exits=19  peak=3  occ-s=532.1  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=30  exits=30  peak=2  occ-s=176.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=15  exits=14  peak=3  occ-s=332.3  max_dwell=130.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=24212  proximity=3  idle=1  queue=1523  buildup=22685  ped_near_miss=0
+[showcase] t=460s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=460.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -21.5) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.4) spd=0.2 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=40  FL0=15.3s FL2=25.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=60  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=29  FL1=140.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=21  exits=19  peak=3  occ-s=552.1  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=30  exits=30  peak=2  occ-s=176.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=15  exits=14  peak=3  occ-s=342.3  max_dwell=140.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=24812  proximity=3  idle=1  queue=1523  buildup=23285  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[showcase] t=470s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=470.0s
+  FL0: ( -16.8, -14.9) spd=2.5 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.5) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=41  FL2=35.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=60  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=29  FL1=150.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=21  exits=20  peak=3  occ-s=569.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=30  exits=30  peak=2  occ-s=176.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=15  exits=14  peak=3  occ-s=352.3  max_dwell=150.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=25412  proximity=3  idle=1  queue=1523  buildup=23885  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=480s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=480.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.9, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.8) spd=0.1 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=41  FL2=45.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=62  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=30  FL0=3.4s FL1=160.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=21  exits=20  peak=3  occ-s=579.8  max_dwell=51.2s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=31  exits=31  peak=2  occ-s=178.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=16  exits=14  peak=3  occ-s=365.7  max_dwell=160.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=26012  proximity=3  idle=1  queue=1523  buildup=24485  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=490s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=490.0s
+  FL0: ( -15.7,   4.6) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.7) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=41  FL2=55.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=62  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=30  FL0=13.4s FL1=170.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=21  exits=20  peak=3  occ-s=589.8  max_dwell=55.9s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=31  exits=31  peak=2  occ-s=178.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=16  exits=14  peak=3  occ-s=385.7  max_dwell=170.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=26612  proximity=3  idle=1  queue=1523  buildup=25085  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=500s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=500.0s
+  FL0: ( -17.7, -11.6) spd=2.8 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.1, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -17.7) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=41  FL2=65.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=64  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=31  FL1=180.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=21  exits=20  peak=3  occ-s=599.8  max_dwell=65.9s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=32  exits=32  peak=2  occ-s=182.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=16  exits=15  peak=3  occ-s=398.5  max_dwell=180.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=27212  proximity=3  idle=1  queue=1523  buildup=25685  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=510s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=510.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=43  FL0=7.5s FL2=75.9s FL3=5.8s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=64  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=31  FL1=190.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.00m/s  entries=23  exits=20  peak=3  occ-s=623.1  max_dwell=75.9s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=32  exits=32  peak=2  occ-s=182.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=16  exits=15  peak=3  occ-s=408.5  max_dwell=190.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=27812  proximity=3  idle=1  queue=1523  buildup=26285  ped_near_miss=0
+[showcase] t=520s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=520.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.3, -21.4) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=43  FL0=17.5s FL2=85.9s FL3=15.8s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=64  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=31  FL1=200.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.00m/s  entries=23  exits=20  peak=3  occ-s=653.1  max_dwell=85.9s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=32  exits=32  peak=2  occ-s=182.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=16  exits=15  peak=3  occ-s=418.5  max_dwell=200.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=28412  proximity=3  idle=1  queue=1523  buildup=26885  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=530s | loaded=1 unloaded=3 | at_dock=0 staging_queue=2
+[showcase] t=530.0s
+  FL0: ( -17.8,  -9.1) spd=2.8 state=returning area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.5,  -5.2) spd=3.0 state=returning area=StagingArea
+  FL3: (  -3.2, -14.3) spd=2.5 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=46  
+  [StagingArea] occupancy=2/6 full=False blocked=False pallets=0 transitions=66  FL0=0.8s FL2=2.1s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=31  FL1=210.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=3  occ-s=669.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=2  avg_spd=2.87m/s  entries=34  exits=32  peak=2  occ-s=185.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=16  exits=15  peak=3  occ-s=428.5  max_dwell=210.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=28845  proximity=3  idle=1  queue=1569  buildup=27272  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[showcase] t=540s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=540.0s
+  FL0: ( -15.8,   4.7) spd=0.3 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.6,   5.5) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL3: (  -4.5,  -0.8) spd=0.9 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=46  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=70  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=33  FL0=5.6s FL1=220.9s FL2=7.0s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=3  occ-s=669.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=35  exits=35  peak=2  occ-s=189.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.35m/s  entries=18  exits=15  peak=3  occ-s=451.2  max_dwell=220.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=28897  proximity=3  idle=1  queue=1621  buildup=27272  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[showcase] t=550s | loaded=4 unloaded=0 | at_dock=0 staging_queue=1
+[showcase] t=550.0s
+  FL0: ( -14.1,   4.4) spd=1.3 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -11.0) spd=2.8 state=move_to_loading area=StagingArea
+  FL3: (  -5.2,   4.6) spd=0.2 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=46  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=71  FL2=3.6s
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=35  FL0=15.6s FL1=230.9s FL3=5.5s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=23  exits=23  peak=3  occ-s=669.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.79m/s  entries=36  exits=35  peak=2  occ-s=193.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.49m/s  entries=19  exits=16  peak=3  occ-s=479.9  max_dwell=230.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=28897  proximity=3  idle=1  queue=1621  buildup=27272  ped_near_miss=0
+[RuleEngine] FL2: move_to_loading → loading
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL3: move_to_staging → wait_in_staging
+[showcase] t=560s | loaded=4 unloaded=0 | at_dock=1 staging_queue=1
+[showcase] t=560.0s
+  FL0: ( -17.7, -18.1) spd=2.9 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.7,  -5.8) spd=0.0 state=wait_in_staging area=StagingArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=47  FL2=7.3s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=75  FL3=1.9s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=37  FL1=240.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=24  exits=23  peak=3  occ-s=676.9  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=38  exits=37  peak=2  occ-s=199.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=19  exits=18  peak=3  occ-s=495.7  max_dwell=240.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=29333  proximity=3  idle=1  queue=1621  buildup=27708  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=570s | loaded=4 unloaded=0 | at_dock=2 staging_queue=1
+[showcase] t=570.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.7,  -5.8) spd=0.0 state=wait_in_staging area=StagingArea
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=48  FL0=9.7s FL2=17.3s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=75  FL3=11.9s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=37  FL1=250.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=25  exits=23  peak=3  occ-s=696.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=38  exits=37  peak=2  occ-s=209.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=19  exits=18  peak=3  occ-s=505.7  max_dwell=250.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=29933  proximity=3  idle=1  queue=1621  buildup=28308  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[RuleEngine] FL3: wait_in_staging → move_to_loading
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[showcase] t=580s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=580.0s
+  FL0: ( -17.2, -20.1) spd=0.8 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.7) spd=0.4 state=returning area=open
+  FL3: (  -3.6, -13.7) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=49  FL0=19.7s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=76  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=37  FL1=260.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=25  exits=24  peak=3  occ-s=712.4  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=38  exits=38  peak=2  occ-s=212.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=19  exits=18  peak=3  occ-s=515.7  max_dwell=260.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=30533  proximity=3  idle=1  queue=1621  buildup=28908  ped_near_miss=0
+[showcase] t=590s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=590.0s
+  FL0: ( -17.1,  -2.7) spd=3.0 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -19.9) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.6) spd=0.1 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=51  FL2=9.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=78  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=37  FL1=270.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=26  exits=25  peak=3  occ-s=725.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=39  exits=39  peak=2  occ-s=215.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=19  exits=18  peak=3  occ-s=525.7  max_dwell=270.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=31133  proximity=3  idle=1  queue=1621  buildup=29508  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=600s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=600.0s
+  FL0: ( -15.7,   5.0) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -21.5) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.3) spd=0.7 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=51  FL2=19.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=78  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=38  FL0=7.8s FL1=280.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=26  exits=25  peak=3  occ-s=735.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=39  exits=39  peak=2  occ-s=215.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=20  exits=18  peak=3  occ-s=543.5  max_dwell=280.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=31733  proximity=3  idle=1  queue=1621  buildup=30108  ped_near_miss=0
+[showcase] t=610s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=610.0s
+  FL0: ( -13.3,   0.1) spd=2.5 state=move_to_staging area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.3) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=51  FL2=29.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=78  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=39  FL1=290.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=26  exits=25  peak=3  occ-s=745.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=39  exits=39  peak=2  occ-s=215.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=20  exits=19  peak=3  occ-s=561.9  max_dwell=290.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=32333  proximity=3  idle=1  queue=1621  buildup=30708  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=620s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=620.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.9, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.7) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=52  FL0=1.9s FL2=39.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=80  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=39  FL1=300.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=27  exits=25  peak=3  occ-s=757.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=40  exits=40  peak=2  occ-s=218.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=20  exits=19  peak=3  occ-s=571.9  max_dwell=300.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=32933  proximity=3  idle=1  queue=1621  buildup=31308  ped_near_miss=0
+[showcase] t=630s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=630.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.4) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=52  FL0=11.9s FL2=49.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=80  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=39  FL1=310.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=27  exits=25  peak=3  occ-s=777.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=40  exits=40  peak=2  occ-s=218.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=20  exits=19  peak=3  occ-s=581.9  max_dwell=310.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=33533  proximity=3  idle=1  queue=1621  buildup=31908  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[showcase] t=640s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=640.0s
+  FL0: ( -15.7, -20.0) spd=0.9 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.1, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -17.4) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=52  FL0=21.9s FL2=59.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=80  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=39  FL1=320.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.46m/s  entries=27  exits=25  peak=3  occ-s=797.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=40  exits=40  peak=2  occ-s=218.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=20  exits=19  peak=3  occ-s=591.9  max_dwell=320.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=34133  proximity=3  idle=1  queue=1621  buildup=32508  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → wait_at_dock_queue
+[RuleEngine] FL3: wait_at_dock_queue → move_to_loading
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=650s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=650.0s
+  FL0: ( -16.0,   3.8) spd=3.0 state=returning area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=54  FL2=69.6s FL3=3.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=82  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=40  FL0=0.1s FL1=330.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=28  exits=26  peak=3  occ-s=811.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=41  exits=41  peak=2  occ-s=221.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=2.99m/s  entries=21  exits=19  peak=3  occ-s=602.0  max_dwell=330.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=34733  proximity=3  idle=1  queue=1621  buildup=33108  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=660s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=660.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.3, -21.5) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=54  FL2=79.6s FL3=13.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=82  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=40  FL0=10.1s FL1=340.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=28  exits=26  peak=3  occ-s=831.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=41  exits=41  peak=2  occ-s=221.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=21  exits=19  peak=3  occ-s=622.0  max_dwell=340.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=35333  proximity=3  idle=1  queue=1621  buildup=33708  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=670s | loaded=2 unloaded=2 | at_dock=0 staging_queue=1
+[showcase] t=670.0s
+  FL0: ( -15.7,  -5.4) spd=2.8 state=move_to_staging area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.1, -12.9) spd=2.7 state=returning area=open
+  FL3: (  -1.1, -18.6) spd=0.2 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=56  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=83  FL0=0.5s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=41  FL1=350.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=28  exits=28  peak=3  occ-s=847.9  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.81m/s  entries=42  exits=41  peak=2  occ-s=221.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=21  exits=20  peak=3  occ-s=638.2  max_dwell=350.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=35859  proximity=3  idle=1  queue=1621  buildup=34234  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[showcase] t=680s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=680.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.4,  -1.8) spd=0.4 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=57  FL0=4.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=88  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=42  FL1=360.9s FL2=4.3s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=29  exits=28  peak=3  occ-s=852.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=44  exits=44  peak=2  occ-s=230.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=22  exits=20  peak=3  occ-s=652.4  max_dwell=360.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=36256  proximity=3  idle=1  queue=1769  buildup=34483  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL2 (pickup)
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[showcase] t=690s | loaded=3 unloaded=1 | at_dock=1 staging_queue=1
+[showcase] t=690.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.7,  -6.1) spd=0.1 state=move_to_loading area=StagingArea
+  FL3: (  -5.2,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=57  FL0=14.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=89  FL2=0.9s
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=44  FL1=370.9s FL3=2.8s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=29  exits=28  peak=3  occ-s=862.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.08m/s  entries=45  exits=44  peak=2  occ-s=230.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=23  exits=21  peak=3  occ-s=671.2  max_dwell=370.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=36856  proximity=3  idle=1  queue=1769  buildup=35083  ped_near_miss=0
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=700s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=700.0s
+  FL0: ( -15.6, -17.2) spd=1.7 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -1.7,  -1.7) spd=2.8 state=move_to_staging area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=59  FL2=4.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=90  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=45  FL1=380.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=30  exits=29  peak=3  occ-s=875.4  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=45  exits=45  peak=2  occ-s=233.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=23  exits=22  peak=3  occ-s=689.1  max_dwell=380.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=37456  proximity=3  idle=1  queue=1769  buildup=35683  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=710s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=710.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -13.0) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=59  FL2=14.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=94  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=46  FL0=2.3s FL1=390.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=30  exits=29  peak=3  occ-s=885.4  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=47  exits=47  peak=2  occ-s=239.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=24  exits=22  peak=3  occ-s=701.4  max_dwell=390.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=38161  proximity=3  idle=1  queue=1874  buildup=36283  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL2
+[showcase] t=720s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=720.0s
+  FL0: ( -15.9,   4.5) spd=0.4 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.7) spd=0.2 state=returning area=open
+  FL3: (  -3.6, -13.9) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=60  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=94  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=46  FL0=12.3s FL1=400.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=30  exits=30  peak=3  occ-s=893.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=47  exits=47  peak=2  occ-s=239.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.70m/s  entries=24  exits=22  peak=3  occ-s=721.4  max_dwell=400.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=38669  proximity=3  idle=1  queue=1874  buildup=36791  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=730s | loaded=3 unloaded=1 | at_dock=1 staging_queue=1
+[showcase] t=730.0s
+  FL0: ( -17.2,  -8.6) spd=2.6 state=move_to_loading area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -19.8) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.6) spd=0.7 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=61  FL2=7.4s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=95  FL0=2.7s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=47  FL1=410.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=31  exits=30  peak=3  occ-s=901.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.61m/s  entries=48  exits=47  peak=2  occ-s=242.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=24  exits=23  peak=3  occ-s=735.3  max_dwell=410.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=39111  proximity=3  idle=1  queue=1874  buildup=37233  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=740s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=740.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -21.4) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.2) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=62  FL0=6.4s FL2=17.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=96  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=47  FL1=420.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=32  exits=30  peak=3  occ-s=917.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=48  exits=48  peak=2  occ-s=243.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=24  exits=23  peak=3  occ-s=745.3  max_dwell=420.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=39711  proximity=3  idle=1  queue=1874  buildup=37833  ped_near_miss=0
+[showcase] t=750s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=750.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.5) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=62  FL0=16.4s FL2=27.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=96  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=47  FL1=430.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=32  exits=30  peak=3  occ-s=937.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=48  exits=48  peak=2  occ-s=243.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=24  exits=23  peak=3  occ-s=755.3  max_dwell=430.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=40311  proximity=3  idle=1  queue=1874  buildup=38433  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[showcase] t=760s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=760.0s
+  FL0: ( -17.5, -12.2) spd=2.7 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -21.5) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.6) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=63  FL2=37.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=96  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=47  FL1=440.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=32  exits=31  peak=3  occ-s=954.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=48  exits=48  peak=2  occ-s=243.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=24  exits=23  peak=3  occ-s=765.3  max_dwell=440.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=40911  proximity=3  idle=1  queue=1874  buildup=39033  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=770s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=770.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.9, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.9) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=63  FL2=47.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=98  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=48  FL0=4.5s FL1=450.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=32  exits=31  peak=3  occ-s=964.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=49  exits=49  peak=2  occ-s=245.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=25  exits=23  peak=3  occ-s=779.8  max_dwell=450.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=41511  proximity=3  idle=1  queue=1874  buildup=39633  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=780s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=780.0s
+  FL0: ( -15.0,   4.9) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -17.2) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=63  FL2=57.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=98  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=48  FL0=14.5s FL1=460.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=32  exits=31  peak=3  occ-s=974.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=49  exits=49  peak=2  occ-s=245.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=25  exits=23  peak=3  occ-s=799.8  max_dwell=460.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=42111  proximity=3  idle=1  queue=1874  buildup=40233  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=790s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=790.0s
+  FL0: ( -17.8, -14.7) spd=2.9 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.1, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -17.7) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=63  FL2=67.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=100  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=49  FL1=470.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=32  exits=31  peak=3  occ-s=984.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=50  exits=50  peak=2  occ-s=249.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=25  exits=24  peak=3  occ-s=811.6  max_dwell=470.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=42711  proximity=3  idle=1  queue=1874  buildup=40833  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=800s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=800.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=65  FL0=8.6s FL2=77.4s FL3=8.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=100  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=49  FL1=480.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.00m/s  entries=34  exits=31  peak=3  occ-s=1011.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=50  exits=50  peak=2  occ-s=249.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=25  exits=24  peak=3  occ-s=821.6  max_dwell=480.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=43311  proximity=3  idle=1  queue=1874  buildup=41433  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=810s | loaded=1 unloaded=3 | at_dock=3 staging_queue=0
+[showcase] t=810.0s
+  FL0: ( -17.6, -19.3) spd=0.7 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.4, -21.6) spd=0.3 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.4 state=returning area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=65  FL0=18.6s FL2=87.4s FL3=18.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=100  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=49  FL1=490.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.46m/s  entries=34  exits=31  peak=3  occ-s=1041.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=50  exits=50  peak=2  occ-s=249.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=25  exits=24  peak=3  occ-s=831.6  max_dwell=490.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=43911  proximity=3  idle=1  queue=1874  buildup=42033  ped_near_miss=0
+[showcase] t=820s | loaded=1 unloaded=3 | at_dock=0 staging_queue=2
+[showcase] t=820.0s
+  FL0: ( -17.5,  -6.0) spd=2.9 state=returning area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.9,   3.3) spd=3.0 state=returning area=open
+  FL3: (  -3.9,  -7.3) spd=2.9 state=returning area=StagingArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=68  
+  [StagingArea] occupancy=2/6 full=False blocked=False pallets=0 transitions=104  FL0=1.8s FL3=1.4s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=49  FL1=500.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=34  exits=34  peak=3  occ-s=1051.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=2  avg_spd=2.89m/s  entries=53  exits=51  peak=2  occ-s=255.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=25  exits=24  peak=3  occ-s=841.6  max_dwell=500.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=44258  proximity=3  idle=1  queue=1958  buildup=42296  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[showcase] t=830s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=830.0s
+  FL0: ( -15.7,   5.0) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -7.8,   4.2) spd=1.9 state=move_to_staging area=ShelvesArea
+  FL3: (  -4.6,   0.4) spd=0.4 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=68  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=106  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=51  FL0=6.7s FL1=510.9s FL2=9.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=34  exits=34  peak=3  occ-s=1051.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=53  exits=53  peak=2  occ-s=256.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.63m/s  entries=27  exits=24  peak=3  occ-s=868.2  max_dwell=510.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=44296  proximity=3  idle=1  queue=1996  buildup=42296  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=840s | loaded=4 unloaded=0 | at_dock=1 staging_queue=0
+[showcase] t=840.0s
+  FL0: ( -13.3,   2.7) spd=2.1 state=move_to_staging area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -4.3,   6.1) spd=0.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=69  FL2=0.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=108  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=54  FL1=520.9s FL3=8.2s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=35  exits=34  peak=3  occ-s=1051.3  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=54  exits=54  peak=2  occ-s=260.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=28  exits=26  peak=3  occ-s=896.2  max_dwell=520.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=44305  proximity=3  idle=1  queue=1996  buildup=42305  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL3: move_to_staging → wait_in_staging
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=850s | loaded=4 unloaded=0 | at_dock=2 staging_queue=1
+[showcase] t=850.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.7,  -5.8) spd=0.0 state=wait_in_staging area=StagingArea
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=70  FL0=0.8s FL2=10.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=111  FL3=4.5s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=55  FL1=530.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=36  exits=34  peak=3  occ-s=1062.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=56  exits=55  peak=2  occ-s=268.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=28  exits=27  peak=3  occ-s=908.8  max_dwell=530.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=44967  proximity=3  idle=1  queue=2058  buildup=42905  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[RuleEngine] FL3: wait_in_staging → move_to_loading
+[showcase] t=860s | loaded=3 unloaded=1 | at_dock=2 staging_queue=1
+[showcase] t=860.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.9, -20.3) spd=0.8 state=returning area=LoadingZone
+  FL3: (  -3.3,  -8.9) spd=2.8 state=move_to_loading area=StagingArea
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=70  FL0=10.8s FL2=20.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=111  FL3=14.5s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=55  FL1=540.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.38m/s  entries=36  exits=34  peak=3  occ-s=1082.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.82m/s  entries=56  exits=55  peak=2  occ-s=278.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=28  exits=27  peak=3  occ-s=918.8  max_dwell=540.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=45567  proximity=3  idle=1  queue=2058  buildup=43505  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[showcase] t=870s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=870.0s
+  FL0: ( -16.5, -20.4) spd=0.8 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.9) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -13.6) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=72  FL0=20.8s FL2=2.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=112  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=55  FL1=550.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.38m/s  entries=37  exits=35  peak=3  occ-s=1097.4  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=56  exits=56  peak=2  occ-s=279.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=28  exits=27  peak=3  occ-s=928.8  max_dwell=550.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=46167  proximity=3  idle=1  queue=2058  buildup=44105  ped_near_miss=0
+[showcase] t=880s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=880.0s
+  FL0: ( -16.6,   0.4) spd=3.0 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -20.0) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.8) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=73  FL2=12.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=114  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=55  FL1=560.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=37  exits=36  peak=3  occ-s=1109.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=57  exits=57  peak=2  occ-s=282.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=28  exits=27  peak=3  occ-s=938.8  max_dwell=560.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=46767  proximity=3  idle=1  queue=2058  buildup=44705  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=890s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=890.0s
+  FL0: ( -15.8,   4.6) spd=0.4 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.9, -21.5) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.6) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=73  FL2=22.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=114  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=56  FL0=8.9s FL1=570.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=37  exits=36  peak=3  occ-s=1119.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=57  exits=57  peak=2  occ-s=282.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.70m/s  entries=29  exits=27  peak=3  occ-s=957.7  max_dwell=570.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=47367  proximity=3  idle=1  queue=2058  buildup=45305  ped_near_miss=0
+[showcase] t=900s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=900.0s
+  FL0: ( -14.2,  -2.6) spd=2.7 state=move_to_staging area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -17.0) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=73  FL2=32.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=114  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=57  FL1=580.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=37  exits=36  peak=3  occ-s=1129.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=57  exits=57  peak=2  occ-s=282.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=29  exits=28  peak=3  occ-s=975.0  max_dwell=580.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=47967  proximity=3  idle=1  queue=2058  buildup=45905  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL3: move_to_loading → wait_at_dock_queue
+[RuleEngine] FL3: wait_at_dock_queue → move_to_loading
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=910s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=910.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=75  FL0=3.0s FL2=42.5s FL3=1.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=116  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=57  FL1=590.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.13m/s  entries=39  exits=36  peak=3  occ-s=1143.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=58  exits=58  peak=2  occ-s=285.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=29  exits=28  peak=3  occ-s=985.0  max_dwell=590.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=48567  proximity=3  idle=1  queue=2058  buildup=46505  ped_near_miss=0
+[showcase] t=920s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=920.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.3, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=75  FL0=13.0s FL2=52.5s FL3=11.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=116  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=57  FL1=600.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.13m/s  entries=39  exits=36  peak=3  occ-s=1173.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=58  exits=58  peak=2  occ-s=285.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=29  exits=28  peak=3  occ-s=995.0  max_dwell=600.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=49167  proximity=3  idle=1  queue=2058  buildup=47105  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=930s | loaded=1 unloaded=3 | at_dock=1 staging_queue=0
+[showcase] t=930.0s
+  FL0: ( -15.2, -18.9) spd=1.5 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.0, -16.5) spd=2.4 state=returning area=open
+  FL3: (  -2.1, -20.4) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=77  FL3=21.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=116  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=57  FL1=610.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=39  exits=38  peak=3  occ-s=1202.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=58  exits=58  peak=2  occ-s=285.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=29  exits=28  peak=3  occ-s=1005.0  max_dwell=610.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=49767  proximity=3  idle=1  queue=2058  buildup=47705  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=940s | loaded=1 unloaded=3 | at_dock=0 staging_queue=0
+[showcase] t=940.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.4,  -1.6) spd=0.0 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=78  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=122  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=59  FL0=1.1s FL1=620.9s FL2=2.8s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=39  exits=39  peak=3  occ-s=1203.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=61  exits=61  peak=2  occ-s=293.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.00m/s  entries=31  exits=28  peak=3  occ-s=1019.0  max_dwell=620.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=49904  proximity=3  idle=1  queue=2131  buildup=47769  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[showcase] t=950s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=950.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.6,  -2.8) spd=2.8 state=move_to_staging area=open
+  FL3: (  -5.2,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=78  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=122  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=61  FL0=11.1s FL1=630.9s FL3=1.5s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=39  exits=39  peak=3  occ-s=1203.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=61  exits=61  peak=2  occ-s=293.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.00m/s  entries=32  exits=29  peak=3  occ-s=1047.8  max_dwell=630.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=49904  proximity=3  idle=1  queue=2131  buildup=47769  ped_near_miss=0
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=960s | loaded=4 unloaded=0 | at_dock=1 staging_queue=1
+[showcase] t=960.0s
+  FL0: ( -16.4,  -6.5) spd=1.1 state=move_to_loading area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -1.5,   1.8) spd=2.5 state=move_to_staging area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=79  FL2=3.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=125  FL0=1.6s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=63  FL1=640.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=40  exits=39  peak=3  occ-s=1206.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=1.13m/s  entries=63  exits=62  peak=2  occ-s=298.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=32  exits=31  peak=3  occ-s=1072.2  max_dwell=640.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=50090  proximity=3  idle=1  queue=2131  buildup=47955  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → wait_in_staging
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=970s | loaded=4 unloaded=0 | at_dock=2 staging_queue=1
+[showcase] t=970.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.7,  -5.8) spd=0.0 state=wait_in_staging area=StagingArea
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=80  FL0=5.2s FL2=13.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=127  FL3=7.8s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=63  FL1=650.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=41  exits=39  peak=3  occ-s=1221.9  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=64  exits=63  peak=2  occ-s=308.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=32  exits=31  peak=3  occ-s=1082.2  max_dwell=650.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=50690  proximity=3  idle=1  queue=2131  buildup=48555  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[RuleEngine] FL3: wait_in_staging → move_to_loading
+[showcase] t=980s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=980.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.8) spd=0.0 state=returning area=open
+  FL3: (  -3.6, -14.2) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=81  FL0=15.2s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=128  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=63  FL1=660.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=41  exits=40  peak=3  occ-s=1241.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=64  exits=64  peak=2  occ-s=316.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=32  exits=31  peak=3  occ-s=1092.2  max_dwell=660.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=51290  proximity=3  idle=1  queue=2131  buildup=49155  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[showcase] t=990s | loaded=2 unloaded=2 | at_dock=0 staging_queue=0
+[showcase] t=990.0s
+  FL0: ( -16.8, -15.0) spd=2.5 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.3) spd=0.0 state=returning area=open
+  FL3: (  -3.6, -13.0) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=82  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=128  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=63  FL1=670.9s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=41  exits=41  peak=3  occ-s=1249.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=64  exits=64  peak=2  occ-s=316.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=32  exits=31  peak=3  occ-s=1102.2  max_dwell=670.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=51754  proximity=3  idle=1  queue=2131  buildup=49619  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=1000s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1000.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -19.5) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.4) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=83  FL2=6.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=130  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=64  FL0=3.4s FL1=680.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=42  exits=41  peak=3  occ-s=1255.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=65  exits=65  peak=2  occ-s=318.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=33  exits=31  peak=3  occ-s=1115.6  max_dwell=680.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=52119  proximity=3  idle=1  queue=2131  buildup=49984  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=1010s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1010.0s
+  FL0: ( -15.8,   4.6) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -20.9) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -16.2) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=83  FL2=16.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=130  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=64  FL0=13.4s FL1=690.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=42  exits=41  peak=3  occ-s=1265.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=65  exits=65  peak=2  occ-s=318.6  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=33  exits=31  peak=3  occ-s=1135.6  max_dwell=690.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=52719  proximity=3  idle=1  queue=2131  buildup=50584  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL3: move_to_loading → wait_at_dock_queue
+[RuleEngine] FL3: wait_at_dock_queue → move_to_loading
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=1020s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=1020.0s
+  FL0: ( -17.7, -11.5) spd=2.8 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=84  FL2=26.1s FL3=1.7s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=132  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=65  FL1=700.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=43  exits=41  peak=3  occ-s=1277.4  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=66  exits=66  peak=2  occ-s=322.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=33  exits=32  peak=3  occ-s=1148.4  max_dwell=700.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=53319  proximity=3  idle=1  queue=2131  buildup=51184  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=1030s | loaded=3 unloaded=1 | at_dock=3 staging_queue=0
+[showcase] t=1030.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.4, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=85  FL0=7.4s FL2=36.1s FL3=11.7s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=132  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=65  FL1=710.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.13m/s  entries=44  exits=41  peak=3  occ-s=1304.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=66  exits=66  peak=2  occ-s=322.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=33  exits=32  peak=3  occ-s=1158.4  max_dwell=710.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=53919  proximity=3  idle=1  queue=2131  buildup=51784  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=1040s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=1040.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.1, -16.7) spd=2.3 state=returning area=open
+  FL3: (  -1.8, -20.2) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=86  FL0=17.4s FL3=21.7s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=132  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=65  FL1=720.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.38m/s  entries=44  exits=42  peak=3  occ-s=1333.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=66  exits=66  peak=2  occ-s=322.3  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=33  exits=32  peak=3  occ-s=1168.4  max_dwell=720.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=54519  proximity=3  idle=1  queue=2131  buildup=52384  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[showcase] t=1050s | loaded=1 unloaded=3 | at_dock=0 staging_queue=1
+[showcase] t=1050.0s
+  FL0: ( -17.8,  -9.3) spd=2.8 state=returning area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.4,  -1.5) spd=0.0 state=returning area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=88  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=137  FL0=0.7s
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=66  FL1=730.9s FL2=2.7s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=44  exits=44  peak=3  occ-s=1339.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.77m/s  entries=69  exits=68  peak=2  occ-s=328.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=34  exits=32  peak=3  occ-s=1181.2  max_dwell=730.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=54850  proximity=3  idle=1  queue=2131  buildup=52715  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[showcase] t=1060s | loaded=3 unloaded=1 | at_dock=0 staging_queue=0
+[showcase] t=1060.0s
+  FL0: ( -15.8,   4.7) spd=0.2 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.8,  -2.5) spd=2.8 state=move_to_staging area=open
+  FL3: (  -5.2,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=88  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=138  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=69  FL0=5.6s FL1=740.9s FL3=1.2s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=44  exits=44  peak=3  occ-s=1339.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=69  exits=69  peak=2  occ-s=329.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=1.08m/s  entries=36  exits=33  peak=3  occ-s=1205.5  max_dwell=740.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=54850  proximity=3  idle=1  queue=2131  buildup=52715  ped_near_miss=0
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=1070s | loaded=4 unloaded=0 | at_dock=1 staging_queue=0
+[showcase] t=1070.0s
+  FL0: ( -14.1,   4.5) spd=1.3 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -1.5,   2.4) spd=2.5 state=move_to_staging area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=89  FL2=3.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=140  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=70  FL0=15.6s FL1=750.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=45  exits=44  peak=3  occ-s=1342.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=70  exits=70  peak=2  occ-s=333.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=2.14m/s  entries=36  exits=34  peak=3  occ-s=1235.0  max_dwell=750.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=55029  proximity=3  idle=1  queue=2131  buildup=52894  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_staging → wait_in_staging
+[showcase] t=1080s | loaded=4 unloaded=0 | at_dock=1 staging_queue=1
+[showcase] t=1080.0s
+  FL0: ( -16.1,  -6.1) spd=0.0 state=wait_in_staging area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -12.7) spd=0.8 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=89  FL2=13.0s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=143  FL0=6.0s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=71  FL1=760.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=45  exits=44  peak=3  occ-s=1352.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=0.00m/s  entries=72  exits=71  peak=2  occ-s=342.9  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=36  exits=35  peak=3  occ-s=1245.6  max_dwell=760.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=55744  proximity=3  idle=1  queue=2246  buildup=53494  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[RuleEngine] FL0: wait_in_staging → move_to_loading
+[showcase] t=1090s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1090.0s
+  FL0: ( -17.8, -16.9) spd=2.9 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.9) spd=1.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.3) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=89  FL2=23.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=144  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=71  FL1=770.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=1.44m/s  entries=45  exits=44  peak=3  occ-s=1362.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=72  exits=72  peak=2  occ-s=350.9  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=36  exits=35  peak=3  occ-s=1255.6  max_dwell=770.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=56344  proximity=3  idle=1  queue=2246  buildup=54094  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → wait_at_dock_queue
+[RuleEngine] FL0: wait_at_dock_queue → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=1100s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1100.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.4) spd=0.0 state=returning area=open
+  FL3: (  -3.6, -13.1) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=91  FL0=9.3s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=144  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=71  FL1=780.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=46  exits=45  peak=3  occ-s=1372.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=72  exits=72  peak=2  occ-s=350.9  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=36  exits=35  peak=3  occ-s=1265.6  max_dwell=780.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=56904  proximity=3  idle=1  queue=2246  buildup=54654  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[showcase] t=1110s | loaded=2 unloaded=2 | at_dock=2 staging_queue=0
+[showcase] t=1110.0s
+  FL0: ( -17.5, -19.8) spd=0.8 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.8, -19.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.5) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=92  FL0=19.3s FL2=6.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=144  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=71  FL1=790.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.38m/s  entries=47  exits=45  peak=3  occ-s=1388.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=72  exits=72  peak=2  occ-s=350.9  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=36  exits=35  peak=3  occ-s=1275.6  max_dwell=790.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=57504  proximity=3  idle=1  queue=2246  buildup=55254  ped_near_miss=0
+[showcase] t=1120s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1120.0s
+  FL0: ( -17.3,  -4.0) spd=2.9 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -21.1) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -16.3) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=93  FL2=16.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=146  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=71  FL1=800.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=47  exits=46  peak=3  occ-s=1402.3  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=73  exits=73  peak=2  occ-s=353.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=36  exits=35  peak=3  occ-s=1285.6  max_dwell=800.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=58104  proximity=3  idle=1  queue=2246  buildup=55854  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL0 (pickup)
+[showcase] t=1130s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1130.0s
+  FL0: ( -15.7,   5.0) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -18.0) spd=1.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=93  FL2=26.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=146  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=72  FL0=7.4s FL1=810.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=47  exits=46  peak=3  occ-s=1412.3  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=73  exits=73  peak=2  occ-s=353.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=37  exits=35  peak=3  occ-s=1303.0  max_dwell=810.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=58704  proximity=3  idle=1  queue=2246  buildup=56454  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → loading
+[showcase] t=1140s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=1140.0s
+  FL0: ( -13.2,   1.2) spd=2.4 state=move_to_staging area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.4, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=94  FL2=36.5s FL3=9.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=146  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=73  FL1=820.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=48  exits=46  peak=3  occ-s=1431.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=73  exits=73  peak=2  occ-s=353.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=37  exits=36  peak=3  occ-s=1321.9  max_dwell=820.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=59304  proximity=3  idle=1  queue=2246  buildup=57054  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL3
+[showcase] t=1150s | loaded=2 unloaded=2 | at_dock=3 staging_queue=0
+[showcase] t=1150.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.6, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.3, -19.9) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=3/1 full=True blocked=False pallets=0 transitions=95  FL0=1.5s FL2=46.5s FL3=19.4s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=148  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=73  FL1=830.9s
+  [ZoneMonitor] LoadingZone           cnt=3  avg_spd=0.38m/s  entries=49  exits=46  peak=3  occ-s=1453.2  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=74  exits=74  peak=2  occ-s=357.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=37  exits=36  peak=3  occ-s=1331.9  max_dwell=830.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=59904  proximity=3  idle=1  queue=2246  buildup=57654  ped_near_miss=0
+[showcase] t=1160s | loaded=2 unloaded=2 | at_dock=1 staging_queue=1
+[showcase] t=1160.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.8,   3.0) spd=3.0 state=returning area=open
+  FL3: (  -3.9,  -6.1) spd=2.9 state=returning area=StagingArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=97  FL0=11.5s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=151  FL3=1.8s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=73  FL1=840.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=49  exits=48  peak=3  occ-s=1468.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.91m/s  entries=76  exits=75  peak=2  occ-s=361.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=37  exits=36  peak=3  occ-s=1341.9  max_dwell=840.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=60504  proximity=3  idle=1  queue=2246  buildup=58254  ped_near_miss=0
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL2 (pickup)
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL0
+[showcase] t=1170s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1170.0s
+  FL0: ( -16.0, -20.2) spd=0.8 state=returning area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -7.8,   4.4) spd=1.8 state=move_to_staging area=ShelvesArea
+  FL3: (  -4.6,   0.3) spd=0.7 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=97  FL0=21.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=152  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=74  FL1=850.9s FL2=9.8s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=49  exits=48  peak=3  occ-s=1478.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=76  exits=76  peak=2  occ-s=362.0  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=2.41m/s  entries=38  exits=36  peak=3  occ-s=1361.7  max_dwell=850.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=61104  proximity=3  idle=1  queue=2246  buildup=58854  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL3 (pickup)
+[showcase] t=1180s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1180.0s
+  FL0: ( -16.2,   2.5) spd=3.0 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.1) spd=3.0 state=move_to_loading area=LoadingZone
+  FL3: (  -4.2,   6.1) spd=0.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=99  FL2=0.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=156  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=76  FL1=860.9s FL3=8.3s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=2.98m/s  entries=50  exits=49  peak=3  occ-s=1479.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=78  exits=78  peak=2  occ-s=368.2  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=39  exits=37  peak=3  occ-s=1380.4  max_dwell=860.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=61317  proximity=3  idle=1  queue=2367  buildup=58946  ped_near_miss=0
+[RuleEngine] FL2: move_to_loading → loading
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL0 (pickup)
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[showcase] t=1190s | loaded=4 unloaded=0 | at_dock=1 staging_queue=0
+[showcase] t=1190.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -12.9) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=99  FL2=10.1s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=158  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=78  FL0=9.6s FL1=870.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=50  exits=49  peak=3  occ-s=1489.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=79  exits=79  peak=2  occ-s=371.7  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=40  exits=38  peak=3  occ-s=1402.4  max_dwell=870.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=61917  proximity=3  idle=1  queue=2367  buildup=59546  ped_near_miss=0
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL2
+[showcase] t=1200s | loaded=3 unloaded=1 | at_dock=1 staging_queue=1
+[showcase] t=1200.0s
+  FL0: ( -15.1,  -4.3) spd=2.8 state=move_to_staging area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.8, -20.2) spd=0.8 state=returning area=LoadingZone
+  FL3: (  -3.6, -13.9) spd=0.5 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=99  FL2=20.1s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=159  FL0=0.1s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=79  FL1=880.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=50  exits=49  peak=3  occ-s=1499.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.80m/s  entries=80  exits=79  peak=2  occ-s=371.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=40  exits=39  peak=3  occ-s=1419.0  max_dwell=880.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=62517  proximity=3  idle=1  queue=2367  buildup=60146  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[RuleEngine] FL0: move_to_loading → loading
+[showcase] t=1210s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1210.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -18.5) spd=0.2 state=returning area=open
+  FL3: (  -3.6, -13.2) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=101  FL0=3.7s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=160  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=79  FL1=890.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=51  exits=50  peak=3  occ-s=1506.1  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=80  exits=80  peak=2  occ-s=375.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=40  exits=39  peak=3  occ-s=1429.0  max_dwell=890.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=62913  proximity=3  idle=1  queue=2367  buildup=60542  ped_near_miss=0
+[showcase] t=1220s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=1220.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -19.1) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -13.9) spd=0.2 state=move_to_loading area=open
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=102  FL0=13.7s FL2=3.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=160  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=79  FL1=900.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.20m/s  entries=52  exits=50  peak=3  occ-s=1519.7  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=80  exits=80  peak=2  occ-s=375.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=40  exits=39  peak=3  occ-s=1439.0  max_dwell=900.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=63513  proximity=3  idle=1  queue=2367  buildup=61142  ped_near_miss=0
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 3 dropped at dock by FL0
+[showcase] t=1230s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1230.0s
+  FL0: ( -15.3, -17.8) spd=1.6 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -20.7) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -15.9) spd=0.9 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=103  FL2=13.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=160  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=79  FL1=910.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=52  exits=51  peak=3  occ-s=1538.9  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=80  exits=80  peak=2  occ-s=375.4  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=40  exits=39  peak=3  occ-s=1449.0  max_dwell=910.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=64113  proximity=3  idle=1  queue=2367  buildup=61742  ped_near_miss=0
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=1240s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1240.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.2, -21.6) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.5, -18.3) spd=1.5 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=103  FL2=23.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=162  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=80  FL0=1.8s FL1=920.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=52  exits=51  peak=3  occ-s=1548.9  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=81  exits=81  peak=2  occ-s=377.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=41  exits=39  peak=3  occ-s=1460.9  max_dwell=920.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=64713  proximity=3  idle=1  queue=2367  buildup=62342  ped_near_miss=0
+[RuleEngine] FL3: move_to_loading → loading
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL0 (pickup)
+[showcase] t=1250s | loaded=3 unloaded=1 | at_dock=2 staging_queue=0
+[showcase] t=1250.0s
+  FL0: ( -15.8,   4.6) spd=0.4 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.4, -21.6) spd=0.0 state=returning area=LoadingZone
+  FL3: (  -3.5, -19.2) spd=0.0 state=loading area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=104  FL2=33.6s FL3=9.6s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=162  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=80  FL0=11.8s FL1=930.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=0.00m/s  entries=53  exits=51  peak=3  occ-s=1568.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=81  exits=81  peak=2  occ-s=377.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.70m/s  entries=41  exits=39  peak=3  occ-s=1480.9  max_dwell=930.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=65313  proximity=3  idle=1  queue=2367  buildup=62942  ped_near_miss=0
+[RuleEngine] FL3: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL3
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=1260s | loaded=2 unloaded=2 | at_dock=2 staging_queue=1
+[showcase] t=1260.0s
+  FL0: ( -16.8,  -7.6) spd=2.2 state=move_to_loading area=StagingArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -6.0, -19.8) spd=2.2 state=returning area=LoadingZone
+  FL3: (  -3.2, -20.0) spd=0.8 state=returning area=LoadingZone
+  [LoadingZone] occupancy=2/1 full=True blocked=False pallets=0 transitions=104  FL2=43.6s FL3=19.6s
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=163  FL0=2.3s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=81  FL1=940.9s
+  [ZoneMonitor] LoadingZone           cnt=2  avg_spd=1.46m/s  entries=53  exits=51  peak=3  occ-s=1588.6  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.18m/s  entries=82  exits=81  peak=2  occ-s=380.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=41  exits=40  peak=3  occ-s=1495.3  max_dwell=940.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=65913  proximity=3  idle=1  queue=2367  buildup=63542  ped_near_miss=0
+[RuleEngine] FL0: move_to_loading → loading
+[RuleEngine] FL2: returning → idle
+[RuleEngine] FL2: idle → pickup_at_shelves
+[showcase] t=1270s | loaded=2 unloaded=2 | at_dock=1 staging_queue=0
+[showcase] t=1270.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (  -4.2,  -3.7) spd=3.0 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=107  FL0=5.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=168  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=82  FL1=950.9s FL2=1.2s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=54  exits=53  peak=3  occ-s=1597.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=84  exits=84  peak=2  occ-s=386.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=42  exits=40  peak=3  occ-s=1506.5  max_dwell=950.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=66425  proximity=3  idle=1  queue=2367  buildup=64054  ped_near_miss=0
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 1 → FL2 (pickup)
+[showcase] t=1280s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1280.0s
+  FL0: ( -17.6, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -8.0,   1.3) spd=2.5 state=move_to_staging area=open
+  FL3: (  -5.0,   3.3) spd=3.0 state=returning area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=107  FL0=15.9s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=168  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=83  FL1=960.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=54  exits=53  peak=3  occ-s=1607.5  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=84  exits=84  peak=2  occ-s=386.5  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=42  exits=41  peak=3  occ-s=1525.5  max_dwell=960.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=67025  proximity=3  idle=1  queue=2367  buildup=64654  ped_near_miss=0
+[RuleEngine] FL3: returning → idle
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL0: loading → returning
+[pallet_flow] Pallet 2 dropped at dock by FL0
+[RuleEngine] FL2: move_to_staging → move_to_loading
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 2 → FL3 (pickup)
+[RuleEngine] FL2: move_to_loading → loading
+[showcase] t=1290s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1290.0s
+  FL0: ( -17.3, -13.3) spd=2.7 state=returning area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -2.6,   5.1) spd=1.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=109  FL2=1.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=170  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=84  FL1=970.9s FL3=9.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=55  exits=54  peak=3  occ-s=1616.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=85  exits=85  peak=2  occ-s=390.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=2.42m/s  entries=43  exits=41  peak=3  occ-s=1545.4  max_dwell=970.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=67536  proximity=3  idle=1  queue=2367  buildup=65165  ped_near_miss=0
+[RuleEngine] FL3: move_to_staging → move_to_loading
+[RuleEngine] FL0: returning → idle
+[RuleEngine] FL0: idle → pickup_at_shelves
+[showcase] t=1300s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1300.0s
+  FL0: ( -15.8,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -3.2, -19.2) spd=0.0 state=loading area=LoadingZone
+  FL3: (  -3.5, -12.9) spd=0.4 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=109  FL2=11.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=174  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=86  FL0=4.1s FL1=980.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=55  exits=54  peak=3  occ-s=1626.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=87  exits=87  peak=2  occ-s=396.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.50m/s  entries=44  exits=42  peak=3  occ-s=1560.3  max_dwell=980.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=68136  proximity=3  idle=1  queue=2367  buildup=65765  ped_near_miss=0
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[pallet_flow] Pallet 3 → FL0 (pickup)
+[RuleEngine] FL2: loading → returning
+[pallet_flow] Pallet 1 dropped at dock by FL2
+[showcase] t=1310s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1310.0s
+  FL0: ( -15.3,   4.8) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -4.8, -20.3) spd=0.8 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.3) spd=0.0 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=109  FL2=21.5s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=174  
+  [ShelvesArea] occupancy=2/∞ full=False blocked=False pallets=0 transitions=86  FL0=14.1s FL1=990.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.75m/s  entries=55  exits=54  peak=3  occ-s=1636.0  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=87  exits=87  peak=2  occ-s=396.1  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=2  avg_spd=1.87m/s  entries=44  exits=42  peak=3  occ-s=1580.3  max_dwell=990.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=68736  proximity=3  idle=1  queue=2367  buildup=66365  ped_near_miss=0
+[RuleEngine] FL0: move_to_staging → move_to_loading
+[showcase] t=1320s | loaded=3 unloaded=1 | at_dock=1 staging_queue=0
+[showcase] t=1320.0s
+  FL0: ( -17.8, -13.5) spd=2.9 state=move_to_loading area=open
+  FL1: ( -12.6,  10.1) spd=3.0 state=move_to_loading area=ShelvesArea
+  FL2: (  -5.7, -19.4) spd=0.4 state=returning area=LoadingZone
+  FL3: (  -3.6, -14.2) spd=0.9 state=move_to_loading area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=111  FL2=4.3s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=176  
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=87  FL1=1000.9s
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.40m/s  entries=56  exits=55  peak=3  occ-s=1641.8  max_dwell=90.6s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=88  exits=88  peak=2  occ-s=399.8  max_dwell=47.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=3.00m/s  entries=44  exits=43  peak=3  occ-s=1592.4  max_dwell=1000.9s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+  Pedestrian(id=1, name=Character_01, state=walking, wps=4)
+  [events] total=69085  proximity=3  idle=1  queue=2367  buildup=66714  ped_near_miss=0
