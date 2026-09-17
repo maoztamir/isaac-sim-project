@@ -313,3 +313,113 @@
   [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
   [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
   [events] total=9060  proximity=0  idle=14  queue=46  buildup=9000  ped_near_miss=0
+[dock_queue_forming] t=160.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=160.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=160.0  max_dwell=160.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=9662  proximity=0  idle=16  queue=46  buildup=9600  ped_near_miss=0
+[dock_queue_forming] t=170.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=170.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=170.0  max_dwell=170.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=10262  proximity=0  idle=16  queue=46  buildup=10200  ped_near_miss=0
+[dock_queue_forming] t=180.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=180.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=180.0  max_dwell=180.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=10864  proximity=0  idle=18  queue=46  buildup=10800  ped_near_miss=0
+[dock_queue_forming] t=190.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=190.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=190.0  max_dwell=190.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=11464  proximity=0  idle=18  queue=46  buildup=11400  ped_near_miss=0
+[dock_queue_forming] t=200.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=200.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=200.0  max_dwell=200.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=12066  proximity=0  idle=20  queue=46  buildup=12000  ped_near_miss=0
+[dock_queue_forming] t=210.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=210.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=210.0  max_dwell=210.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=12666  proximity=0  idle=20  queue=46  buildup=12600  ped_near_miss=0
+[dock_queue_forming] t=220.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=220.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=220.0  max_dwell=220.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=13268  proximity=0  idle=22  queue=46  buildup=13200  ped_near_miss=0
+[dock_queue_forming] t=230.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=230.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=230.0  max_dwell=230.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=13868  proximity=0  idle=22  queue=46  buildup=13800  ped_near_miss=0
+[dock_queue_forming] t=240.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=240.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=240.0  max_dwell=240.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=14470  proximity=0  idle=24  queue=46  buildup=14400  ped_near_miss=0
+[dock_queue_forming] t=250.0s
+  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
+  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
+  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=250.0s
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
+  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
+  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=250.0  max_dwell=250.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
+  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [events] total=15070  proximity=0  idle=24  queue=46  buildup=15000  ped_near_miss=0
