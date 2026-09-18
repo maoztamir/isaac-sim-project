@@ -1,26 +1,26 @@
 [main] logging to /home/ubuntu/isaac_sim_samples/isaac-sim-project/tests/output/main.log
-[main] Loading scenario: dock_queue_forming
+[main] Loading scenario: dock_queue_pedestrian
 [main] warehouse_sim loaded from: /home/ubuntu/isaac_sim_samples/isaac-sim-project/warehouse_sim/__init__.py
 [main] Preset scenarios:  ['dock_queue', 'dock_queue_pedestrian', 'loading_pause', 'loading_pause_004', 'area_buildup', 'aisle_congestion', 'showcase', 'door_cycle', 'mixed_floor', 'dock_queue_forming', 'door_idle', 'live_alerts', 'pallet_occupancy', 'floor_occupancy', 'overspill_detection']
 [main] Config scenarios:  ['vehicle_idle']
 [main] STAGING_CENTER_Y = -7.65 (expect ~ -7.65)
-[main] Instantiating SpecScenario[dock_queue_forming] ...
-[dock_queue_forming] Getting stage...
-[dock_queue_forming] Resolving assets root...
-[dock_queue_forming] Clearing /World...
-[dock_queue_forming] Loading warehouse USD...
+[main] Released previous scenario's physics subscription.
+[main] Instantiating DockQueuePedestrianScenario ...
+[dock_queue_pedestrian] Getting stage...
+[dock_queue_pedestrian] Resolving assets root...
+[dock_queue_pedestrian] Clearing /World...
+[dock_queue_pedestrian] Loading warehouse USD...
 [spawn_cameras_from_usd] cam_south → /World/Cameras/cam_south
 [spawn_cameras_from_usd] cam_north → /World/Cameras/cam_north
 [spawn_cameras_from_usd] cam_west → /World/Cameras/cam_west
 [spawn_cameras_from_usd] cam_east → /World/Cameras/cam_east
-[dock_queue_forming] 4 surveillance cameras loaded from USD.
-[dock_queue_forming] 3 loading dock gates + crates spawned.
-[dock_queue_forming] Scene built: 3 forklifts, 0 pedestrians, 3 areas, 3 doors.
-[dock_queue_forming] doors: [(0, 'closed'), (1, 'open'), (2, 'closed')]
-[dock_queue_forming] focus camera spawned at /World/Cameras/cam_dock_queue
-[ih] active camera → /World/Cameras/cam_dock_queue
-[dock_queue_forming] 1 spec pallets spawned.
-[dock_queue_forming] Spec loaded — 3 forklifts, 3 timeline phases.
+[dock_queue_pedestrian] 4 surveillance cameras loaded from USD.
+[dock_queue_pedestrian] 3 loading dock gates + crates spawned.
+[dock_queue_pedestrian] Pedestrian 0 registered: Character, 4 waypoints, loop=True
+[ih] Command file written: /tmp/warehouse_sim_pedestrians.txt (8 lines, 1 pedestrian(s))
+[ih] NavMesh baking failed — falling back to direct-path navigation (navmesh_enabled=False). Characters will walk straight-line routes.
+[ih] IRA pedestrians ready: 1 character(s), 1 SkelRoot(s) wired.
+[dock_queue_pedestrian] Scene built: 4 forklifts, 1 pedestrians, 3 areas, 3 doors.
 [main] Scene ready — 30s delay before simulation starts.
 [main] Start your screen recorder now, then wait for the countdown.
 [main]   30s ...
@@ -30,8 +30,8 @@
 [main]   10s ...
 [main]   5s ...
 [main] Starting simulation now.
-[dock_queue_forming] Simulation started.
-[dock_queue_forming] First physics step — initialising ShelfMap...
+[dock_queue_pedestrian] Simulation started.
+[dock_queue_pedestrian] First physics step — initialising ShelfMap...
 [ShelfMap] trying decal-based scan first
 [ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X11'               cx=-20.36 cy=8.65
 [ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=8.65
@@ -146,280 +146,243 @@
 [ShelfMap] Shelf Y: 8.1 -> 25.7
 [ShelfMap] Aisles X: [-20.4, -15.4, -10.5, -5.5, -0.5]
 [ShelfMap] 6 shelf rects, 5 aisles detected.
-[dock_queue_forming] doors: [(0, 'closed'), (1, 'open'), (2, 'closed')]
-[dock_queue_forming] ShelfMap ready, waypoints assigned.
-[dock_queue_forming] t=10.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=10.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=10.0  max_dwell=10.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=646  proximity=0  idle=0  queue=46  buildup=600  ped_near_miss=0
-[dock_queue_forming] t=20.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=20.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=20.0  max_dwell=20.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=1248  proximity=0  idle=2  queue=46  buildup=1200  ped_near_miss=0
-[dock_queue_forming] t=30.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=30.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=30.0  max_dwell=30.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=1848  proximity=0  idle=2  queue=46  buildup=1800  ped_near_miss=0
-[dock_queue_forming] t=40.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=40.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=40.0  max_dwell=40.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=2450  proximity=0  idle=4  queue=46  buildup=2400  ped_near_miss=0
-[dock_queue_forming] t=50.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=50.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=50.0  max_dwell=50.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=3050  proximity=0  idle=4  queue=46  buildup=3000  ped_near_miss=0
-[dock_queue_forming] t=60.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=60.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=60.0  max_dwell=60.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=3652  proximity=0  idle=6  queue=46  buildup=3600  ped_near_miss=0
-[dock_queue_forming] t=70.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=70.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=70.0  max_dwell=70.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=4252  proximity=0  idle=6  queue=46  buildup=4200  ped_near_miss=0
-[dock_queue_forming] t=80.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=80.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=80.0  max_dwell=80.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=4854  proximity=0  idle=8  queue=46  buildup=4800  ped_near_miss=0
-[dock_queue_forming] t=90.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=90.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=90.0  max_dwell=90.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=5454  proximity=0  idle=8  queue=46  buildup=5400  ped_near_miss=0
-[dock_queue_forming] t=100.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=100.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=100.0  max_dwell=100.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=6056  proximity=0  idle=10  queue=46  buildup=6000  ped_near_miss=0
-[dock_queue_forming] t=110.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=110.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=110.0  max_dwell=110.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=6656  proximity=0  idle=10  queue=46  buildup=6600  ped_near_miss=0
-[dock_queue_forming] t=120.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=120.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=120.0  max_dwell=120.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=7258  proximity=0  idle=12  queue=46  buildup=7200  ped_near_miss=0
-[dock_queue_forming] t=130.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=130.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=130.0  max_dwell=130.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=7858  proximity=0  idle=12  queue=46  buildup=7800  ped_near_miss=0
-[dock_queue_forming] t=140.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=140.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=140.0  max_dwell=140.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=8460  proximity=0  idle=14  queue=46  buildup=8400  ped_near_miss=0
-[dock_queue_forming] t=150.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=150.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=150.0  max_dwell=150.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=9060  proximity=0  idle=14  queue=46  buildup=9000  ped_near_miss=0
-[dock_queue_forming] t=160.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=160.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=160.0  max_dwell=160.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=9662  proximity=0  idle=16  queue=46  buildup=9600  ped_near_miss=0
-[dock_queue_forming] t=170.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=170.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=170.0  max_dwell=170.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=10262  proximity=0  idle=16  queue=46  buildup=10200  ped_near_miss=0
-[dock_queue_forming] t=180.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=180.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=180.0  max_dwell=180.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=10864  proximity=0  idle=18  queue=46  buildup=10800  ped_near_miss=0
-[dock_queue_forming] t=190.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=190.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=190.0  max_dwell=190.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=11464  proximity=0  idle=18  queue=46  buildup=11400  ped_near_miss=0
-[dock_queue_forming] t=200.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=200.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=200.0  max_dwell=200.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=12066  proximity=0  idle=20  queue=46  buildup=12000  ped_near_miss=0
-[dock_queue_forming] t=210.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=210.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=210.0  max_dwell=210.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=12666  proximity=0  idle=20  queue=46  buildup=12600  ped_near_miss=0
-[dock_queue_forming] t=220.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=220.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=220.0  max_dwell=220.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=13268  proximity=0  idle=22  queue=46  buildup=13200  ped_near_miss=0
-[dock_queue_forming] t=230.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=230.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=230.0  max_dwell=230.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=13868  proximity=0  idle=22  queue=46  buildup=13800  ped_near_miss=0
-[dock_queue_forming] t=240.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=240.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=240.0  max_dwell=240.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=14470  proximity=0  idle=24  queue=46  buildup=14400  ped_near_miss=0
-[dock_queue_forming] t=250.0s
-  FL0: ( -10.4, -21.2) spd=0.0 state=loading area=LoadingZone
-  FL1: ( -10.5, -16.8) spd=0.0 state=idle area=open
-  FL2: ( -10.4, -13.8) spd=0.0 state=idle area=open
-  [LoadingZone] occupancy=1/1 full=True blocked=False pallets=0 transitions=1  FL0=250.0s
-  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=4  
-  [ShelvesArea] occupancy=0/∞ full=False blocked=False pallets=0 transitions=0  
-  [ZoneMonitor] LoadingZone           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=250.0  max_dwell=250.0s
-  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=2  exits=2  peak=2  occ-s=7.9  max_dwell=7.1s
-  [ZoneMonitor] ShelvesArea           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
-  [events] total=15070  proximity=0  idle=24  queue=46  buildup=15000  ped_near_miss=0
+[dock_queue_pedestrian] doors 0+2 open, door 1 closed — 4 forklifts staggered by 5.0s, loading duration 20.0s
+[dock_queue_pedestrian] ShelfMap ready, waypoints assigned.
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL1: idle → pickup_at_shelves
+[dock_queue_pedestrian] t=10.0s
+  FL0: ( -20.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.1, -10.1) spd=2.9 state=pickup_at_shelves area=StagingArea
+  FL2: (  -7.5, -18.6) spd=0.0 state=idle area=open
+  FL3: (  -0.5, -18.6) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=3  FL1=0.4s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=1  FL0=0.4s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.88m/s  entries=2  exits=1  peak=1  occ-s=2.8  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=0.4  max_dwell=0.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL1: pickup_at_shelves → move_to_staging
+[dock_queue_pedestrian] t=20.0s
+  FL0: ( -19.8,   5.9) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -15.1,   5.1) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.3,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (   2.2, -10.1) spd=2.9 state=pickup_at_shelves area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=6  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=3  FL0=10.4s FL1=5.3s FL2=0.4s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=7.2  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=0.25m/s  entries=3  exits=0  peak=3  occ-s=16.1  max_dwell=10.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[dock_queue_pedestrian] t=30.0s
+  FL0: ( -21.2,   5.4) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -15.7,   5.6) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.0,   5.8) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL3: (  -0.3,   5.2) spd=0.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=6  
+  [ShelvesArea] occupancy=4/∞ full=False blocked=False pallets=0 transitions=4  FL0=20.4s FL1=15.3s FL2=10.4s FL3=5.3s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=7.2  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=4  avg_spd=0.19m/s  entries=4  exits=0  peak=4  occ-s=51.5  max_dwell=20.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         [main] logging to /home/ubuntu/isaac_sim_samples/isaac-sim-project/tests/output/main.log
+[main] Loading scenario: dock_queue_pedestrian
+[main] warehouse_sim loaded from: /home/ubuntu/isaac_sim_samples/isaac-sim-project/warehouse_sim/__init__.py
+[main] Preset scenarios:  ['dock_queue', 'dock_queue_pedestrian', 'loading_pause', 'loading_pause_004', 'area_buildup', 'aisle_congestion', 'showcase', 'door_cycle', 'mixed_floor', 'dock_queue_forming', 'door_idle', 'live_alerts', 'pallet_occupancy', 'floor_occupancy', 'overspill_detection']
+[main] Config scenarios:  ['vehicle_idle']
+[main] STAGING_CENTER_Y = -7.65 (expect ~ -7.65)
+[main] Released previous scenario's physics subscription.
+[main] Instantiating DockQueuePedestrianScenario ...
+[dock_queue_pedestrian] Getting stage...
+[dock_queue_pedestrian] Resolving assets root...
+[dock_queue_pedestrian] Clearing /World...
+[dock_queue_pedestrian] Loading warehouse USD...
+[spawn_cameras_from_usd] cam_south → /World/Cameras/cam_south
+[spawn_cameras_from_usd] cam_north → /World/Cameras/cam_north
+[spawn_cameras_from_usd] cam_west → /World/Cameras/cam_west
+[spawn_cameras_from_usd] cam_east → /World/Cameras/cam_east
+[dock_queue_pedestrian] 4 surveillance cameras loaded from USD.
+[dock_queue_pedestrian] 3 loading dock gates + crates spawned.
+[dock_queue_pedestrian] Pedestrian 0 registered: Character, 4 waypoints, loop=True
+[ih] Command file written: /tmp/warehouse_sim_pedestrians.txt (8 lines, 1 pedestrian(s))
+[ih] NavMesh baking failed — falling back to direct-path navigation (navmesh_enabled=False). Characters will walk straight-line routes.
+[ih] IRA pedestrians ready: 1 character(s), 1 SkelRoot(s) wired.
+[dock_queue_pedestrian] Scene built: 4 forklifts, 1 pedestrians, 3 areas, 3 doors.
+[main] Scene ready — 30s delay before simulation starts.
+[main] Start your screen recorder now, then wait for the countdown.
+[main]   30s ...
+[main]   25s ...
+[main]   20s ...
+[main]   15s ...
+[main]   10s ...
+[main]   5s ...
+[main] Starting simulation now.
+[dock_queue_pedestrian] Simulation started.
+[dock_queue_pedestrian] First physics step — initialising ShelfMap...
+[ShelfMap] trying decal-based scan first
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X11'               cx=-20.36 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m62'          cx=-20.94 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m63'          cx=-20.94 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m64'          cx=-20.94 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m65'          cx=-20.94 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-20.94 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m66_1161'     cx=-19.80 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m67_1162'     cx=-19.80 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m68_1163'     cx=-19.80 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m69_1164'     cx=-19.80 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-19.80 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X12_1166'          cx=-20.36 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-20.36 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X17'               cx=-10.45 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-10.45 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m82'          cx=-11.03 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m83'          cx=-11.03 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m84'          cx=-11.03 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m85'          cx=-11.03 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-11.03 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m86'          cx=-9.89 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m87'          cx=-9.89 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m88'          cx=-9.89 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m89'          cx=-9.89 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-9.89 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X18'               cx=-10.45 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-10.45 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X19'               cx=-5.49 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-5.49 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m90'          cx=-6.07 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m91'          cx=-6.07 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m92'          cx=-6.07 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m93'          cx=-6.07 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-6.07 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m94'          cx=-4.93 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m95'          cx=-4.93 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m96'          cx=-4.93 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m97'          cx=-4.93 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-4.93 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X20'               cx=-5.49 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-5.49 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X21'               cx=-0.54 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-0.54 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m98'          cx=-1.12 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m99'          cx=-1.12 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m100'         cx=-1.12 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m101'         cx=-1.12 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-1.12 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m102'         cx=0.02 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m103'         cx=0.02 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m104'         cx=0.02 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m105'         cx=0.02 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=0.02 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X22'               cx=-0.54 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-0.54 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X13'               cx=-15.41 cy=8.65
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-15.41 cy=8.65
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m70'          cx=-15.99 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m71_10'       cx=-15.99 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m72_11'       cx=-15.99 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m73_12'       cx=-15.99 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-15.99 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m106'         cx=-14.85 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=11.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m107'         cx=-14.85 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=15.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m108'         cx=-14.85 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=19.19
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m109'         cx=-14.85 cy=22.92
+[ShelfMap]   decal Stripe4m  'SM_FloorDecal_StripeFull_4m'            cx=-14.85 cy=22.92
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X14_13'            cx=-15.41 cy=25.19
+[ShelfMap]   decal RecRed    'SM_FloorDecal_RecRed1X1'                cx=-15.41 cy=25.19
+[ShelfMap] decal scan: aisle Xs = [-20.36, -15.41, -10.45, -5.49, -0.54]
+[ShelfMap] decal scan: shelf Y 8.11 → 25.73
+[ShelfMap] decal scan: boundary Xs = [-20.94, -19.8, -15.99, -14.85, -11.03, -9.89, -6.07, -4.93, -1.12, 0.02]
+[ShelfMap]   shelf block: x=(-24.53,-20.94) y=(8.11,25.73) w=3.59m
+[ShelfMap]   shelf block: x=(-19.80,-15.99) y=(8.11,25.73) w=3.81m
+[ShelfMap]   shelf block: x=(-14.85,-11.03) y=(8.11,25.73) w=3.82m
+[ShelfMap]   shelf block: x=(-9.89,-6.07) y=(8.11,25.73) w=3.82m
+[ShelfMap]   shelf block: x=(-4.93,-1.12) y=(8.11,25.73) w=3.81m
+[ShelfMap]   shelf block: x=(0.02,3.66) y=(8.11,25.73) w=3.64m
+[ShelfMap] decal scan complete: 6 rects, 5 aisles
+[ShelfMap] Shelf Y: 8.1 -> 25.7
+[ShelfMap] Aisles X: [-20.4, -15.4, -10.5, -5.5, -0.5]
+[ShelfMap] 6 shelf rects, 5 aisles detected.
+[dock_queue_pedestrian] doors 0+2 open, door 1 closed — 4 forklifts staggered by 5.0s, loading duration 20.0s
+[dock_queue_pedestrian] ShelfMap ready, waypoints assigned.
+[RuleEngine] FL0: idle → pickup_at_shelves
+[RuleEngine] FL1: idle → pickup_at_shelves
+[dock_queue_pedestrian] t=10.0s
+  FL0: ( -20.1,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL1: ( -12.1, -10.1) spd=2.9 state=pickup_at_shelves area=StagingArea
+  FL2: (  -7.5, -18.6) spd=0.0 state=idle area=open
+  FL3: (  -0.5, -18.6) spd=0.0 state=idle area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=1/6 full=False blocked=False pallets=0 transitions=3  FL1=0.4s
+  [ShelvesArea] occupancy=1/∞ full=False blocked=False pallets=0 transitions=1  FL0=0.4s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=1  avg_spd=2.88m/s  entries=2  exits=1  peak=1  occ-s=2.8  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=1  avg_spd=0.00m/s  entries=1  exits=0  peak=1  occ-s=0.4  max_dwell=0.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+[RuleEngine] FL2: idle → pickup_at_shelves
+[RuleEngine] FL0: pickup_at_shelves → move_to_staging
+[RuleEngine] FL3: idle → pickup_at_shelves
+[RuleEngine] FL1: pickup_at_shelves → move_to_staging
+[dock_queue_pedestrian] t=20.0s
+  FL0: ( -19.8,   5.9) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -15.1,   5.1) spd=0.8 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.3,   4.7) spd=0.0 state=pickup_at_shelves area=ShelvesArea
+  FL3: (   2.2, -10.1) spd=2.9 state=pickup_at_shelves area=open
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=6  
+  [ShelvesArea] occupancy=3/∞ full=False blocked=False pallets=0 transitions=3  FL0=10.4s FL1=5.3s FL2=0.4s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=7.2  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=3  avg_spd=0.25m/s  entries=3  exits=0  peak=3  occ-s=16.1  max_dwell=10.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
+[RuleEngine] FL2: pickup_at_shelves → move_to_staging
+[RuleEngine] FL3: pickup_at_shelves → move_to_staging
+[dock_queue_pedestrian] t=30.0s
+  FL0: ( -21.2,   5.4) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL1: ( -15.7,   5.6) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL2: (  -5.0,   5.8) spd=0.0 state=move_to_staging area=ShelvesArea
+  FL3: (  -0.3,   5.2) spd=0.8 state=move_to_staging area=ShelvesArea
+  [LoadingZone] occupancy=0/1 full=False blocked=False pallets=0 transitions=0  
+  [StagingArea] occupancy=0/6 full=False blocked=False pallets=0 transitions=6  
+  [ShelvesArea] occupancy=4/∞ full=False blocked=False pallets=0 transitions=4  FL0=20.4s FL1=15.3s FL2=10.4s FL3=5.3s
+  [ZoneMonitor] LoadingZone           cnt=0  avg_spd=0.00m/s  entries=0  exits=0  peak=0  occ-s=0.0  max_dwell=0.0s
+  [ZoneMonitor] StagingArea           cnt=0  avg_spd=0.00m/s  entries=3  exits=3  peak=1  occ-s=7.2  max_dwell=2.4s
+  [ZoneMonitor] ShelvesArea           cnt=4  avg_spd=0.19m/s  entries=4  exits=0  peak=4  occ-s=51.5  max_dwell=20.4s
+  Pedestrian(id=0, name=Character, state=walking, wps=4)
