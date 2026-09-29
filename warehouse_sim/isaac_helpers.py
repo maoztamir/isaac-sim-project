@@ -26,6 +26,13 @@ def get_stage():
     return get_current_stage()
 
 
+def new_stage():
+    """Close the current stage and open a fresh empty one. Returns the new stage."""
+    import omni.usd
+    omni.usd.get_context().new_stage()
+    return get_stage()
+
+
 def get_assets_root():
     """Return the Nucleus/local assets root path string."""
     from isaacsim.storage.native import get_assets_root_path
