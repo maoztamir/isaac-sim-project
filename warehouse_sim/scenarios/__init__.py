@@ -14,6 +14,7 @@ from .live_alerts              import LiveAlertsScenario
 from .pallet_occupancy         import PalletOccupancyScenario
 from .floor_occupancy          import FloorOccupancyScenario
 from .overspill_detection      import OverspillDetectionScenario
+from .acme_route_block         import AcmeRouteBlockScenario
 from .specs.dock_queue_forming import SPEC as _SPEC_DOCK_QUEUE_FORMING
 
 
@@ -40,6 +41,7 @@ PRESETS = {
     "pallet_occupancy":        PalletOccupancyScenario,
     "floor_occupancy":         FloorOccupancyScenario,
     "overspill_detection":     OverspillDetectionScenario,
+    "acme_route_block":       AcmeRouteBlockScenario,
 }
 
 

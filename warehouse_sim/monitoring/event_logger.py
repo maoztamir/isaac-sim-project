@@ -10,6 +10,9 @@ Supported event types (use the EVENT_* constants):
   EVENT_PALLET_TRANSFER    Pallet picked up or deposited
   EVENT_PROXIMITY_ALERT    Two forklifts within near-miss distance
   EVENT_IDLE_ALERT         Forklift idle in non-designated area past threshold
+  EVENT_ROUTE_BLOCK_PLACED  Pallet/box set down on a dock-face lane (MAO-106)
+  EVENT_ROUTE_BLOCK_CLEARED Pallet/box removed from a dock-face lane (MAO-106)
+  EVENT_CONTROL_NOTE        Ground-truth marker for a MAO-106 control case
 
 Each event is an Event namedtuple:
   Event(type, sim_time, payload)
@@ -32,6 +35,9 @@ EVENT_IDLE_ALERT             = "idle_alert"
 EVENT_PEDESTRIAN_NEAR_MISS   = "pedestrian_near_miss"
 EVENT_FLOOR_OCCUPANCY        = "floor_occupancy"        # zone % coverage snapshot
 EVENT_OVERSPILL_DETECTED     = "overspill_detected"     # pallet/box outside zone boundary
+EVENT_ROUTE_BLOCK_PLACED     = "route_block_placed"     # MAO-106: pallet/box set down on a lane
+EVENT_ROUTE_BLOCK_CLEARED    = "route_block_cleared"    # MAO-106: pallet/box removed from a lane
+EVENT_CONTROL_NOTE           = "control_note"           # MAO-106: ground-truth control-case marker
 
 
 @dataclass
@@ -177,6 +183,42 @@ class EventLogger:
             "y":             round(y, 3),
             "dist_to_zone":  round(dist_to_zone, 3),
         }))
+
+    def log_route_block_placed(self, sim_time: float, lane_name: str,
+                               x: float, y: float, fl_id: int) -> None:
+        """A pallet/box was set down on a dock-face lane (MAO-106 main event).
+
+        lane_name: e.g. 'busy_west_center' or 'quiet_center_east'.
+        """
+        self._append(Event(EVENT_ROUTE_BLOCK_PLACED, sim_time, {
+            "lane":  lane_name,
+            "x":     round(x, 3),
+            "y":     round(y, 3),
+            "fl_id": fl_id,
+        }))
+
+    def log_route_block_cleared(self, sim_time: float, lane_name: str,
+                                x: float, y: float, fl_id: int) -> None:
+        """The lane obstruction logged by log_route_block_placed() was removed."""
+        self._append(Event(EVENT_ROUTE_BLOCK_CLEARED, sim_time, {
+            "lane":  lane_name,
+            "x":     round(x, 3),
+            "y":     round(y, 3),
+            "fl_id": fl_id,
+        }))
+
+    def log_control_note(self, sim_time: float, case_name: str, note: str,
+                         **extra) -> None:
+        """Ground-truth marker for a MAO-106 control case (e.g. quiet-lane
+        dwell, short dwell, trailer/open-door, box-on-busy-lane).
+
+        case_name identifies which control case; note is typically 'placed'
+        or 'cleared'. Extra keyword args (x, y, prim_type, ...) are merged
+        into the payload as-is.
+        """
+        payload = {"case": case_name, "note": note}
+        payload.update(extra)
+        self._append(Event(EVENT_CONTROL_NOTE, sim_time, payload))
 
     # ── Query API ─────────────────────────────────────────────────────────────
 

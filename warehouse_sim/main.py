@@ -30,6 +30,9 @@ Change SCENARIO below to switch presets:
     "vehicle_idle"            — some forklifts parked idle (alert detection)
     "live_alerts"             — full alert escalation: blocked aisle, near-miss,
                                 area overload, dock queue, idle door, idle forklift
+    "acme_route_block"        — MAO-106: lane-shuttle dock traffic (busy/quiet
+                                lanes + door spurs) plus a scripted route-
+                                blocked pallet event and 4 control cases.
 """
 
 # ── Select scenario here ────────────────────────────────────────────────────
